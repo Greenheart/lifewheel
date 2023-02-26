@@ -13,24 +13,13 @@ Designed using the [Humane Tech](https://www.humanetech.com/) principles, this p
 -   👌 Keep 100% control of your private data.
 -   😇 No signup or account needed. Designed to be used offline.
 -   📲 Install the Progressive Web App to make reflection a habit.
--   📥 Easy exports and imports, giving you full control over data syncing.
--   🔐 Optionally encrypt your data with a passphrase of your choosing to improve security and privacy.
--   🔗 Encode your data into a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server). Save the link for later, share it or generate a QR code.
+-   📥 Easy exports and imports, giving you full control over data syncing and backups.
+-   🔐 Optionally encrypt your data to improve your security and privacy. Let the app generate a strong passphrase - or choose your own.
+-   🔗 Encode your data into a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server). Save the link (for example in your password manager), share it, or generate a QR code.
 -   ✨ Easily access your data on any device by clicking your private link - or by scanning your QR code.
 -   🆓 Free as in freedom. This is [free software](https://www.gnu.org/philosophy/free-sw.html), and you're welcome to help make it even better!
 
 **Now check out the [DEMO LINK]!**
-
-## Core Technologies
-
--   Svelte
--   SvelteKit
--   Vite
--   Web Crypto API
--   D3.js
--   Vite PWA
--   Tailwind CSS
--   unplugin-icons
 
 ## License
 
