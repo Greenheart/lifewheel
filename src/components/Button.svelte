@@ -3,6 +3,10 @@
 
     export const variants = {
         solid: 'rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-400/75 px-3 py-2 text-lg text-black shadow-md',
+        roundSolid:
+            'border-2 border-emerald-400 bg-gradient-to-br from-emerald-400 to-emerald-400/75 w-14 xs:w-16 h-14 xs:h-16 text-2xl shadow-md rounded-full text-black',
+        roundOutline:
+            'border-2 border-emerald-400 w-14 xs:w-16 h-14 xs:h-16 text-2xl rounded-full shadow-md',
     }
     export const defaultVariant = 'solid'
 </script>

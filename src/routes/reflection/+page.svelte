@@ -1,7 +1,5 @@
 <script lang="ts" context="module">
-    import Button from '$components/Button.svelte'
+    import Reflection from '$components/Reflection.svelte'
 </script>
 
-<div class="grid">
-    <Button>Begin</Button>
-</div>
+<Reflection />
