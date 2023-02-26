@@ -35,38 +35,6 @@ export const lifewheel: Dimension[] = [
     },
 ]
 
-export const intro: Partial<ReflectionStep>[] = [
-    {
-        title: 'Reflect on Your Life Balance',
-        text: 'Rate your satisfaction of eight different areas of your life on a scale from 1 - 10 to gain a better insight into your strengths & weaknesses.',
-    },
-]
-
-export const outro: Partial<ReflectionStep>[] = [
-    {
-        title: 'Well done!',
-        text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
-    },
-]
-
-/**
- * This defines the visible texts for each step of the reflection exercise.
- */
-export const reflectionSteps = [
-    intro.map((step) => {
-        step.phase = 'intro'
-        return step
-    }),
-    (lifewheel as Partial<ReflectionStep>[]).map((step) => {
-        step.phase = 'reflection'
-        return step
-    }),
-    outro.map((step) => {
-        step.phase = 'outro'
-        return step
-    }),
-].flat()
-
 /**
  * Colors for each dimension of the lifewheel.
  */
@@ -128,3 +96,36 @@ export const colors = [
         text: 'text-pink-400',
     },
 ]
+
+export const intro: Partial<ReflectionStep>[] = [
+    {
+        title: 'Reflect on Your Life Balance',
+        text: 'Rate your satisfaction of eight different areas of your life on a scale from 1 - 10 to gain a better insight into your strengths & weaknesses.',
+    },
+]
+
+export const outro: Partial<ReflectionStep>[] = [
+    {
+        title: 'Well done!',
+        text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
+    },
+]
+
+/**
+ * This defines the visible texts for each step of the reflection exercise.
+ */
+export const allReflectionSteps = [
+    intro.map((step) => {
+        step.phase = 'intro'
+        return step
+    }),
+    (lifewheel as Partial<ReflectionStep>[]).map((step, i) => {
+        step.phase = 'reflection'
+        step.colors = colors[i]
+        return step
+    }),
+    outro.map((step) => {
+        step.phase = 'outro'
+        return step
+    }),
+].flat() as ReflectionStep[]

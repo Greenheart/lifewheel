@@ -1,9 +1,11 @@
+import type { colors } from './constants'
+
 export type Dimension = {
     title: string
     text: string
 }
 
-export type ReflectionPhase = 'intro' | 'reflection' | 'outro'
 export type ReflectionStep = Dimension & {
-    phase: ReflectionPhase
+    phase: 'intro' | 'reflection' | 'outro'
+    colors?: (typeof colors)[number]
 }
