@@ -13,7 +13,7 @@ export type LifewheelStep = BasicStep & {
      */
     colors: (typeof colors)[number]
     /**
-     * The position in the LifeWheelState where this dimension is stored
+     * The position in the LifewheelState where this dimension is stored
      */
     i: number
 }

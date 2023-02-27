@@ -46,6 +46,19 @@
     }
 </script>
 
+<!-- Make it easy to navigate between sections with the keyboard -->
+<svelte:body
+    on:keyup={(event) => {
+        if (document.activeElement?.id !== 'input-slider') {
+            if (event.key === 'ArrowLeft') {
+                onPrev()
+            } else if (event.key === 'ArrowRight') {
+                onNext()
+            }
+        }
+    }}
+/>
+
 <div class="mx-auto grid max-w-screen-md place-items-center">
     <div class="max-w-lg px-4 py-8">
         <ReflectionTexts />
