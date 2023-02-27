@@ -130,3 +130,8 @@ export const allReflectionSteps = [
         return step
     }),
 ].flat() as ReflectionStep[]
+
+/**
+ * Default value when adding a new dimension to the lifewheel.
+ */
+export const INITIAL_LEVEL = 6
