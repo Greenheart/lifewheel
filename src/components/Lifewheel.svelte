@@ -78,7 +78,7 @@
                         {/each}
                     </defs>
 
-                    {#if $reflectionStep.phase === 'reflection'}
+                    {#if $lifewheel[0] !== 0}
                         {#each dimensions as path, i}
                             <path
                                 d={path}
