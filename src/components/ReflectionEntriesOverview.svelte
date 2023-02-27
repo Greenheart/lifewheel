@@ -45,24 +45,19 @@
     }
 </script>
 
-{#if $reflections.length}
-    <div class="pt-16">
-        <h2 class="text-xl font-extrabold">Previous reflections</h2>
+<div class="pt-16">
+    <div>
         <!--
-            IDEA: Maybe show loading... when loading data from file/link etc.
-            In that case, show the section by default, and move all the import/export buttons here too.
+            IDEA: Maybe make this into a tab group that can be opened or closed. See SkillTabs for more info.
+            The two tabs should be Save and Load.
+            
+            For Save, you get the options "Copy link", "Show QR code" (maybe keep it separate to respect the user's intention) and "Export JSON file"
+            For Load, you get the options "Import JSON file" and instructions for how to load via a link
          -->
-        <div class="grid gap-2 py-4">
-            {#each $reflections
-                .slice()
-                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time }}
-                <p>{time.toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' })}</p>
-            {/each}
-        </div>
-
-        <div class="grid max-w-sm grid-cols-2 gap-2">
-            <Button on:click={exportData}>Export data</Button>
+        <div class="grid max-w-lg gap-2 sm:grid-cols-3">
             <Button on:click={copyLink}>{copyText}</Button>
+            <Button on:click={exportData} variant="outline">Export data</Button>
+            <Button variant="outline">Import from file</Button>
         </div>
 
         <div class="pt-16" class:hidden={!isQRReady}>
@@ -70,4 +65,29 @@
             <canvas bind:this={canvas} />
         </div>
     </div>
-{/if}
+
+    <!-- IDEA: We should probably persist state to localStorage to prevent data loss from accidental page reloads -->
+    <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
+
+    <h2 class="pt-16 text-center text-3xl font-extrabold">Previous reflections</h2>
+    <!--
+        IDEA: Maybe show loading... when loading data from file/link etc.
+        In that case, show the section by default, and move all the import/export buttons here too.
+        -->
+    {#if $reflections.length}
+        <div class="grid gap-2 py-4">
+            <!-- IDEA: select an entry to render a view-only lifewheel on the right side -->
+            <!-- IDEA: use staggered animation when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes -->
+            <!--
+                IDEA: Another idea could be to use a tweened store for the preview state, and simply set the new values as you step through the entries.
+                This way, it will be easy to see how values change over time.
+             -->
+            <!-- IDEA: Add keyboard navigation to allow stepping through with arrow keys. -->
+            {#each $reflections
+                .slice()
+                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time }}
+                <p>{time.toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' })}</p>
+            {/each}
+        </div>
+    {/if}
+</div>
