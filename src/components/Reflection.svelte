@@ -3,20 +3,32 @@
     import ReflectionTexts from './ReflectionTexts.svelte'
     import InputSlider from './InputSlider.svelte'
 
-    import { allReflectionSteps } from '$lib/constants'
+    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
     import { isLifewheelStep } from '$lib/utils'
     import type { LifewheelState, LifewheelStep } from '$lib/types'
 </script>
 
 <script lang="ts">
-    import { reflectionStep, lifewheel } from '$lib/stores'
+    import { reflectionStep, lifewheel, reflections, tweenedLifewheel } from '$lib/stores'
     import Lifewheel from './Lifewheel.svelte'
+    import { goto } from '$app/navigation'
 
     const getCurrentIndex = () =>
         allReflectionSteps.findIndex((step) => step.title === $reflectionStep.title)
 
     let currentIndex = getCurrentIndex()
     let canGoBack = currentIndex >= 1
+
+    const resetReflection = async () => {
+        window.setTimeout(async () => {
+            $lifewheel = INITIAL_LIFEWHEEL_STATE
+            tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
+            currentIndex = 0
+            canGoBack = true
+
+            await goto('/')
+        }, 200)
+    }
 
     const onPrev = () => {
         currentIndex = getCurrentIndex()
@@ -29,8 +41,10 @@
     const onNext = () => {
         currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
-            // if last slide has been reached, exit the reflection, save state and reset.
-            console.log($lifewheel, 'you did it!')
+            $reflections = [...$reflections, { time: new Date(), data: $lifewheel }]
+            console.log({ reflections: $reflections })
+
+            resetReflection()
         } else {
             $reflectionStep = allReflectionSteps[currentIndex + 1]
 
