@@ -63,9 +63,9 @@
 </script>
 
 <div
-    class="mx-auto grid max-w-screen-md grid-rows-[min-content-content_1fr_min-content_min-content] justify-items-center gap-8"
+    class="mx-auto grid max-w-screen-md grid-rows-[min-content-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
-    <Lifewheel class="max-w-lg" />
+    <Lifewheel class="max-w-xs xs:max-w-md sm:max-w-lg" />
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4 pb-4">
         <div class="h-40 xs:h-52">
