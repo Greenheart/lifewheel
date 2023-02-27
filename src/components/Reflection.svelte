@@ -63,7 +63,7 @@
 </script>
 
 <div
-    class="mx-auto grid h-screen max-w-screen-md grid-rows-[min-content-content_1fr_min-content_min-content] justify-items-center gap-8"
+    class="mx-auto grid max-w-screen-md grid-rows-[min-content-content_1fr_min-content_min-content] justify-items-center gap-8"
 >
     <Lifewheel class="max-w-lg" />
 
