@@ -25,15 +25,13 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import { scale } from 'svelte/transition'
-    import { lifewheel, reflectionStep, tweenedLifewheel } from '../lib/stores'
+    import { lifewheel, tweenedLifewheel } from '../lib/stores'
 
     let dimensions: string[] = []
     let visible = false
 
     onMount(() => {
-        window.setTimeout(() => {
-            visible = true
-        }, 200)
+        visible = true
     })
 
     $: {
@@ -49,10 +47,7 @@
 
 <div class="h-[500px] w-[500px]">
     {#if visible}
-        <div
-            class="relative h-[500px] w-[500px]"
-            in:scale={{ delay: 100, duration: 500, start: 0.5 }}
-        >
+        <div class="relative h-[500px] w-[500px]" in:scale={{ duration: 600, start: 0.5 }}>
             <!-- Render lifewheel background -->
             <div class="absolute inset-0">
                 <svg width="500" height="500" viewBox="0 0 500 500">
