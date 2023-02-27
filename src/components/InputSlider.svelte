@@ -7,6 +7,21 @@
     let step = 1
 </script>
 
+<!-- Make it easy to change the current value with the keyboard -->
+<svelte:body
+    on:keydown={(event) => {
+        if (document.activeElement?.id !== 'input-slider') {
+            if (event.key === 'ArrowDown') {
+                // @ts-expect-error Not sure how to type cast variables accessed from a svelte store
+                $lifewheel[$reflectionStep.i] = Math.max(min, $lifewheel[$reflectionStep.i] - 1)
+            } else if (event.key === 'ArrowUp') {
+                // @ts-expect-error Not sure how to type cast variables accessed from a svelte store
+                $lifewheel[$reflectionStep.i] = Math.min(max, $lifewheel[$reflectionStep.i] + 1)
+            }
+        }
+    }}
+/>
+
 <div
     class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl sm:h-8"
 >
