@@ -39,3 +39,30 @@ export const getUniqueEntries = (items: ReflectionEntry[]) =>
             array.findIndex((otherItem) => item.time.getTime() === otherItem.time.getTime()) ===
             index,
     )
+
+export function mergeTypedArrays(...arrays: Uint8Array[]) {
+    const size = arrays.reduce((totalLength, array) => totalLength + array.length, 0)
+    const merged = new Uint8Array(size)
+
+    let position = 0
+    for (let i = 0; i < arrays.length; i++) {
+        const array = arrays[i]
+        merged.set(array, position)
+        position += array.length
+    }
+    return merged
+}
+
+export function encodeInt(n: number) {
+    const num = Math.min(256 * 256 * 256 * 256 - 1, Math.floor(n))
+    const res = new Uint8Array(4)
+    res[0] = num >> 24
+    res[1] = (num >> 16) & 0xff
+    res[2] = (num >> 8) & 0xff
+    res[3] = num & 0xff
+    return res
+}
+
+export function decodeInt(data: Uint8Array) {
+    return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
+}
