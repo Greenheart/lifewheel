@@ -1,9 +1,12 @@
 <script lang="ts">
     import Button from '$components/Button.svelte'
     import LinkButton from '$components/LinkButton.svelte'
-    import { encodeReflectionEntries } from '$lib/export'
+    import { encodeReflectionEntries, getURIFragment } from '$lib/export'
     import { decodeReflectionEntries } from '$lib/import'
     import { reflections } from '$lib/stores'
+
+    // TODO: Automatically load data from hash in onMount()
+    // TODO: Filter out duplicate state to only keep unique entries
 
     const exportData = () => {
         console.log($reflections)
@@ -11,6 +14,24 @@
         console.log(data)
         const imported = decodeReflectionEntries(data)
         console.log(imported)
+    }
+
+    let copyText = 'Copy your link'
+
+    const copyLink = async () => {
+        const hash = getURIFragment(encodeReflectionEntries($reflections))
+        console.log(window.location.origin, hash)
+        const original = copyText
+        copyText = 'Copied!'
+
+        const url = new URL(window.location.origin)
+        url.hash = encodeURIComponent(hash)
+
+        await navigator.clipboard.writeText(url.toString())
+
+        window.setTimeout(() => {
+            copyText = original
+        }, 2000)
     }
 </script>
 
@@ -40,6 +61,9 @@
             {/each}
         </div>
 
-        <Button on:click={exportData}>Export data</Button>
+        <div class="grid max-w-sm grid-cols-2 gap-2">
+            <Button on:click={exportData}>Export data</Button>
+            <Button on:click={copyLink}>{copyText}</Button>
+        </div>
     </div>
 {/if}

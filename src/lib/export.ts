@@ -1,3 +1,5 @@
+import { base64 } from 'rfc4648'
+
 import type { ReflectionEntry } from './types'
 
 function encodeInt(n: number) {
@@ -41,3 +43,5 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
         ...encodedEntries,
     )
 }
+
+export const getURIFragment = (encodedData: Uint8Array) => base64.stringify(encodedData)

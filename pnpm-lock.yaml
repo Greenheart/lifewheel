@@ -11,6 +11,7 @@ specifiers:
   prettier: ^2.8.4
   prettier-plugin-svelte: ^2.9.0
   prettier-plugin-tailwindcss: ^0.2.3
+  rfc4648: ^1.5.2
   svelte: ^3.55.1
   svelte-check: ^3.0.4
   tailwindcss: ^3.2.7
@@ -21,6 +22,7 @@ specifiers:
 dependencies:
   '@types/d3-shape': 3.1.1
   d3-shape: 3.2.0
+  rfc4648: 1.5.2
 
 devDependencies:
   '@sveltejs/adapter-static': 2.0.1_@sveltejs+kit@1.8.5
@@ -1092,6 +1094,10 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
+
+  /rfc4648/1.5.2:
+    resolution: {integrity: sha512-tLOizhR6YGovrEBLatX1sdcuhoSCXddw3mqNVAcKxGJ+J0hFeJ+SjeWCv5UPA/WU3YzWPPuCVYgXBKZUPGpKtg==}
+    dev: false
 
   /rimraf/2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
