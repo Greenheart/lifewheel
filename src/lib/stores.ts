@@ -29,14 +29,14 @@ export const tweenedLifewheel = tweened<LifewheelState>(INITIAL_LIFEWHEEL_STATE,
 export const reflections = writable<ReflectionEntry[]>([
     {
         time: new Date(Date.now() - 2100 * 1000),
-        data: INITIAL_LIFEWHEEL_STATE,
+        data: Array.from({ length: 8 }, () => 6) as LifewheelState,
     },
     {
         time: new Date(Date.now() - 3600 * 1000),
-        data: INITIAL_LIFEWHEEL_STATE,
+        data: Array.from({ length: 8 }, () => 6) as LifewheelState,
     },
     {
         time: new Date(Date.now() - 230 * 1000),
-        data: INITIAL_LIFEWHEEL_STATE,
+        data: Array.from({ length: 8 }, () => 6) as LifewheelState,
     },
 ])
