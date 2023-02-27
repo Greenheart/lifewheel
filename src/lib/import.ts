@@ -20,8 +20,7 @@ function decodeEntry(entryData: Uint8Array) {
 
 export function decodeReflectionEntries(data: Uint8Array) {
     // Protocol version is stored in the first byte
-    const PROTOCOL_VERSION = data.at(0)
-    console.log({ PROTOCOL_VERSION })
+    // const PROTOCOL_VERSION = data.at(0)
 
     const length = decodeInt(data.subarray(1, 5))
     return Array.from({ length }, (_, index) => {
