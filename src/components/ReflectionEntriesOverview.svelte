@@ -46,8 +46,12 @@
 </script>
 
 {#if $reflections.length}
-    <div class="px-4 pt-16">
+    <div class="pt-16">
         <h2 class="text-xl font-extrabold">Previous reflections</h2>
+        <!--
+            IDEA: Maybe show loading... when loading data from file/link etc.
+            In that case, show the section by default, and move all the import/export buttons here too.
+         -->
         <div class="grid gap-2 py-4">
             {#each $reflections
                 .slice()

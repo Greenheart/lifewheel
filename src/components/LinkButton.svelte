@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import { cx } from '$lib/utils'
-    import { defaultVariant, variants } from './Button.svelte'
+    import { defaultVariant, variants, defaultClasses } from './Button.svelte'
 </script>
 
 <script lang="ts">
@@ -10,6 +10,6 @@
     export { className as class }
 </script>
 
-<a {href} class={cx('block text-center', variants[variant], className)}>
+<a {href} class={cx('block text-center', defaultClasses, variants[variant], className)}>
     <slot />
 </a>

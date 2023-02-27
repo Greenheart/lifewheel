@@ -2,13 +2,14 @@
     import { cx } from '$lib/utils'
 
     export const variants = {
-        solid: 'rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-400/75 px-3 py-2 text-lg text-black shadow-md',
+        solid: 'rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-400/75 px-3 py-2 text-lg text-black hover:from-emerald-500 hover:to-emerald-500/75',
+        outline: 'rounded-lg px-3 py-2 text-lg hover:from-emerald-500 hover:to-emerald-500/75',
         roundSolid:
-            'border-2 border-emerald-400 bg-gradient-to-br from-emerald-400 to-emerald-400/75 w-12 2xs:w-14 xs:w-16 h-12 2xs:h-14 xs:h-16 text-2xl shadow-md rounded-full text-black',
-        roundOutline:
-            'border-2 border-emerald-400 w-12 2xs:w-14 xs:w-16 h-12 2xs:h-14 xs:h-16 text-2xl rounded-full shadow-md',
+            'bg-gradient-to-br from-emerald-400 to-emerald-400/75 hover:from-emerald-500 hover:to-emerald-500/75 w-12 2xs:w-14 xs:w-16 h-12 2xs:h-14 xs:h-16 text-2xl rounded-full text-black',
+        roundOutline: 'w-12 2xs:w-14 xs:w-16 h-12 2xs:h-14 xs:h-16 text-2xl rounded-full',
     }
     export const defaultVariant = 'solid'
+    export const defaultClasses = 'border-2 border-emerald-400 hover:border-emerald-500 shadow-md'
 </script>
 
 <script lang="ts">
@@ -18,6 +19,6 @@
     export { className as class }
 </script>
 
-<button on:click {disabled} class={cx(variants[variant], className)}>
+<button on:click {disabled} class={cx(defaultClasses, variants[variant], className)}>
     <slot />
 </button>
