@@ -8,7 +8,6 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-
     import { onMount } from 'svelte'
 
     onMount(() => {

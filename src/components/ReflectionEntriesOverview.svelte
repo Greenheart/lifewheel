@@ -89,5 +89,18 @@
                 <p>{time.toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' })}</p>
             {/each}
         </div>
+
+        <!--
+            IDEA: Maybe use the same layout as for doing a reflection, but without the slider and instead showing the date and time there
+            Then you can use the round buttons to see the different results
+            This view could be a nice way to see a note attached to the refleciton, if we add that
+            IDEA: When you select a previous reflection, you could open the visualization for that index, and then move from there
+            IDEA: Wehn you reach the beginning or the end, we replace the round button with a regular square Button to go back
+        -->
     {/if}
 </div>
+
+<a
+    href="/#AQAAAANj%2FPkABAcFCQUIBQdj%2FPkACAkGCQgGBANj%2FPk8BAcGCggIBwg%3D"
+    class="mt-32 block text-emerald-400 underline">Reload with debug data</a
+>
