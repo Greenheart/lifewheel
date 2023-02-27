@@ -5,6 +5,7 @@ specifiers:
   '@sveltejs/kit': ^1.8.5
   '@types/d3-shape': ^3.1.1
   '@types/qrcode': ^1.5.0
+  '@vitejs/plugin-basic-ssl': ^1.0.1
   autoprefixer: ^10.4.13
   d3-shape: ^3.2.0
   postcss: ^8.4.21
@@ -31,6 +32,7 @@ devDependencies:
   '@sveltejs/kit': 1.8.5_svelte@3.55.1+vite@4.1.4
   '@types/d3-shape': 3.1.1
   '@types/qrcode': 1.5.0
+  '@vitejs/plugin-basic-ssl': 1.0.1_vite@4.1.4
   autoprefixer: 10.4.13_postcss@8.4.21
   postcss: 8.4.21
   postcss-load-config: 4.0.1_postcss@8.4.21
@@ -372,6 +374,15 @@ packages:
     resolution: {integrity: sha512-BPdoIt1lfJ6B7rw35ncdwBZrAssjcwzI5LByIrYs+tpXlj/CAkuVdRsgZDdP4lq5EjyWzwxZCqAoFyHKFwp32g==}
     dependencies:
       '@types/node': 18.14.2
+    dev: true
+
+  /@vitejs/plugin-basic-ssl/1.0.1_vite@4.1.4:
+    resolution: {integrity: sha512-pcub+YbFtFhaGRTo1832FQHQSHvMrlb43974e2eS8EKleR3p1cDdkJFPci1UhwkEf1J9Bz+wKBSzqpKp7nNj2A==}
+    engines: {node: '>=14.6.0'}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0
+    dependencies:
+      vite: 4.1.4
     dev: true
 
   /acorn-node/1.8.2:
