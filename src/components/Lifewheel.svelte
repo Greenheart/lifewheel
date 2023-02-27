@@ -43,10 +43,8 @@
     }
 </script>
 
-<!-- TODO: maybe d3 can position labels/icons in a circle around the wheel? -->
-
-<!-- TODO: Make the life wheel responsive and well suited for both smaller and larger screens. -->
 <!-- TODO: Add icons for each dimension -->
+<!-- TODO: maybe d3 can position icons in a circle around the wheel? -->
 
 <div class={cx('aspect-square w-full', className)}>
     {#if visible}
@@ -75,6 +73,7 @@
                 {/each}
             </defs>
 
+            <!-- Only render actual lifewheel when first data is available -->
             {#if $lifewheel[0] !== 0}
                 {#each dimensions as path, i}
                     <path

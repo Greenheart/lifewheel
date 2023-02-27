@@ -25,6 +25,7 @@
             tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
             currentIndex = 0
             canGoBack = true
+            $reflectionStep = allReflectionSteps[currentIndex]
 
             // TODO: Fix bug with resetting that doesn't work as expected.
 
