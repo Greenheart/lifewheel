@@ -36,7 +36,8 @@
             })
             .catch((error) => console.error(error))
 
-        await navigator.clipboard.writeText(url.toString())
+        // Clipboard is only available in via HTTPS or localhost
+        await navigator?.clipboard?.writeText(url.toString())
 
         window.setTimeout(() => {
             copyText = original
@@ -60,8 +61,9 @@
             <Button on:click={copyLink}>{copyText}</Button>
         </div>
 
-        <div class="pt-16">
-            <canvas bind:this={canvas} class:hidden={!isQRReady} class="aspect-square" />
+        <div class="pt-16" class:hidden={!isQRReady}>
+            <h2 class="pb-4 text-xl font-extrabold">QR code for your link:</h2>
+            <canvas bind:this={canvas} />
         </div>
     </div>
 {/if}
