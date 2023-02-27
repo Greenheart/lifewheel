@@ -26,4 +26,17 @@ export const tweenedLifewheel = tweened<LifewheelState>(INITIAL_LIFEWHEEL_STATE,
  * All previous reflections we currently know of.
  * This will store both new reflections entries from this session, as well as any previous data the user loads.
  */
-export const reflections = writable<ReflectionEntry[]>([])
+export const reflections = writable<ReflectionEntry[]>([
+    {
+        time: new Date(Date.now() - 2100 * 1000),
+        data: INITIAL_LIFEWHEEL_STATE,
+    },
+    {
+        time: new Date(Date.now() - 3600 * 1000),
+        data: INITIAL_LIFEWHEEL_STATE,
+    },
+    {
+        time: new Date(Date.now() - 230 * 1000),
+        data: INITIAL_LIFEWHEEL_STATE,
+    },
+])

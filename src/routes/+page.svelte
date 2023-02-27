@@ -1,6 +1,7 @@
 <script lang="ts">
     import Button from '$components/Button.svelte'
     import LinkButton from '$components/LinkButton.svelte'
+    import { reflections } from '$lib/stores'
 </script>
 
 <div class="pt-16 text-center">
@@ -17,3 +18,16 @@
     <LinkButton href="/reflection">New reflection</LinkButton>
     <Button>Import from file</Button>
 </div>
+
+{#if $reflections.length}
+    <div class="px-4 pt-16">
+        <h2 class="text-xl font-extrabold">Previous reflections</h2>
+        <div class="grid gap-2 pt-4">
+            {#each $reflections
+                .slice()
+                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time }}
+                <p>{time.toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' })}</p>
+            {/each}
+        </div>
+    </div>
+{/if}
