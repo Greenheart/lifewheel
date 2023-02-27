@@ -2,28 +2,35 @@
     import Button from '$components/Button.svelte'
     import LinkButton from '$components/LinkButton.svelte'
     import ReflectionEntriesOverview from '$components/ReflectionEntriesOverview.svelte'
+
+    import { decodeReflectionEntries, getDataFromLink } from '$lib/import'
+    import { getUniqueItems } from '$lib/utils'
 </script>
 
 <script lang="ts">
-    import { decodeReflectionEntries, getDataFromLink } from '$lib/import'
     import { reflections } from '$lib/stores'
 
     import { onMount } from 'svelte'
 
-    // TODO: Automatically load data from hash in onMount()
-    // TODO: Filter out duplicate state to only keep unique entries
-
     onMount(() => {
         if (window.location.hash) {
-            console.log(decodeURIComponent(window.location.hash), window.location.hash)
-
-            // Skip # sign
-            const data = getDataFromLink(window.location.hash.slice(1))
+            const data = getDataFromLink(window.location.hash.slice(1)) // Skip # sign
+            const before = $reflections.length
 
             history.pushState('', document.title, window.location.pathname)
             const newEntries = decodeReflectionEntries(data)
-            console.log('LINK IMPORT! :D', newEntries)
-            $reflections = [...$reflections, ...newEntries]
+
+            // Remove duplicate entries to keep the UI clean.
+            // This saves data in future exports, if some entries were imported more than once.
+            $reflections = getUniqueItems([...$reflections, ...newEntries])
+
+            // IDEA: Maybe show a toast that import was successful, or just a nice transition when entries appear
+            console.log(
+                `Imported ${Math.abs($reflections.length - before)} - filtered out ${Math.abs(
+                    newEntries.length - $reflections.length,
+                )}`,
+                $reflections.map((e) => e.time.getTime()),
+            )
         }
     })
 </script>

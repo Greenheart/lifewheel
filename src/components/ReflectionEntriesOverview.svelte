@@ -13,6 +13,8 @@
         console.log(data)
         const imported = decodeReflectionEntries(data)
         console.log(imported)
+
+        // TODO: write JSON file
     }
 
     let copyText = 'Copy your link'

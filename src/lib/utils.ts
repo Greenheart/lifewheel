@@ -27,3 +27,10 @@ export const createReflectionEntry = (data: LifewheelState): ReflectionEntry => 
         time,
     }
 }
+
+export const getUniqueItems = (items: ReflectionEntry[]) =>
+    items.filter(
+        (item, index, array) =>
+            array.findIndex((otherItem) => item.time.getTime() === otherItem.time.getTime()) ===
+            index,
+    )

@@ -26,6 +26,8 @@
             currentIndex = 0
             canGoBack = true
 
+            // TODO: Fix bug with resetting that doesn't work as expected.
+
             await goto('/')
         }, 200)
     }
