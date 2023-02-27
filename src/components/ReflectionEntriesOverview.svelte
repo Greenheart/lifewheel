@@ -104,3 +104,48 @@
     href="/#AQAAAANj%2FPkABAcFCQUIBQdj%2FPkACAkGCQgGBANj%2FPk8BAcGCggIBwg%3D"
     class="mt-32 block text-emerald-400 underline">Reload with debug data</a
 >
+
+<!--
+
+IDEA: Maybe store derived key in sessionStorage to improve performance and UX. Or maybe only do this if the user selects "remember me"
+IDEA: Maybe store encrypted output in a store, to allow it to be exported in various formats (link, QR, file)
+
+
+    ENCRYPTED EXPORTS - should it all be encrypted by default to simplify development?
+
+    IDEA: UX flow for exporting encrypted data
+
+    0. Export options should only be available once there's actual data to export
+    1. User clicks "Export data"
+    2. User enters their passphrase (or generates a new one)
+    3. A loading state is visible while encrypting the user data.
+    4. Once the encrypted data is ready, it's saved to a store so it can be exported in multiple formats.
+    5. The user can export a link, which will add "1e" to the front of the hash. Unencrypted links instead start with "0e".
+    6. The user can export a file (maybe JSON plain, or encrypted binary file (including a header in front))
+    
+
+
+    NOTE: It might be better to add the protocol version in the header (like "0e" or "1e") instead of including it in the binary data.
+        - Perhaps "0e1p" meaning "0e" no encryption and "1p" meaning protocol version 1.
+        - This would make it easier to debug protocol versions too, at a slight cost of space
+
+
+    ENCRYPTED IMPORTS
+        - if all data is encrypted then this will be simple for developers, but probably a worse UX
+        - optional encryption is possible, but takes more effort to build.
+        - IDEA: For example, we could add a special sequence in the beginning of the output data to indicate whether or not the data is encrypted.
+        - For example, we could add "1e" or "0e" to the beginning of the output URI/file to show if encryption is on or not.
+            - This would make it possible to parse links automatically whether or not they use encryption.
+            - And this would prove the versatility of the tech, as well as giving more value to people using the app.
+
+    IDEA: UX flow for importing possibly encrypted data via the URI
+    1. User loads the app with a hash URL.
+    2. If the hash starts with "0e" => the data is loaded directly into the app
+    2. If the hash starts with "1e" => the user is prompted for their passphrase.
+    3. The app then tries decrypting their data with the passphrase.
+        4. If it succeeds => the data is loaded into the app.
+        4. If it fails => prompt passphrase again until decryption succeeds.
+        5. Or if the user wants to, they can press "Cancel", which clears the hash and starts the app with a fresh state.
+    
+
+-->
