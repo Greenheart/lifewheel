@@ -4,7 +4,7 @@
     import InputSlider from './InputSlider.svelte'
 
     import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
-    import { isLifewheelStep } from '$lib/utils'
+    import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
     import type { LifewheelState, LifewheelStep } from '$lib/types'
 </script>
 
@@ -41,8 +41,7 @@
     const onNext = () => {
         currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
-            $reflections = [...$reflections, { time: new Date(), data: $lifewheel }]
-            console.log({ reflections: $reflections })
+            $reflections = [...$reflections, createReflectionEntry($lifewheel)]
 
             resetReflection()
         } else {
