@@ -65,9 +65,7 @@
 <div
     class="mx-auto grid h-screen max-h-[800px] max-w-screen-md grid-rows-[max-content_1fr_min-content_max-content] place-content-center justify-items-center gap-8"
 >
-    <div class="pt-48">
-        <Lifewheel />
-    </div>
+    <Lifewheel class="pt-48" />
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4 pb-4">
         <div class="h-40 xs:h-52">

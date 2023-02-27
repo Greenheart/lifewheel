@@ -27,6 +27,9 @@
     import { scale } from 'svelte/transition'
     import { lifewheel, tweenedLifewheel } from '../lib/stores'
 
+    let className = ''
+    export { className as class }
+
     let dimensions: string[] = []
     let visible = false
 
@@ -45,9 +48,12 @@
 <!-- TODO: Make the life wheel responsive and well suited for both smaller and larger screens. -->
 <!-- TODO: Add icons for each dimension -->
 
-<div class="h-[500px] w-[500px]">
+<div class={cx('relative aspect-square h-full max-h-[500px] w-full max-w-[500px]', className)}>
     {#if visible}
-        <div class="relative h-[500px] w-[500px]" in:scale={{ duration: 600, start: 0.5 }}>
+        <div
+            class="relative inset-0 h-full max-h-[500px] w-full max-w-[500px]"
+            in:scale={{ duration: 600, start: 0.5 }}
+        >
             <!-- Render lifewheel background -->
             <div class="absolute inset-0">
                 <svg width="500" height="500" viewBox="0 0 500 500">
