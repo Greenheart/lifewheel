@@ -8,7 +8,7 @@
 </script>
 
 <div
-    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-xl xs:h-6 sm:h-8"
+    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl sm:h-8"
 >
     {#if isLifewheelStep($reflectionStep)}
         <span>{min}</span>
@@ -20,7 +20,7 @@
             {max}
             {step}
             class={cx(
-                'h-4 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm xs:h-5',
+                'h-4 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm xs:h-5 sm:h-6',
                 $reflectionStep.colors.from,
                 $reflectionStep.colors.to,
             )}

@@ -11,6 +11,6 @@
 >
     {$reflectionStep.title}
 </h2>
-<p class="whitespace-pre-wrap pt-2 text-left xs:text-lg">
+<p class="whitespace-pre-wrap pt-2 text-sm 2xs:text-base xs:text-lg">
     {$reflectionStep.text}
 </p>
