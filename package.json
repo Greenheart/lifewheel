@@ -18,17 +18,17 @@
         "@sveltejs/adapter-static": "^2.0.1",
         "@sveltejs/kit": "^1.8.5",
         "autoprefixer": "^10.4.13",
+        "postcss": "^8.4.21",
+        "postcss-load-config": "^4.0.1",
         "prettier": "^2.8.4",
         "prettier-plugin-svelte": "^2.9.0",
         "prettier-plugin-tailwindcss": "^0.2.3",
         "svelte": "^3.55.1",
         "svelte-check": "^3.0.4",
+        "tailwindcss": "^3.2.7",
         "tslib": "^2.5.0",
         "typescript": "^4.9.5",
-        "vite": "^4.1.4",
-        "tailwindcss": "^3.2.7",
-        "postcss": "^8.4.21",
-        "postcss-load-config": "^4.0.1"
+        "vite": "^4.1.4"
     },
     "type": "module",
     "prettier": {
@@ -51,5 +51,9 @@
                 }
             }
         ]
+    },
+    "dependencies": {
+        "@types/d3-shape": "^3.1.1",
+        "d3-shape": "^3.2.0"
     }
 }

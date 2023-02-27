@@ -1,9 +1,10 @@
 <script>
+    import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
     import { lifewheel, reflectionStep } from '../lib/stores'
     import { cx, isLifewheelStep } from '../lib/utils'
 
-    let min = 1
-    let max = 10
+    let min = MIN_LEVEL
+    let max = MAX_LEVEL
     let step = 1
 </script>
 

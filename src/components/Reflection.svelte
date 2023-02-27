@@ -10,6 +10,7 @@
 
 <script lang="ts">
     import { reflectionStep, lifewheel } from '$lib/stores'
+    import Lifewheel from './Lifewheel.svelte'
 
     const getCurrentIndex = () =>
         allReflectionSteps.findIndex((step) => step.title === $reflectionStep.title)
@@ -47,8 +48,12 @@
 </script>
 
 <div
-    class="mx-auto grid h-screen max-h-[800px] max-w-screen-md grid-rows-[1fr_min-content_max-content] place-content-center justify-items-center gap-8"
+    class="mx-auto grid h-screen max-h-[800px] max-w-screen-md grid-rows-[max-content_1fr_min-content_max-content] place-content-center justify-items-center gap-8"
 >
+    <div class="pt-32">
+        <Lifewheel />
+    </div>
+
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4 pb-4">
         <div class="h-40 xs:h-52">
             <ReflectionTexts />

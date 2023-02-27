@@ -1,6 +1,6 @@
-import type { LifewheelStep, ReflectionStep, TextStep } from './types'
+import type { LifewheelState, LifewheelStep, ReflectionStep, TextStep } from './types'
 
-export const lifewheel: Partial<LifewheelStep>[] = [
+export const lifewheelSteps: Partial<LifewheelStep>[] = [
     {
         title: 'Love and Relationships',
         text: 'How satisfied are you with your romantic life right now? Consider how you feel about things like intimacy, independence, and emotional/intellectual connection.',
@@ -97,14 +97,14 @@ export const colors = [
     },
 ]
 
-export const intro: Partial<TextStep>[] = [
+export const introSteps: Partial<TextStep>[] = [
     {
         title: 'Reflect on Your Life Balance',
         text: 'Rate your satisfaction of eight different areas of your life on a scale from 1 - 10 to gain a better insight into your strengths & weaknesses.',
     },
 ]
 
-export const outro: Partial<TextStep>[] = [
+export const outroSteps: Partial<TextStep>[] = [
     {
         title: 'Well done!',
         text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
@@ -115,17 +115,17 @@ export const outro: Partial<TextStep>[] = [
  * This defines the visible texts for each step of the reflection exercise.
  */
 export const allReflectionSteps = [
-    intro.map((step) => {
+    introSteps.map((step) => {
         step.phase = 'intro'
         return step
     }),
-    lifewheel.map((step, i) => {
+    lifewheelSteps.map((step, i) => {
         step.phase = 'reflection'
         step.colors = colors[i]
         step.i = i
         return step
     }),
-    outro.map((step) => {
+    outroSteps.map((step) => {
         step.phase = 'outro'
         return step
     }),
@@ -135,3 +135,12 @@ export const allReflectionSteps = [
  * Default value when adding a new dimension to the lifewheel.
  */
 export const INITIAL_LEVEL = 6
+
+export const MIN_LEVEL = 1
+export const MAX_LEVEL = 10
+
+/**
+ * By starting all values at 0, we can keep the dimensions hidden until they become active for the first time.
+ * This is key in enabling the tweened motion.
+ */
+export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
