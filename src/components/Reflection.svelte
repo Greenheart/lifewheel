@@ -11,12 +11,14 @@
 <script lang="ts">
     import { reflectionStep, lifewheel } from '$lib/stores'
 
-    let canGoBack = false
+    const getCurrentIndex = () =>
+        allReflectionSteps.findIndex((step) => step.title === $reflectionStep.title)
+
+    let currentIndex = getCurrentIndex()
+    let canGoBack = currentIndex >= 1
 
     const onPrev = () => {
-        const currentIndex = allReflectionSteps.findIndex(
-            (step) => step.title === $reflectionStep.title,
-        )
+        currentIndex = getCurrentIndex()
         if (currentIndex <= 1) {
             canGoBack = false
         }
@@ -24,9 +26,7 @@
     }
 
     const onNext = () => {
-        const currentIndex = allReflectionSteps.findIndex(
-            (step) => step.title === $reflectionStep.title,
-        )
+        currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
             // if last slide has been reached, exit the reflection, save state and reset.
             console.log($lifewheel, 'you did it!')
@@ -46,27 +46,18 @@
     }
 </script>
 
-<!-- Make it easy to navigate between sections with the keyboard -->
-<svelte:body
-    on:keyup={(event) => {
-        if (document.activeElement?.id !== 'input-slider') {
-            if (event.key === 'ArrowLeft') {
-                onPrev()
-            } else if (event.key === 'ArrowRight') {
-                onNext()
-            }
-        }
-    }}
-/>
-
-<div class="mx-auto grid max-w-screen-md place-items-center">
-    <div class="max-w-lg px-4 py-8">
-        <ReflectionTexts />
+<div
+    class="mx-auto grid h-screen max-h-[800px] max-w-screen-md grid-rows-[1fr_min-content_max-content] place-content-center justify-items-center gap-8"
+>
+    <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4 pb-4">
+        <div class="h-40 xs:h-52">
+            <ReflectionTexts />
+        </div>
     </div>
 
     <InputSlider />
 
-    <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4 pt-4 2xs:pt-8">
+    <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}
             <Button variant="roundOutline" on:click={onPrev}>←</Button>
         {/if}
@@ -74,3 +65,16 @@
         <Button variant="roundSolid" on:click={onNext}>→</Button>
     </div>
 </div>
+
+<!-- Make it easy to navigate between sections with the keyboard -->
+<svelte:body
+    on:keyup={(event) => {
+        if (document.activeElement?.id !== 'input-slider') {
+            if (event.key === 'ArrowLeft') {
+                if (canGoBack) onPrev()
+            } else if (event.key === 'ArrowRight') {
+                onNext()
+            }
+        }
+    }}
+/>

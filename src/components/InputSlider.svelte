@@ -7,23 +7,8 @@
     let step = 1
 </script>
 
-<!-- Make it easy to change the current value with the keyboard -->
-<svelte:body
-    on:keydown={(event) => {
-        if (document.activeElement?.id !== 'input-slider') {
-            if (event.key === 'ArrowDown') {
-                // @ts-expect-error Not sure how to type cast variables accessed from a svelte store
-                $lifewheel[$reflectionStep.i] = Math.max(min, $lifewheel[$reflectionStep.i] - 1)
-            } else if (event.key === 'ArrowUp') {
-                // @ts-expect-error Not sure how to type cast variables accessed from a svelte store
-                $lifewheel[$reflectionStep.i] = Math.min(max, $lifewheel[$reflectionStep.i] + 1)
-            }
-        }
-    }}
-/>
-
 <div
-    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl sm:h-8"
+    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl"
 >
     {#if isLifewheelStep($reflectionStep)}
         <span>{min}</span>
@@ -35,7 +20,7 @@
             {max}
             {step}
             class={cx(
-                'h-4 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm xs:h-5 sm:h-6',
+                'h-4 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm xs:h-5',
                 $reflectionStep.colors.from,
                 $reflectionStep.colors.to,
             )}
@@ -47,6 +32,19 @@
         <span>{max}</span>
     {/if}
 </div>
+
+<!-- Make it easy to change the current value with the keyboard -->
+<svelte:body
+    on:keydown={(event) => {
+        if (document.activeElement?.id !== 'input-slider' && isLifewheelStep($reflectionStep)) {
+            if (event.key === 'ArrowDown') {
+                $lifewheel[$reflectionStep.i] = Math.max(min, $lifewheel[$reflectionStep.i] - 1)
+            } else if (event.key === 'ArrowUp') {
+                $lifewheel[$reflectionStep.i] = Math.min(max, $lifewheel[$reflectionStep.i] + 1)
+            }
+        }
+    }}
+/>
 
 <style>
     .slider {

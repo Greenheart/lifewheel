@@ -5,6 +5,6 @@ import type { LifewheelState, ReflectionStep } from './types'
 /**
  * The currently visible reflection step.
  */
-export const reflectionStep = writable<ReflectionStep>(allReflectionSteps[1])
+export const reflectionStep = writable<ReflectionStep>(allReflectionSteps[0])
 
 export const lifewheel = writable<LifewheelState>([0, 0, 0, 0, 0, 0, 0, 0])
