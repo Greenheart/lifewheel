@@ -28,3 +28,8 @@ export type ReflectionStep = LifewheelStep | BasicStep
  * Each dimension of the life wheel represented by a number
  */
 export type LifewheelState = [number, number, number, number, number, number, number, number]
+
+export type ReflectionEntry = {
+    data: LifewheelState
+    time: Date
+}

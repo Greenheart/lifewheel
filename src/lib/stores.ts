@@ -2,7 +2,7 @@ import { writable } from 'svelte/store'
 import { tweened } from 'svelte/motion'
 import { cubicOut } from 'svelte/easing'
 import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from './constants'
-import type { LifewheelState, ReflectionStep } from './types'
+import type { LifewheelState, ReflectionEntry, ReflectionStep } from './types'
 
 /**
  * The currently visible reflection step.
