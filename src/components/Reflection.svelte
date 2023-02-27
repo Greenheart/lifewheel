@@ -65,7 +65,7 @@
 <div
     class="mx-auto grid h-screen max-h-[800px] max-w-screen-md grid-rows-[max-content_1fr_min-content_max-content] place-content-center justify-items-center gap-8"
 >
-    <div class="relative pt-48">
+    <div class="pt-48">
         <Lifewheel />
     </div>
 

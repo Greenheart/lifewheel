@@ -1,4 +1,5 @@
 import { base64 } from 'rfc4648'
+import QRCode from 'qrcode'
 
 import type { ReflectionEntry } from './types'
 
@@ -46,3 +47,10 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
 
 export const getLinkFromData = (encodedData: Uint8Array) =>
     encodeURIComponent(base64.stringify(encodedData))
+
+export const showQRCode = async (text: string, canvas: HTMLCanvasElement) => {
+    if (!text) return
+    return new Promise<void>((resolve, reject) => {
+        QRCode.toCanvas(canvas, text, (error) => (error ? reject(error) : resolve()))
+    })
+}

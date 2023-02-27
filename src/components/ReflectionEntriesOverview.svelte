@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import Button from '$components/Button.svelte'
-    import { encodeReflectionEntries, getLinkFromData } from '$lib/export'
+    import { encodeReflectionEntries, getLinkFromData, showQRCode } from '$lib/export'
     import { decodeReflectionEntries } from '$lib/import'
 </script>
 
@@ -17,6 +17,9 @@
         // TODO: write JSON file
     }
 
+    let canvas: HTMLCanvasElement
+    let isQRReady = false
+
     let copyText = 'Copy your link'
 
     const copyLink = async () => {
@@ -26,6 +29,12 @@
 
         const url = new URL(window.location.origin)
         url.hash = hash
+
+        await showQRCode(url.toString(), canvas)
+            .then(() => {
+                isQRReady = true
+            })
+            .catch((error) => console.error(error))
 
         await navigator.clipboard.writeText(url.toString())
 
@@ -49,6 +58,10 @@
         <div class="grid max-w-sm grid-cols-2 gap-2">
             <Button on:click={exportData}>Export data</Button>
             <Button on:click={copyLink}>{copyText}</Button>
+        </div>
+
+        <div class="pt-16">
+            <canvas bind:this={canvas} class:hidden={!isQRReady} class="aspect-square" />
         </div>
     </div>
 {/if}
