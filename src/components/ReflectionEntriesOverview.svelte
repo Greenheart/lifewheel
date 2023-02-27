@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import Button from '$components/Button.svelte'
-    import { encodeReflectionEntries, getURIFragment } from '$lib/export'
+    import { encodeReflectionEntries, getLinkFromData } from '$lib/export'
     import { decodeReflectionEntries } from '$lib/import'
 </script>
 
@@ -18,12 +18,12 @@
     let copyText = 'Copy your link'
 
     const copyLink = async () => {
-        const hash = getURIFragment(encodeReflectionEntries($reflections))
+        const hash = getLinkFromData(encodeReflectionEntries($reflections))
         const original = copyText
         copyText = 'Copied!'
 
         const url = new URL(window.location.origin)
-        url.hash = encodeURIComponent(hash)
+        url.hash = hash
 
         await navigator.clipboard.writeText(url.toString())
 

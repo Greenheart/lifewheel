@@ -5,8 +5,27 @@
 </script>
 
 <script lang="ts">
+    import { decodeReflectionEntries, getDataFromLink } from '$lib/import'
+    import { reflections } from '$lib/stores'
+
+    import { onMount } from 'svelte'
+
     // TODO: Automatically load data from hash in onMount()
     // TODO: Filter out duplicate state to only keep unique entries
+
+    onMount(() => {
+        if (window.location.hash) {
+            console.log(decodeURIComponent(window.location.hash), window.location.hash)
+
+            // Skip # sign
+            const data = getDataFromLink(window.location.hash.slice(1))
+
+            history.pushState('', document.title, window.location.pathname)
+            const newEntries = decodeReflectionEntries(data)
+            console.log('LINK IMPORT! :D', newEntries)
+            $reflections = [...$reflections, ...newEntries]
+        }
+    })
 </script>
 
 <div class="pt-16 text-center">

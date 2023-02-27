@@ -44,4 +44,5 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     )
 }
 
-export const getURIFragment = (encodedData: Uint8Array) => base64.stringify(encodedData)
+export const getLinkFromData = (encodedData: Uint8Array) =>
+    encodeURIComponent(base64.stringify(encodedData))

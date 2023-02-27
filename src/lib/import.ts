@@ -1,3 +1,5 @@
+import { base64 } from 'rfc4648'
+
 import type { ReflectionEntry } from './types'
 
 function decodeInt(data: Uint8Array) {
@@ -28,3 +30,5 @@ export function decodeReflectionEntries(data: Uint8Array) {
         return decodeEntry(entryData)
     })
 }
+
+export const getDataFromLink = (hash: string) => base64.parse(decodeURIComponent(hash))
