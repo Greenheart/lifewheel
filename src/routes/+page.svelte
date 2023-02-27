@@ -1,10 +1,9 @@
 <script lang="ts" context="module">
-    import Button from '$components/Button.svelte'
     import LinkButton from '$components/LinkButton.svelte'
     import ReflectionEntriesOverview from '$components/ReflectionEntriesOverview.svelte'
 
     import { decodeReflectionEntries, getDataFromLink } from '$lib/import'
-    import { getUniqueItems } from '$lib/utils'
+    import { getUniqueEntries } from '$lib/utils'
 </script>
 
 <script lang="ts">
@@ -20,9 +19,7 @@
             history.pushState('', document.title, window.location.pathname)
             const newEntries = decodeReflectionEntries(data)
 
-            // Remove duplicate entries to keep the UI clean.
-            // This saves data in future exports, if some entries were imported more than once.
-            $reflections = getUniqueItems([...$reflections, ...newEntries])
+            $reflections = getUniqueEntries([...$reflections, ...newEntries])
 
             // IDEA: Maybe show a toast that import was successful, or just a nice transition when entries appear
             console.log(

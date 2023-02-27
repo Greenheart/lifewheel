@@ -28,7 +28,12 @@ export const createReflectionEntry = (data: LifewheelState): ReflectionEntry => 
     }
 }
 
-export const getUniqueItems = (items: ReflectionEntry[]) =>
+/**
+ * Remove duplicate entries to keep the UI clean.
+ *
+ * This saves data in future exports, if some entries were imported more than once.
+ */
+export const getUniqueEntries = (items: ReflectionEntry[]) =>
     items.filter(
         (item, index, array) =>
             array.findIndex((otherItem) => item.time.getTime() === otherItem.time.getTime()) ===
