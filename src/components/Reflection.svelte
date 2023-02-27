@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
+    import InputSlider from './InputSlider.svelte'
 </script>
 
 <script lang="ts">
@@ -15,11 +16,12 @@
         <ReflectionTexts />
     </div>
 
-    <div class="flex w-full max-w-sm justify-between px-4 py-4">
+    <InputSlider />
+
+    <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4 pt-4 2xs:pt-8">
         {#if onPrev}
             <Button variant="roundOutline" on:click={onPrev}>←</Button>
         {/if}
-        <div class="flex-grow" />
         {#if onNext}
             <Button variant="roundSolid" on:click={onNext}>→</Button>
         {/if}

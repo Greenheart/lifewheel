@@ -1,6 +1,6 @@
-import type { Dimension, ReflectionStep } from './types'
+import type { LifewheelStep, ReflectionStep, TextStep } from './types'
 
-export const lifewheel: Dimension[] = [
+export const lifewheel: Partial<LifewheelStep>[] = [
     {
         title: 'Love and Relationships',
         text: 'How satisfied are you with your romantic life right now? Consider how you feel about things like intimacy, independence, and emotional/intellectual connection.',
@@ -97,14 +97,14 @@ export const colors = [
     },
 ]
 
-export const intro: Partial<ReflectionStep>[] = [
+export const intro: Partial<TextStep>[] = [
     {
         title: 'Reflect on Your Life Balance',
         text: 'Rate your satisfaction of eight different areas of your life on a scale from 1 - 10 to gain a better insight into your strengths & weaknesses.',
     },
 ]
 
-export const outro: Partial<ReflectionStep>[] = [
+export const outro: Partial<TextStep>[] = [
     {
         title: 'Well done!',
         text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
@@ -119,9 +119,10 @@ export const allReflectionSteps = [
         step.phase = 'intro'
         return step
     }),
-    (lifewheel as Partial<ReflectionStep>[]).map((step, i) => {
+    lifewheel.map((step, i) => {
         step.phase = 'reflection'
         step.colors = colors[i]
+        step.i = i
         return step
     }),
     outro.map((step) => {

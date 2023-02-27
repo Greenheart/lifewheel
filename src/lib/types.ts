@@ -1,11 +1,30 @@
 import type { colors } from './constants'
 
-export type Dimension = {
+type BasicStep = {
     title: string
     text: string
+    phase: 'intro' | 'reflection' | 'outro'
 }
 
-export type ReflectionStep = Dimension & {
-    phase: 'intro' | 'reflection' | 'outro'
-    colors?: (typeof colors)[number]
+export type LifewheelStep = BasicStep & {
+    phase: 'reflection'
+    /**
+     * Easy acccess to specific colors
+     */
+    colors: (typeof colors)[number]
+    /**
+     * The position in the LifeWheelState where this dimension is stored
+     */
+    i: number
 }
+
+export type TextStep = BasicStep & {
+    phase: 'intro' | 'outro'
+}
+
+export type ReflectionStep = LifewheelStep | BasicStep
+
+/**
+ * Each dimension of the life wheel represented by a number
+ */
+export type LifewheelState = [number, number, number, number, number, number, number, number]

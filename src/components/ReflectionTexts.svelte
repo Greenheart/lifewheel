@@ -1,12 +1,12 @@
 <script>
-    import { cx } from '../lib/utils'
+    import { cx, isLifewheelStep } from '../lib/utils'
     import { reflectionStep } from '../lib/stores'
 </script>
 
 <h2
     class={cx(
         'text-center text-lg font-normal normal-case 2xs:text-2xl xs:text-3xl',
-        $reflectionStep?.colors?.text ?? 'text-emerald-400',
+        isLifewheelStep($reflectionStep) ? $reflectionStep.colors.text : 'text-emerald-400',
     )}
 >
     {$reflectionStep.title}
