@@ -48,52 +48,52 @@
 <!-- TODO: Make the life wheel responsive and well suited for both smaller and larger screens. -->
 <!-- TODO: Add icons for each dimension -->
 
-<div class={cx('relative aspect-square h-full max-h-[500px] w-full max-w-[500px]', className)}>
+<div class={cx('aspect-square w-full', className)}>
     {#if visible}
-        <div
-            class="relative inset-0 h-full max-h-[500px] w-full max-w-[500px]"
+        <!-- Render lifewheel background -->
+        <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 500 500"
             in:scale={{ duration: 600, start: 0.5 }}
         >
-            <!-- Render lifewheel background -->
-            <svg width="500" height="500" viewBox="0 0 500 500">
-                {#each backgrounds as path, i}
+            {#each backgrounds as path, i}
+                <path
+                    d={path}
+                    class={cx(colors[i].fill, 'opacity-20')}
+                    style="transform: translate3d(50%, 50%, 0)"
+                />
+            {/each}
+
+            <!-- Render lifewheel selected values for each dimension -->
+            <defs>
+                {#each colors as color, i}
+                    <linearGradient id={`gradient-${i}`} cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stop-color={color.rgb} stop-opacity="0.5" />
+                        <stop offset="100%" stop-color={color.rgb} />
+                    </linearGradient>
+                {/each}
+            </defs>
+
+            {#if $lifewheel[0] !== 0}
+                {#each dimensions as path, i}
                     <path
                         d={path}
-                        class={cx(colors[i].fill, 'opacity-20')}
                         style="transform: translate3d(50%, 50%, 0)"
+                        fill={`url(#gradient-${i})`}
                     />
                 {/each}
+            {/if}
 
-                <!-- Render lifewheel selected values for each dimension -->
-                <defs>
-                    {#each colors as color, i}
-                        <linearGradient id={`gradient-${i}`} cx="0.5" cy="0.5" r="0.5">
-                            <stop offset="0%" stop-color={color.rgb} stop-opacity="0.5" />
-                            <stop offset="100%" stop-color={color.rgb} />
-                        </linearGradient>
-                    {/each}
-                </defs>
-
-                {#if $lifewheel[0] !== 0}
-                    {#each dimensions as path, i}
-                        <path
-                            d={path}
-                            style="transform: translate3d(50%, 50%, 0)"
-                            fill={`url(#gradient-${i})`}
-                        />
-                    {/each}
-                {/if}
-
-                <!-- Render outlined circles to show levels -->
-                {#each Array(10) as _, i}
-                    <circle
-                        cx={250}
-                        cy={250}
-                        r={(i + 2) * levelWidth}
-                        class="fill-none stroke-stone-900 stroke-1"
-                    />
-                {/each}
-            </svg>
-        </div>
+            <!-- Render outlined circles to show levels -->
+            {#each Array(10) as _, i}
+                <circle
+                    cx={250}
+                    cy={250}
+                    r={(i + 2) * levelWidth}
+                    class="fill-none stroke-stone-900 stroke-1"
+                />
+            {/each}
+        </svg>
     {/if}
 </div>
