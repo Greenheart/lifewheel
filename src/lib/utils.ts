@@ -1,6 +1,7 @@
 import type {
     LifewheelState,
     LifewheelStep,
+    ProtocolVersion,
     ReflectionEntry,
     ReflectionStep,
     TextStep,
@@ -65,4 +66,23 @@ export function encodeInt(n: number) {
 
 export function decodeInt(data: Uint8Array) {
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
+}
+
+export const formatHeader = ({
+    encrypted,
+    protocolVersion,
+}: {
+    encrypted: boolean
+    protocolVersion: ProtocolVersion
+}) => `${encrypted ? '1' : '0'}e${protocolVersion}p`
+
+export const parseHeader = (header: string) => {
+    const match = header.match(/^([10])e(\d+)p/)
+    if (!match) throw new Error(`Invalid header: ${header}`)
+    return {
+        encrypted: match[1] === '1',
+        protocolVersion: parseInt(match[2], 10) as ProtocolVersion,
+        // Remove data without the header
+        data: header.replace(match[0], ''),
+    }
 }

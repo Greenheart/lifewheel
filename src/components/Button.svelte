@@ -15,10 +15,11 @@
 <script lang="ts">
     export let disabled: boolean = false
     export let variant: keyof typeof variants = defaultVariant
+    export let type: 'submit' | undefined = undefined
     let className = ''
     export { className as class }
 </script>
 
-<button on:click {disabled} class={cx(defaultClasses, variants[variant], className)}>
+<button on:click {disabled} class={cx(defaultClasses, variants[variant], className)} {type}>
     <slot />
 </button>

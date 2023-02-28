@@ -144,3 +144,10 @@ export const MAX_LEVEL = 10
  * This is key in enabling the tweened motion.
  */
 export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
+
+/**
+ * If the need arises, we could abstract away implementation details with a common public API surface
+ */
+export const PROTOCOL_VERSIONS = {
+    1: {},
+}

@@ -27,3 +27,8 @@ export const tweenedLifewheel = tweened<LifewheelState>(INITIAL_LIFEWHEEL_STATE,
  * This will store both new reflections entries from this session, as well as any previous data the user loads.
  */
 export const reflections = writable<ReflectionEntry[]>([])
+
+/**
+ * Whether or not the app is auto-importing a link.
+ */
+export const hasLink = writable<boolean>(false)

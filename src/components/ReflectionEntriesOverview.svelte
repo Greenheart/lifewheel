@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
     import Button from '$components/Button.svelte'
+    import { getEncryptedPayload } from '$lib/crypto'
     import { encodeReflectionEntries, getLinkFromData, showQRCode } from '$lib/export'
     import { decodeReflectionEntries } from '$lib/import'
 </script>
@@ -22,8 +23,7 @@
 
     let copyText = 'Copy your link'
 
-    const copyLink = async () => {
-        const hash = getLinkFromData(encodeReflectionEntries($reflections))
+    const copyLink = async (hash: string) => {
         const original = copyText
         copyText = 'Copied!'
 
@@ -43,7 +43,25 @@
             copyText = original
         }, 2000)
     }
+
+    const encrypt = async () => {
+        const encryptedData = await getEncryptedPayload(
+            encodeReflectionEntries($reflections),
+            'password',
+            2e6,
+        )
+
+        copyLink(getLinkFromData({ data: encryptedData, encrypted: true }))
+    }
+    const decrypt = async () => {
+        //
+    }
 </script>
+
+<!--
+    TODO: load encrypted data with specific protocol version:
+    https://192.168.0.242:5173/#1e1poBpdB1bhuGitN2mocX0VAFF1kpxvSCz44olES1UXkXjjjz%2BN20MxpHeLvP%2FLy3L8AB6EgE4q5A0az97z%2FtyB86f1XXZTM0HCk1kZHMgENmddYx1hxGnCkGHQFBEASWWY
+-->
 
 <div class="pt-16">
     <div>
@@ -55,9 +73,15 @@
             For Load, you get the options "Import JSON file" and instructions for how to load via a link
          -->
         <div class="grid max-w-lg gap-2 sm:grid-cols-3">
-            <Button on:click={copyLink}>{copyText}</Button>
+            <Button
+                on:click={() =>
+                    copyLink(getLinkFromData({ data: encodeReflectionEntries($reflections) }))}
+                >{copyText}</Button
+            >
             <Button on:click={exportData} variant="outline">Export data</Button>
             <Button variant="outline">Import from file</Button>
+            <Button variant="outline" on:click={encrypt}>Encrypt</Button>
+            <Button variant="outline" on:click={decrypt}>Decrypt</Button>
         </div>
 
         <div class="pt-16" class:hidden={!isQRReady}>
