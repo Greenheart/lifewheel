@@ -73,12 +73,14 @@
             For Load, you get the options "Import JSON file" and instructions for how to load via a link
          -->
         <div class="grid max-w-lg gap-2 sm:grid-cols-3">
-            <Button
-                on:click={() =>
-                    copyLink(getLinkFromData({ data: encodeReflectionEntries($reflections) }))}
-                >{copyText}</Button
-            >
-            <Button on:click={exportData} variant="outline">Export data</Button>
+            {#if $reflections.length}
+                <Button
+                    on:click={() =>
+                        copyLink(getLinkFromData({ data: encodeReflectionEntries($reflections) }))}
+                    >{copyText}</Button
+                >
+                <Button on:click={exportData} variant="outline">Export data</Button>
+            {/if}
             <Button variant="outline">Import from file</Button>
             <Button variant="outline" on:click={encrypt}>Encrypt</Button>
             <Button variant="outline" on:click={decrypt}>Decrypt</Button>
