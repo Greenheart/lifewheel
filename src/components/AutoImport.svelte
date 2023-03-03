@@ -1,74 +1,101 @@
 <script lang="ts" context="module">
-    import { getUniqueEntries, parseHeader } from '$lib/utils'
-    import { decodeReflectionEntries, getDataFromLink } from '$lib/import'
+    import { parseLink } from '$lib/utils'
+    import { decodeReflectionEntries } from '$lib/import'
 </script>
 
 <script lang="ts">
-    import { hasLink, reflections } from '$lib/stores'
+    import { hasLink, loading, reflections } from '$lib/stores'
     import { onMount } from 'svelte'
     import Button from './Button.svelte'
+    import { getDecryptedPayload } from '$lib/crypto'
+    import type { ParsedLink } from '$lib/types'
 
-    let isLoading = false
+    let isDecrypting = false
     let password = ''
+
+    let hasProtectedLink = false
+
+    let payload: ParsedLink
 
     onMount(() => {
         if (window.location.hash) {
             $hasLink = true
             const hash = window.location.hash.slice(1) // Skip # sign
+            // const hash = HASH.slice(1) // Skip # sign
 
             try {
-                const { encrypted } = parseHeader(hash)
+                payload = parseLink(hash)
 
-                if (encrypted) {
-                    // TODO: Show form for passphrase
+                console.log(payload)
+
+                if (payload?.encrypted && payload?.data) {
+                    hasProtectedLink = true
                 } else {
                     // load as usual
+                    $loading = false
                 }
             } catch (error) {
                 // Warn user that the link is invalid
+                console.error('Invalid link: ', error)
             }
 
-            const data = getDataFromLink(hash)
-            const before = $reflections.length
+            // const before = $reflections.length
 
-            history.pushState('', document.title, window.location.pathname)
-            const newEntries = decodeReflectionEntries(data)
+            // history.pushState('', document.title, window.location.pathname)
+            // const newEntries = decodeReflectionEntries(data)
+            // $reflections = decodeReflectionEntries(data)
 
-            $reflections = getUniqueEntries([...$reflections, ...newEntries])
+            // $reflections = getUniqueEntries([...$reflections, ...newEntries])
 
             // IDEA: Maybe show a toast that import was successful, or just a nice transition when entries appear
-            console.log(
-                `Imported ${Math.abs($reflections.length - before)} - filtered out ${Math.abs(
-                    newEntries.length - $reflections.length,
-                )}`,
-                $reflections.map((e) => e.time.getTime()),
-            )
+            // console.log(
+            //     `Imported ${Math.abs($reflections.length - before)} - filtered out ${Math.abs(
+            //         newEntries.length - $reflections.length,
+            //     )}`,
+            //     $reflections.map((e) => e.time.getTime()),
+            // )
+        } else {
+            $loading = false
         }
     })
 
-    const submitPassphrase = () => {
-        isLoading = true
-        window.setTimeout(() => {
-            isLoading = false
-            password = ''
-        }, 2000)
+    const submitPassphrase = async () => {
+        isDecrypting = true
+        try {
+            const decrypted = await getDecryptedPayload(payload.data, password)
+            $reflections = decodeReflectionEntries(decrypted)
+            $loading = false
+            isDecrypting = false
+            hasProtectedLink = false
+            history.pushState('', document.title, window.location.pathname)
+        } catch (error) {
+            console.error(error)
+            isDecrypting = false
+        }
+
+        // window.setTimeout(() => {
+        //     isDecrypting = false
+        //     password = ''
+        // }, 2000)
         // TODO: Try decrypting
         // TODO: if something fails, show errors
         // TODO: show cancel button
+
+        // $loading = false
     }
 </script>
 
-{#if $hasLink}
-    <div class="mx-auto w-full max-w-sm px-4 pt-16">
+{#if hasProtectedLink}
+    <div class="mx-auto w-full max-w-sm pt-16">
         <div
             class="place-items-center gap-2 text-lg"
-            class:hidden={!isLoading}
-            class:grid={isLoading}
+            class:hidden={!isDecrypting}
+            class:grid={isDecrypting}
         >
-            <p class="spinner h-8 w-8" />
+            <p class="spinner h-7 w-7" />
             <p>Loading...</p>
         </div>
-        <header class="flex items-center gap-2" class:hidden={isLoading}>
+        <header class="flex items-center gap-2" class:hidden={isDecrypting}>
             <svg
                 class="h-6 w-6"
                 fill="currentColor"
@@ -83,7 +110,7 @@
             </svg>
             <p id="msg">This link is password protected.</p>
         </header>
-        <form on:submit|preventDefault={submitPassphrase} class:hidden={isLoading} class="mt-2">
+        <form on:submit|preventDefault={submitPassphrase} class:hidden={isDecrypting} class="mt-3">
             <input
                 type="password"
                 name="password"
@@ -92,25 +119,25 @@
                 class="w-full rounded-md py-3 px-4 font-light text-black"
                 bind:value={password}
             />
-            <Button type="submit" class="mt-2 w-full">Submit</Button>
+            <Button type="submit" class="mt-4 w-full">Submit</Button>
         </form>
     </div>
-{/if}
 
-<style>
-    .spinner {
-        pointer-events: none;
-        border: 3px solid transparent;
-        border-color: #fff;
-        border-right-width: 2px;
-        border-radius: 50%;
-        -webkit-animation: spin 0.5s linear infinite;
-        animation: spin 0.5s linear infinite;
-    }
-
-    @keyframes spin {
-        100% {
-            transform: rotate(360deg);
+    <style>
+        .spinner {
+            pointer-events: none;
+            border: 3px solid transparent;
+            border-color: #fff;
+            border-right-width: 2px;
+            border-radius: 50%;
+            -webkit-animation: spin 0.5s linear infinite;
+            animation: spin 0.5s linear infinite;
         }
-    }
-</style>
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+{/if}

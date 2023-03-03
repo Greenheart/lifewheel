@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { hasLink } from '$lib/stores'
+    import { loading } from '$lib/stores'
 </script>
 
 <div class="mx-auto max-w-screen-lg px-4">
@@ -21,7 +21,7 @@
 
     <AutoImport />
 
-    {#if !$hasLink}
+    {#if !$loading}
         <!-- NOTE: Maybe simplify unless we want two buttons here in the future -->
         <div class="mx-auto grid max-w-sm grid-cols-2 gap-2 pt-16">
             <LinkButton href="/reflection" class="col-span-2">New reflection</LinkButton>

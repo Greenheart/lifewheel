@@ -1,4 +1,4 @@
-import { base64 } from 'rfc4648'
+import { base64url } from 'rfc4648'
 import QRCode from 'qrcode'
 
 import type { ReflectionEntry, ProtocolVersion } from './types'
@@ -24,7 +24,7 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
  * For example the header "0e1p" means "0e" = no encryption and "1p" = protocol version 1.
  * Similarly "1e" means the data is encrypted
  */
-export const getLinkFromData = ({
+export const formatLink = ({
     data,
     encrypted = false,
     protocolVersion = 1,
@@ -32,7 +32,7 @@ export const getLinkFromData = ({
     data: Uint8Array
     encrypted?: boolean
     protocolVersion?: ProtocolVersion
-}) => formatHeader({ encrypted, protocolVersion }) + encodeURIComponent(base64.stringify(data))
+}) => formatHeader({ encrypted, protocolVersion }) + base64url.stringify(data)
 
 export const showQRCode = async (text: string, canvas: HTMLCanvasElement) => {
     if (!text) return

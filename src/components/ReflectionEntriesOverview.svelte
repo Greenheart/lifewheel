@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import Button from '$components/Button.svelte'
     import { getEncryptedPayload } from '$lib/crypto'
-    import { encodeReflectionEntries, getLinkFromData, showQRCode } from '$lib/export'
+    import { encodeReflectionEntries, formatLink, showQRCode } from '$lib/export'
     import { decodeReflectionEntries } from '$lib/import'
 </script>
 
@@ -51,7 +51,7 @@
             2e6,
         )
 
-        copyLink(getLinkFromData({ data: encryptedData, encrypted: true }))
+        copyLink(formatLink({ data: encryptedData, encrypted: true }))
     }
     const decrypt = async () => {
         //
@@ -76,7 +76,7 @@
             {#if $reflections.length}
                 <Button
                     on:click={() =>
-                        copyLink(getLinkFromData({ data: encodeReflectionEntries($reflections) }))}
+                        copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
                     >{copyText}</Button
                 >
                 <Button on:click={exportData} variant="outline">Export data</Button>

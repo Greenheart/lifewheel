@@ -1,6 +1,8 @@
+import { base64url } from 'rfc4648'
 import type {
     LifewheelState,
     LifewheelStep,
+    ParsedLink,
     ProtocolVersion,
     ReflectionEntry,
     ReflectionStep,
@@ -76,13 +78,20 @@ export const formatHeader = ({
     protocolVersion: ProtocolVersion
 }) => `${encrypted ? '1' : '0'}e${protocolVersion}p`
 
-export const parseHeader = (header: string) => {
-    const match = header.match(/^([10])e(\d+)p/)
-    if (!match) throw new Error(`Invalid header: ${header}`)
+export const parseLink = (link: string): ParsedLink => {
+    /**
+     * Link header example: "1e1p" means encryption enabled, and protocol version 1
+     */
+    const match = link.match(/^([10])e(\d+)p/)
+    if (!match) throw new Error(`Invalid header: ${link}`)
+
+    // Remove the header to get the data.
+    const rawData = link.replace(match[0], '')
+    if (!rawData) throw new Error(`Empty data: ${link}`)
+
     return {
         encrypted: match[1] === '1',
         protocolVersion: parseInt(match[2], 10) as ProtocolVersion,
-        // Remove data without the header
-        data: header.replace(match[0], ''),
+        data: base64url.parse(rawData),
     }
 }

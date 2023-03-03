@@ -35,3 +35,9 @@ export type ReflectionEntry = {
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
+
+export type ParsedLink = {
+    encrypted: boolean
+    protocolVersion: ProtocolVersion
+    data: Uint8Array
+}

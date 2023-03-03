@@ -1,4 +1,4 @@
-import { base64 } from 'rfc4648'
+import { base64url } from 'rfc4648'
 import { decodeInt, encodeInt } from './utils'
 
 async function deriveKey(
@@ -58,11 +58,10 @@ export async function getEncryptedPayload(
 /**
  * Decrypt a payload and return the contents.
  *
- * @param payload The paylod to decrypt.
+ * @param bytes The payload to decrypt.
  * @param password The password used for decryption.
  */
-export async function getDecryptedPayload(payload: string, password: string) {
-    const bytes = base64.parse(payload)
+export async function getDecryptedPayload(bytes: Uint8Array, password: string) {
     const salt = bytes.slice(0, 32)
     const iv = bytes.slice(32, 32 + 16)
     const iterations = bytes.slice(32 + 16, 32 + 16 + 4)

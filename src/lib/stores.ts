@@ -32,3 +32,8 @@ export const reflections = writable<ReflectionEntry[]>([])
  * Whether or not the app is auto-importing a link.
  */
 export const hasLink = writable<boolean>(false)
+
+/**
+ * Delay rendering until the app has loaded.
+ */
+export const loading = writable<boolean>(true)

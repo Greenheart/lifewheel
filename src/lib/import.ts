@@ -1,4 +1,4 @@
-import { base64 } from 'rfc4648'
+import { base64url } from 'rfc4648'
 
 import type { ReflectionEntry } from './types'
 import { decodeInt } from './utils'
@@ -16,15 +16,10 @@ function decodeEntry(entryData: Uint8Array) {
 }
 
 export function decodeReflectionEntries(data: Uint8Array) {
-    // Protocol version is stored in the first byte
-    // const PROTOCOL_VERSION = data.at(0)
-
-    const length = decodeInt(data.subarray(1, 5))
+    const length = decodeInt(data.subarray(0, 4))
     return Array.from({ length }, (_, index) => {
-        const offset = 5 + index * 12
+        const offset = 4 + index * 12
         const entryData = data.subarray(offset, offset + 12)
         return decodeEntry(entryData)
     })
 }
-
-export const getDataFromLink = (hash: string) => base64.parse(decodeURIComponent(hash))
