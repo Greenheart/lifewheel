@@ -7,7 +7,7 @@ export const lifewheelSteps: Partial<LifewheelStep>[] = [
     },
     {
         title: 'Health and Fitness',
-        text: 'How satisfied are you right now with your mental and physical health right now? Do you sleep well? Are you exercising enough? Is your diet balanced and healthy?',
+        text: 'How satisfied are you with your mental and physical health right now? Do you sleep well? Are you exercising enough? Is your diet balanced and healthy?',
     },
     {
         title: 'Engagements and Education',
