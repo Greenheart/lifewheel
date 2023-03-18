@@ -7,15 +7,32 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
+    import { minifyJSONArrays, saveAs } from '$lib/utils'
 
-    const exportData = () => {
-        console.log($reflections)
-        const data = encodeReflectionEntries($reflections)
-        console.log(data)
-        const imported = decodeReflectionEntries(data)
-        console.log(imported)
+    const saveFile = () => {
+        const date = new Date().toLocaleString('sv-SE', {
+            month: 'numeric',
+            day: 'numeric',
+            year: 'numeric',
+        })
+        const time = new Date()
+        time.setSeconds(0, 0)
 
-        // TODO: write JSON file
+        const file = {
+            time,
+            reflections: $reflections,
+        }
+        const minified = minifyJSONArrays(JSON.stringify(file, null, 2))
+
+        const blob = new Blob([minified], {
+            type: 'application/json',
+        })
+
+        saveAs(blob, `${date}-lifewheel.json`)
+    }
+
+    const loadFile = () => {
+        // TODO
     }
 
     let canvas: HTMLCanvasElement
@@ -109,9 +126,9 @@
                         copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
                     >{copyText}</Button
                 >
-                <Button on:click={exportData} variant="outline">Export data</Button>
+                <Button on:click={saveFile} variant="outline">Save file</Button>
             {/if}
-            <Button variant="outline">Import from file</Button>
+            <Button variant="outline" on:click={loadFile}>Load file</Button>
             <Button variant="outline" on:click={encrypt}>Encrypt</Button>
             <Button variant="outline" on:click={decrypt}>Decrypt</Button>
         </div>

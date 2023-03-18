@@ -67,8 +67,6 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string) {
     const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
     const ciphertext = bytes.slice(32 + 16 + 4)
 
-    console.log('decoded iterations', decodeInt(iterations))
-
     const key = await deriveKey(salt, password, decodeInt(iterations), ['decrypt'])
     const content = new Uint8Array(
         await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext),
