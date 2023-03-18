@@ -126,6 +126,18 @@
     <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
 </div>
 
+<div class="pb-16">
+    <h3>Debug data</h3>
+    <a
+        href="https://192.168.0.242:5173/#0e1pAAAAA2QVhRAJBggFBggJBGQVhUwGCAkECAQIBGQVhjwIAwkGCQYIBg=="
+        class="block text-emerald-400 underline">3 reflections</a
+    >
+    <a
+        href="https://192.168.0.242:5173/#1e1pjecBoTdA5SP2RkAqsIMTiKHkXJeJIJLqie5jzEBAV-qwbCpPb2rSun07TpnS9p0pAB6EgCMoDpxReehe2LUsAe5pgkB4QfhBrLI8kKo50N2V6rzZjk1j334_hswcQRIWonthUkPbF300vjCe"
+        class="block text-emerald-400 underline">3 encrypted reflections</a
+    >
+</div>
+
 <!--
 
 IDEA: Maybe store derived key in sessionStorage to improve performance and UX. Or maybe only do this if the user selects "remember me"

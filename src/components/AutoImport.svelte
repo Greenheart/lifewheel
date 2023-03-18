@@ -121,6 +121,7 @@
                 autofocus
                 class="w-full rounded-md py-3 px-4 font-light text-black"
                 bind:value={password}
+                autocomplete="off"
             />
             <Button type="submit" class="mt-4 w-full">Submit</Button>
         </form>
