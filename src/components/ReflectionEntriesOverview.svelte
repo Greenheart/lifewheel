@@ -64,43 +64,12 @@
 -->
 
 <div class="pt-16">
-    <div>
-        <!--
-            IDEA: Maybe make this into a tab group that can be opened or closed. See SkillTabs for more info.
-            The two tabs should be Save and Load.
-            
-            For Save, you get the options "Copy link", "Show QR code" (maybe keep it separate to respect the user's intention) and "Export JSON file"
-            For Load, you get the options "Import JSON file" and instructions for how to load via a link
-         -->
-        <div class="grid max-w-lg gap-2 sm:grid-cols-3">
-            {#if $reflections.length}
-                <Button
-                    on:click={() =>
-                        copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
-                    >{copyText}</Button
-                >
-                <Button on:click={exportData} variant="outline">Export data</Button>
-            {/if}
-            <Button variant="outline">Import from file</Button>
-            <Button variant="outline" on:click={encrypt}>Encrypt</Button>
-            <Button variant="outline" on:click={decrypt}>Decrypt</Button>
-        </div>
-
-        <div class="pt-16" class:hidden={!isQRReady}>
-            <h2 class="pb-4 text-xl font-extrabold">QR code for your link:</h2>
-            <canvas bind:this={canvas} />
-        </div>
-    </div>
-
-    <!-- IDEA: We should probably persist state to localStorage to prevent data loss from accidental page reloads -->
-    <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
-
-    <h2 class="pt-16 text-center text-3xl font-extrabold">Previous reflections</h2>
-    <!--
-        IDEA: Maybe show loading... when loading data from file/link etc.
-        In that case, show the section by default, and move all the import/export buttons here too.
-        -->
     {#if $reflections.length}
+        <h2 class="pt-16 text-center text-3xl font-extrabold">Previous reflections</h2>
+        <!--
+            IDEA: Maybe show loading... when loading data from file/link etc.
+            In that case, show the section by default, and move all the import/export buttons here too.
+        -->
         <div class="grid gap-2 pt-4 pb-16">
             <!-- IDEA: select an entry to render a view-only lifewheel on the right side -->
             <!-- IDEA: use staggered animation when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes -->
@@ -124,6 +93,37 @@
             IDEA: Wehn you reach the beginning or the end, we replace the round button with a regular square Button to go back
         -->
     {/if}
+
+    <div>
+        <!--
+            IDEA: Maybe make this into a tab group that can be opened or closed. See SkillTabs for more info.
+            The two tabs should be Save and Load.
+            
+            For Save, you get the options "Copy link", "Show QR code" (maybe keep it separate to respect the user's intention) and "Export JSON file"
+            For Load, you get the options "Import JSON file" and instructions for how to load via a link
+         -->
+        <div class="grid max-w-lg gap-2 pb-16 sm:grid-cols-3">
+            {#if $reflections.length}
+                <Button
+                    on:click={() =>
+                        copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
+                    >{copyText}</Button
+                >
+                <Button on:click={exportData} variant="outline">Export data</Button>
+            {/if}
+            <Button variant="outline">Import from file</Button>
+            <Button variant="outline" on:click={encrypt}>Encrypt</Button>
+            <Button variant="outline" on:click={decrypt}>Decrypt</Button>
+        </div>
+
+        <div class="pt-16" class:hidden={!isQRReady}>
+            <h2 class="pb-4 text-xl font-extrabold">QR code for your link:</h2>
+            <canvas bind:this={canvas} />
+        </div>
+    </div>
+
+    <!-- IDEA: We should probably persist state to localStorage to prevent data loss from accidental page reloads -->
+    <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
 </div>
 
 <!--
