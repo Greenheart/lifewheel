@@ -101,7 +101,7 @@
         In that case, show the section by default, and move all the import/export buttons here too.
         -->
     {#if $reflections.length}
-        <div class="grid gap-2 py-4">
+        <div class="grid gap-2 pt-4 pb-16">
             <!-- IDEA: select an entry to render a view-only lifewheel on the right side -->
             <!-- IDEA: use staggered animation when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes -->
             <!--
@@ -125,11 +125,6 @@
         -->
     {/if}
 </div>
-
-<a
-    href="/#AQAAAANj%2FPkABAcFCQUIBQdj%2FPkACAkGCQgGBANj%2FPk8BAcGCggIBwg%3D"
-    class="mt-32 block text-emerald-400 underline">Reload with debug data</a
->
 
 <!--
 

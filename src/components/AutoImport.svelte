@@ -28,11 +28,13 @@
 
                 console.log(payload)
 
-                if (payload?.encrypted && payload?.data) {
+                if (payload.encrypted && payload.data) {
                     hasProtectedLink = true
                 } else {
-                    // load as usual
+                    // load unencrypted entries
+                    $reflections = decodeReflectionEntries(payload.data)
                     $loading = false
+                    history.pushState('', document.title, window.location.pathname)
                 }
             } catch (error) {
                 // Warn user that the link is invalid
@@ -93,7 +95,7 @@
             class:grid={isDecrypting}
         >
             <p class="spinner h-7 w-7" />
-            <p>Loading...</p>
+            <p>Decrypting your data...</p>
         </div>
         <header class="flex items-center gap-2" class:hidden={isDecrypting}>
             <svg
@@ -110,6 +112,7 @@
             </svg>
             <p id="msg">This link is password protected.</p>
         </header>
+        <!-- svelte-ignore a11y-autofocus -->
         <form on:submit|preventDefault={submitPassphrase} class:hidden={isDecrypting} class="mt-3">
             <input
                 type="password"
