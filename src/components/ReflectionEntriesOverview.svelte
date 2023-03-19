@@ -50,10 +50,20 @@
             description: 'Lifewheel save files',
         })
 
-        const file: SaveFile = await blob.text().then((content) => JSON.parse(content))
+        const file: SaveFile = await blob
+            .text()
+            .then((content) => JSON.parse(content))
+            .catch((err) => {
+                console.error(`Unable to open file "${blob.name}"`, blob, err)
+            })
+
+        if (!file) return
 
         if (file.type !== 'lifewheel') {
-            console.error('Unsupported file type:', file)
+            console.error(
+                `Unable to open file "${blob.name}": Unsupported file type "${file.type}"`,
+                file,
+            )
             return
         }
 
