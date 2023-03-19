@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
     import Button from '$components/Button.svelte'
+    import FolderOpen from '$icons/FolderOpen.svelte'
+    import Download from '$icons/Download.svelte'
     import { getEncryptedPayload } from '$lib/crypto'
     import { encodeReflectionEntries, formatLink, showQRCode } from '$lib/export'
     import { minifyJSONArrays } from '$lib/utils'
@@ -9,7 +11,6 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import Folder from './icons/Folder.svelte'
 
     const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
@@ -165,10 +166,12 @@
                         copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
                     >{copyText}</Button
                 >
-                <Button on:click={saveFile} variant="outline">Save file</Button>
+                <Button on:click={saveFile} variant="outline" class="flex items-center gap-3"
+                    ><Download />Save file</Button
+                >
             {/if}
             <Button variant="outline" on:click={loadFile} class="flex items-center gap-3"
-                ><Folder />Load file</Button
+                ><FolderOpen />Open file</Button
             >
             <Button variant="outline" on:click={encrypt}>Encrypt</Button>
             <Button variant="outline" on:click={decrypt}>Decrypt</Button>
