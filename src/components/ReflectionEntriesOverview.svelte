@@ -11,6 +11,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
+    import Link from '$icons/Link.svelte'
 
     const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
@@ -159,12 +160,12 @@
             For Save, you get the options "Copy link", "Show QR code" (maybe keep it separate to respect the user's intention) and "Export JSON file"
             For Load, you get the options "Import JSON file" and instructions for how to load via a link
          -->
-        <div class="grid max-w-lg gap-2 pb-16 sm:grid-cols-3">
+        <div class="grid max-w-xl gap-2 pb-16 sm:grid-cols-3">
             {#if $reflections.length}
                 <Button
                     on:click={() =>
                         copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
-                    >{copyText}</Button
+                    class="flex items-center gap-3"><Link />{copyText}</Button
                 >
                 <Button on:click={saveFile} variant="outline" class="flex items-center gap-3"
                     ><Download />Save file</Button
