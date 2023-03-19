@@ -165,13 +165,13 @@
                 <Button
                     on:click={() =>
                         copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
-                    class="flex items-center gap-3"><Link />{copyText}</Button
+                    class="flex items-center gap-2"><Link />{copyText}</Button
                 >
-                <Button on:click={saveFile} variant="outline" class="flex items-center gap-3"
+                <Button on:click={saveFile} variant="outline" class="flex items-center gap-2"
                     ><Download />Save file</Button
                 >
             {/if}
-            <Button variant="outline" on:click={loadFile} class="flex items-center gap-3"
+            <Button variant="outline" on:click={loadFile} class="flex items-center gap-2"
                 ><FolderOpen />Open file</Button
             >
             <Button variant="outline" on:click={encrypt}>Encrypt</Button>
