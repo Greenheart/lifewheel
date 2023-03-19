@@ -7,6 +7,7 @@ specifiers:
   '@types/qrcode': ^1.5.0
   '@vitejs/plugin-basic-ssl': ^1.0.1
   autoprefixer: ^10.4.14
+  browser-fs-access: ^0.33.0
   d3-shape: ^3.2.0
   postcss: ^8.4.21
   postcss-load-config: ^4.0.1
@@ -23,6 +24,7 @@ specifiers:
   vite: ^4.2.0
 
 dependencies:
+  browser-fs-access: 0.33.0
   d3-shape: 3.2.0
   qrcode: 1.5.1
   rfc4648: 1.5.2
@@ -460,6 +462,10 @@ packages:
     dependencies:
       fill-range: 7.0.1
     dev: true
+
+  /browser-fs-access/0.33.0:
+    resolution: {integrity: sha512-OIroFiFdNcITJnLCJUoJBRWLf6lu/e7h24Ik0khWg7Ozn+sR+asYiSeiPpXmV32OgogSNiOqCoaI1/7vrl1T+Q==}
+    dev: false
 
   /browserslist/4.21.5:
     resolution: {integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w==}

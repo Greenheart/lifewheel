@@ -2,14 +2,15 @@
     import Button from '$components/Button.svelte'
     import { getEncryptedPayload } from '$lib/crypto'
     import { encodeReflectionEntries, formatLink, showQRCode } from '$lib/export'
-    import { decodeReflectionEntries } from '$lib/import'
+    import { minifyJSONArrays } from '$lib/utils'
+    import { fileSave, fileOpen } from 'browser-fs-access'
+    import type { SaveFile } from '$lib/types'
 </script>
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import { minifyJSONArrays, saveAs } from '$lib/utils'
 
-    const saveFile = () => {
+    const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
             month: 'numeric',
             day: 'numeric',
@@ -18,7 +19,7 @@
         const time = new Date()
         time.setSeconds(0, 0)
 
-        const file = {
+        const file: SaveFile = {
             time,
             reflections: $reflections,
         }
@@ -28,11 +29,32 @@
             type: 'application/json',
         })
 
-        saveAs(blob, `${date}-lifewheel.json`)
+        await fileSave(blob, {
+            fileName: `${date}-lifewheel.json`,
+            mimeTypes: ['application/json'],
+            extensions: ['.json'],
+            id: 'documents',
+            startIn: 'documents',
+            description: 'Lifewheel save files',
+        })
     }
 
-    const loadFile = () => {
-        // TODO
+    const loadFile = async () => {
+        const blob = await fileOpen({
+            mimeTypes: ['application/json'],
+            id: 'documents',
+            startIn: 'documents',
+            extensions: ['.json'],
+            description: 'Lifewheel save files',
+        })
+
+        const file: SaveFile = await blob.text().then((content) => JSON.parse(content))
+
+        // Turn timestamps back into runtime types
+        $reflections = file.reflections.map((entry) => ({
+            time: new Date(entry.time),
+            data: entry.data,
+        }))
     }
 
     let canvas: HTMLCanvasElement
@@ -41,7 +63,6 @@
     let copyText = 'Copy your link'
 
     const copyLink = async (hash: string) => {
-        const original = copyText
         copyText = 'Copied!'
 
         const url = new URL(window.location.origin)
@@ -57,7 +78,7 @@
         await navigator?.clipboard?.writeText(url.toString())
 
         window.setTimeout(() => {
-            copyText = original
+            copyText = 'Copy your link'
         }, 2000)
     }
 

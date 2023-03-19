@@ -41,3 +41,8 @@ export type ParsedLink = {
     protocolVersion: ProtocolVersion
     data: Uint8Array
 }
+
+export type SaveFile = {
+    time: Date
+    reflections: ReflectionEntry[]
+}
