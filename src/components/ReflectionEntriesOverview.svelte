@@ -15,6 +15,7 @@
     import LifewheelStatic from './LifewheelStatic.svelte'
     import { fade } from 'svelte/transition'
 
+    // TODO: extract logic to library outside of the component
     const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
             month: 'numeric',
@@ -46,6 +47,7 @@
         })
     }
 
+    // TODO: extract logic to library outside of the component
     const loadFile = async () => {
         const blob = await fileOpen({
             mimeTypes: ['application/json'],
@@ -160,7 +162,7 @@
             Then you can use the round buttons to see the different results
             This view could be a nice way to see a note attached to the refleciton, if we add that
             IDEA: When you select a previous reflection, you could open the visualization for that index, and then move from there
-            IDEA: Wehn you reach the beginning or the end, we replace the round button with a regular square Button to go back
+            IDEA: When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
         -->
     {/if}
 
@@ -196,7 +198,6 @@
         </div>
     </div>
 
-    <!-- IDEA: We should probably persist state to localStorage to prevent data loss from accidental page reloads -->
     <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
 </div>
 
