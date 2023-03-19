@@ -1,8 +1,12 @@
-import { writable } from 'svelte/store'
+import { writable, type Writable } from 'svelte/store'
 import { tweened } from 'svelte/motion'
 import { cubicOut } from 'svelte/easing'
+import { z } from 'zod'
+import storedWritable from '@efstajas/svelte-stored-writable'
+
 import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from './constants'
 import type { LifewheelState, ReflectionEntry, ReflectionStep } from './types'
+import { browser } from '$app/environment'
 
 /**
  * The currently visible reflection step.
@@ -23,12 +27,6 @@ export const tweenedLifewheel = tweened<LifewheelState>(INITIAL_LIFEWHEEL_STATE,
 })
 
 /**
- * All previous reflections we currently know of.
- * This will store both new reflections entries from this session, as well as any previous data the user loads.
- */
-export const reflections = writable<ReflectionEntry[]>([])
-
-/**
  * Whether or not the app is auto-importing a link.
  */
 export const hasLink = writable<boolean>(false)
@@ -37,3 +35,20 @@ export const hasLink = writable<boolean>(false)
  * Delay rendering until the app has loaded.
  */
 export const loading = writable<boolean>(true)
+
+const reflectionsSchema = z.array(
+    z.object({
+        data: z.array(z.number()).length(8),
+        time: z.coerce.date(),
+    }),
+)
+
+/**
+ * Previous reflections.
+ */
+export const reflections = storedWritable(
+    'lifewheelReflections',
+    reflectionsSchema,
+    [],
+    !browser,
+) as Writable<ReflectionEntry[]> & { clear: () => void }

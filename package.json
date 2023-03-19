@@ -56,9 +56,11 @@
         ]
     },
     "dependencies": {
+        "@efstajas/svelte-stored-writable": "^0.1.1",
         "browser-fs-access": "^0.33.0",
         "d3-shape": "^3.2.0",
         "qrcode": "^1.5.1",
-        "rfc4648": "^1.5.2"
+        "rfc4648": "^1.5.2",
+        "zod": "^3.21.4"
     }
 }

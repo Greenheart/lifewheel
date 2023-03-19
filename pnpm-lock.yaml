@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@efstajas/svelte-stored-writable': ^0.1.1
   '@sveltejs/adapter-static': ^2.0.1
   '@sveltejs/kit': ^1.12.0
   '@types/d3-shape': ^3.1.1
@@ -22,12 +23,15 @@ specifiers:
   tslib: ^2.5.0
   typescript: ^5.0.2
   vite: ^4.2.0
+  zod: ^3.21.4
 
 dependencies:
+  '@efstajas/svelte-stored-writable': 0.1.1
   browser-fs-access: 0.33.0
   d3-shape: 3.2.0
   qrcode: 1.5.1
   rfc4648: 1.5.2
+  zod: 3.21.4
 
 devDependencies:
   '@sveltejs/adapter-static': 2.0.1_@sveltejs+kit@1.12.0
@@ -49,6 +53,13 @@ devDependencies:
   vite: 4.2.0
 
 packages:
+
+  /@efstajas/svelte-stored-writable/0.1.1:
+    resolution: {integrity: sha512-CfWSU6dhNdSVFffitz9MQASkczgY0/xbyMQaDPpEQ60Xr5PEOyAFEUEedMwZrRrl/DT0LoRJqzzMVPNi1kHVtQ==}
+    dependencies:
+      svelte: 3.57.0
+      zod: 3.21.4
+    dev: false
 
   /@esbuild/android-arm/0.17.12:
     resolution: {integrity: sha512-E/sgkvwoIfj4aMAPL2e35VnUJspzVYl7+M1B2cqeubdBhADV4uPon0KCc8p2G+LqSJ6i8ocYPCqY3A4GGq0zkQ==}
@@ -1432,7 +1443,6 @@ packages:
   /svelte/3.57.0:
     resolution: {integrity: sha512-WMXEvF+RtAaclw0t3bPDTUe19pplMlfyKDsixbHQYgCWi9+O9VN0kXU1OppzrB9gPAvz4NALuoca2LfW2bOjTQ==}
     engines: {node: '>= 8'}
-    dev: true
 
   /tailwindcss/3.2.7_postcss@8.4.21:
     resolution: {integrity: sha512-B6DLqJzc21x7wntlH/GsZwEXTBttVSl1FtCzC8WP4oBc/NKef7kaax5jeihkkCEWc831/5NDJ9gRNDK6NEioQQ==}
@@ -1628,4 +1638,8 @@ packages:
       which-module: 2.0.0
       y18n: 4.0.3
       yargs-parser: 18.1.3
+    dev: false
+
+  /zod/3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
