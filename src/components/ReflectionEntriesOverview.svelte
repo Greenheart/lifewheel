@@ -12,6 +12,8 @@
 <script lang="ts">
     import { reflections } from '$lib/stores'
     import Link from '$icons/Link.svelte'
+    import LifewheelStatic from './LifewheelStatic.svelte'
+    import { fade } from 'svelte/transition'
 
     const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
@@ -128,7 +130,7 @@
             IDEA: Maybe show loading... when loading data from file/link etc.
             In that case, show the section by default, and move all the import/export buttons here too.
         -->
-        <div class="grid gap-2 pt-4 pb-16">
+        <div class="grid justify-items-center gap-2 pt-4 pb-16">
             <!-- IDEA: select an entry to render a view-only lifewheel on the right side -->
             <!-- IDEA: use staggered animation when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes -->
             <!--
@@ -138,8 +140,18 @@
             <!-- IDEA: Add keyboard navigation to allow stepping through with arrow keys. -->
             {#each $reflections
                 .slice()
-                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time }}
-                <p>{time.toLocaleString('en-GB', { dateStyle: 'long', timeStyle: 'short' })}</p>
+                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time, data }, i}
+                {#key time.toISOString()}
+                    <div in:fade={{ duration: 300, delay: i * 200 }}>
+                        <p>
+                            {time.toLocaleString('en-GB', {
+                                dateStyle: 'long',
+                                timeStyle: 'short',
+                            })}
+                        </p>
+                        <LifewheelStatic {data} />
+                    </div>
+                {/key}
             {/each}
         </div>
 
