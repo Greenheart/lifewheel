@@ -20,6 +20,8 @@
         time.setSeconds(0, 0)
 
         const file: SaveFile = {
+            type: 'lifewheel',
+            version: 1,
             time,
             reflections: $reflections,
         }
@@ -49,6 +51,11 @@
         })
 
         const file: SaveFile = await blob.text().then((content) => JSON.parse(content))
+
+        if (file.type !== 'lifewheel') {
+            console.error('Unsupported file type:', file)
+            return
+        }
 
         // Turn timestamps back into runtime types
         $reflections = file.reflections.map((entry) => ({

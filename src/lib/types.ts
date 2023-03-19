@@ -43,6 +43,8 @@ export type ParsedLink = {
 }
 
 export type SaveFile = {
+    type: 'lifewheel'
+    version: ProtocolVersion
     time: Date
     reflections: ReflectionEntry[]
 }
