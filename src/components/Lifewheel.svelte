@@ -40,6 +40,7 @@
     })
 
     onDestroy(() => {
+        // Reset tweened state to make sure it shows smooth transitions if the lifewheel is opened when partially filled.
         tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
     })
 
@@ -47,19 +48,6 @@
         tweenedLifewheel.set($lifewheel)
         dimensions = getArcPaths($tweenedLifewheel)
     }
-    /*
-        TODO: investigate bug with missing tweens for first lifewheel values if they are unchanged when re-opening from the main menu for example.
-
-        Steps to reproduce:
-        1. start a new reflection and fill in the two first categories
-        2. go back to main menu
-        3. start a new reflection (partially filled state is preserved in the background)
-        4. when changing values for the first two dimensions, the value changes don't show tweened animations
-        5. only when the third value (next new dimension) is added, the tweened values start working again
-        
-        Potential fix: when re-opening the lifewheel with a partially filled state, ensure we clear the tweened store, and then add the values back again.
-        This should hopefully force a smooth re-render.
-    */
 </script>
 
 <!-- TODO: Add icons for each dimension -->
