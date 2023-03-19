@@ -9,6 +9,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
+    import Folder from './icons/Folder.svelte'
 
     const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
@@ -166,7 +167,9 @@
                 >
                 <Button on:click={saveFile} variant="outline">Save file</Button>
             {/if}
-            <Button variant="outline" on:click={loadFile}>Load file</Button>
+            <Button variant="outline" on:click={loadFile} class="flex items-center gap-3"
+                ><Folder />Load file</Button
+            >
             <Button variant="outline" on:click={encrypt}>Encrypt</Button>
             <Button variant="outline" on:click={decrypt}>Decrypt</Button>
         </div>
