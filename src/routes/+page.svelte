@@ -7,9 +7,21 @@
 <script lang="ts">
     import { loading } from '$lib/stores'
     import PlusCircle from '$icons/PlusCircle.svelte'
+    import GitHub from '$icons/GitHub.svelte'
+    import { REPO_URL } from '$lib/constants'
 </script>
 
 <div class="mx-auto max-w-screen-lg px-4">
+    <!--
+        IDEA: Add a toggleable menu in the top left, and then the github icon in the top right
+        IDEA: When the page loads, initially only the heading and tagline is visible. Then shortly after, the top menu and the app content fades in.
+        This will create a nice loading experience when opening the app.
+    -->
+    <div class="flex justify-end">
+        <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="-mr-4 p-4"><GitHub /></a
+        >
+    </div>
+
     <div class="pt-16 text-center">
         <h1
             class="bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"

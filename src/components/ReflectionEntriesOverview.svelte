@@ -140,6 +140,7 @@
                 This way, it will be easy to see how values change over time.
              -->
             <!-- IDEA: Add keyboard navigation to allow stepping through with arrow keys. -->
+            <!-- IDEA: when fading in the previous entries, perhaps using the delayed transition, but for the list items rather than the life wheels -->
             {#each $reflections
                 .slice()
                 .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time, data }, i}
@@ -207,11 +208,11 @@
 <div class="pb-16">
     <h3>Debug data</h3>
     <a
-        href="https://192.168.0.242:5173/#0e1pAAAAA2QVhRAJBggFBggJBGQVhUwGCAkECAQIBGQVhjwIAwkGCQYIBg=="
+        href="/#0e1pAAAAA2QVhRAJBggFBggJBGQVhUwGCAkECAQIBGQVhjwIAwkGCQYIBg=="
         class="block text-emerald-400 underline">3 reflections</a
     >
     <a
-        href="https://192.168.0.242:5173/#1e1pjecBoTdA5SP2RkAqsIMTiKHkXJeJIJLqie5jzEBAV-qwbCpPb2rSun07TpnS9p0pAB6EgCMoDpxReehe2LUsAe5pgkB4QfhBrLI8kKo50N2V6rzZjk1j334_hswcQRIWonthUkPbF300vjCe"
+        href="/#1e1pjecBoTdA5SP2RkAqsIMTiKHkXJeJIJLqie5jzEBAV-qwbCpPb2rSun07TpnS9p0pAB6EgCMoDpxReehe2LUsAe5pgkB4QfhBrLI8kKo50N2V6rzZjk1j334_hswcQRIWonthUkPbF300vjCe"
         class="block text-emerald-400 underline">3 encrypted reflections</a
     >
 </div>
