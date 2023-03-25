@@ -72,10 +72,8 @@
                     If the graph gets too large for the screen width, only show the section closest to the currently selected index
                     Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
             -->
-            <Lifewheel {data} {tweenedLifewheel} class="max-w-xs xs:max-w-md sm:max-w-lg" />
-
             <div
-                class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4 pb-4"
+                class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4"
             >
                 <Button
                     variant="roundOutline"
@@ -93,6 +91,8 @@
                     on:click={onNext}>→</Button
                 >
             </div>
+
+            <Lifewheel {data} {tweenedLifewheel} class="max-w-xs xs:max-w-md sm:max-w-lg" />
         </div>
     </section>
 {/if}
