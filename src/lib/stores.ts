@@ -1,6 +1,5 @@
-import { writable, type Writable } from 'svelte/store'
-import { z } from 'zod'
-import storedWritable from '@efstajas/svelte-stored-writable'
+import { writable } from 'svelte/store'
+import { persisted } from 'svelte-local-storage-store'
 
 import { INITIAL_LIFEWHEEL_STATE } from './constants'
 import type { LifewheelState, ReflectionEntry } from './types'
@@ -23,19 +22,9 @@ export const hasLink = writable<boolean>(false)
  */
 export const loading = writable<boolean>(true)
 
-const reflectionsSchema = z.array(
-    z.object({
-        data: z.array(z.number()).length(8),
-        time: z.coerce.date(),
-    }),
-)
-
 /**
  * Previous reflections.
  */
-export const reflections = storedWritable(
-    'lifewheelReflections',
-    reflectionsSchema,
-    [],
-    !browser,
-) as Writable<ReflectionEntry[]> & { clear: () => void }
+export const reflections = browser
+    ? persisted<ReflectionEntry[]>('lifewheelReflections', [])
+    : writable<ReflectionEntry[]>([])
