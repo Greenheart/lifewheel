@@ -37,6 +37,7 @@ export const createReflectionEntry = (data: LifewheelState): ReflectionEntry => 
  * This saves data in future exports, if some entries were imported more than once.
  */
 export const getUniqueEntries = (items: ReflectionEntry[]) =>
+    // TODO: Improve this to do proper deep equality check to see if all fields are equal
     items.filter(
         (item, index, array) =>
             array.findIndex((otherItem) => item.time.getTime() === otherItem.time.getTime()) ===

@@ -5,41 +5,73 @@
 <script lang="ts">
     import { reflections } from '$lib/stores'
     import { fade } from 'svelte/transition'
+
+    // get the current entry
+
+    let index = Math.max($reflections.length - 1, 0)
+    $: currentEntry = $reflections[index]
 </script>
 
 {#if $reflections.length}
-    <h2 class="pt-16 text-center text-3xl font-extrabold">Previous reflections</h2>
-    <div class="grid justify-items-center gap-2 pt-4 pb-16">
-        <!-- IDEA: select an entry to render a view-only lifewheel on the right side -->
-        <!-- IDEA: use staggered animation when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes -->
-        <!--
+    <section>
+        <h2 class="pt-16 text-center text-3xl font-extrabold">Previous reflections</h2>
+        <div class="grid justify-items-center gap-2 pt-4">
+            <!--
+                IDEA: On both mobile and desktop, keep the same UI layout
+                
+                Lifewheel
+                    Below the heading, show a preview of the lifewheel.
+
+                Navigation + date
+                    Show round arrow buttons (for prev and next) on the sides, and the date of the current reflection in the center
+                    When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
+
+                Note - if we add notes in the future
+                    If the entry has a note, this could be a nice place to show the note attached to the refleciton
+                    Maybe show first lines and then toggle to expand (which resets for each entry)
+                    TODO: Figure out how to encode variable length string in the entries.
+                          Maybe possible to use some special delimiter sequence so the parser can know where the next entry starts
+
+                Slider
+                    (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
+                    The slider has one step for each entry, and min value 0 anv max value length - 1.
+                    Changing the value of the slider updates the index of the current Entry
+                
+                Graph
+                    Below the top section, show a graph of how the values have changed over time
+                    One line is shown for each dimension, using the matching color
+                    Horisontally, each entry is equally spaced on the x-axis
+                    On the y-axis, the values 1 to 10 are shown
+                    The current reflection entry is highlighted vertically in the graph
+                    Changing the current reflection entry updates the 
+            -->
+
+            <!--
                 IDEA: Another idea could be to use a tweened store for the preview state, and simply set the new values as you step through the entries.
                 This way, it will be easy to see how values change over time.
              -->
-        <!-- IDEA: Add keyboard navigation to allow stepping through with arrow keys. -->
-        <!-- IDEA: when fading in the previous entries, perhaps using the delayed transition, but for the list items rather than the life wheels -->
-        {#each $reflections
-            .slice()
-            .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time, data }, i}
-            {#key time.toISOString()}
-                <div in:fade={{ duration: 300, delay: i * 200 }}>
-                    <p>
-                        {time.toLocaleString('en-GB', {
-                            dateStyle: 'long',
-                            timeStyle: 'short',
-                        })}
-                    </p>
-                    <LifewheelStatic {data} />
-                </div>
-            {/key}
-        {/each}
-    </div>
-
-    <!--
-            IDEA: Maybe use the same layout as for doing a reflection, but without the slider and instead showing the date and time there
-            Then you can use the round buttons to see the different results
-            This view could be a nice way to see a note attached to the refleciton, if we add that
-            IDEA: When you select a previous reflection, you could open the visualization for that index, and then move from there
-            IDEA: When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
-        -->
+            <!-- IDEA: Add keyboard navigation to allow stepping through with arrow keys. -->
+            <!-- IDEA: when fading in the previous entries, perhaps using the delayed transition, but for the list items rather than the life wheels -->
+            {#each $reflections
+                .slice()
+                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time, data }, i}
+                {#key time.toISOString()}
+                    <div in:fade={{ duration: 300, delay: i * 200 }}>
+                        <p>
+                            {time.toLocaleString('en-GB', {
+                                dateStyle: 'long',
+                                timeStyle: 'short',
+                            })}
+                        </p>
+                        <LifewheelStatic {data} />
+                    </div>
+                {/key}
+            {/each}
+        </div>
+    </section>
 {/if}
+
+<!--
+    IDEA: For the life wheel dimensions, maybe use a staggered transition (delay increasing with dimension index)
+    when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes
+-->
