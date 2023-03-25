@@ -4,7 +4,7 @@
 
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
-    import InputSlider from './InputSlider.svelte'
+    import ReflectionInputSlider from './ReflectionInputSlider.svelte'
     import Lifewheel from './Lifewheel.svelte'
 
     import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
@@ -91,7 +91,7 @@
         </div>
     </div>
 
-    <InputSlider {reflectionStep} />
+    <ReflectionInputSlider {reflectionStep} />
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}

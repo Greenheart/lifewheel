@@ -2,8 +2,8 @@ import { writable, type Writable } from 'svelte/store'
 import { z } from 'zod'
 import storedWritable from '@efstajas/svelte-stored-writable'
 
-import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from './constants'
-import type { LifewheelState, ReflectionEntry, ReflectionStep } from './types'
+import { INITIAL_LIFEWHEEL_STATE } from './constants'
+import type { LifewheelState, ReflectionEntry } from './types'
 import { browser } from '$app/environment'
 
 /**
