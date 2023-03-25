@@ -1,10 +1,10 @@
 import { base64url } from 'rfc4648'
 
 import type { ReflectionEntry } from './types'
-import { decodeInt } from './utils'
+import { decodeInt32 } from './utils'
 
 function decodeTime(data: Uint8Array) {
-    const timestamp = decodeInt(data)
+    const timestamp = decodeInt32(data)
     return new Date(timestamp * 1000)
 }
 
@@ -16,7 +16,7 @@ function decodeEntry(entryData: Uint8Array) {
 }
 
 export function decodeReflectionEntries(data: Uint8Array) {
-    const length = decodeInt(data.subarray(0, 4))
+    const length = decodeInt32(data.subarray(0, 4))
     return Array.from({ length }, (_, index) => {
         const offset = 4 + index * 12
         const entryData = data.subarray(offset, offset + 12)

@@ -1,5 +1,5 @@
 import { base64url } from 'rfc4648'
-import { decodeInt, encodeInt } from './utils'
+import { decodeInt32, encodeInt32 } from './utils'
 
 async function deriveKey(
     salt: Uint8Array,
@@ -40,7 +40,7 @@ export async function getEncryptedPayload(
     const key = await deriveKey(salt, password, iterations, ['encrypt'])
 
     const iv = crypto.getRandomValues(new Uint8Array(16))
-    const iterationsBytes = encodeInt(iterations)
+    const iterationsBytes = encodeInt32(iterations)
     const ciphertext = new Uint8Array(
         await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, content),
     )
@@ -67,7 +67,7 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string) {
     const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
     const ciphertext = bytes.slice(32 + 16 + 4)
 
-    const key = await deriveKey(salt, password, decodeInt(iterations), ['decrypt'])
+    const key = await deriveKey(salt, password, decodeInt32(iterations), ['decrypt'])
     const content = new Uint8Array(
         await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext),
     )

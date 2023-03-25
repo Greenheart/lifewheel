@@ -57,7 +57,7 @@ export function mergeTypedArrays(...arrays: Uint8Array[]) {
     return merged
 }
 
-export function encodeInt(n: number) {
+export function encodeInt32(n: number) {
     const num = Math.min(256 * 256 * 256 * 256 - 1, Math.floor(n))
     const res = new Uint8Array(4)
     res[0] = num >> 24
@@ -67,8 +67,25 @@ export function encodeInt(n: number) {
     return res
 }
 
-export function decodeInt(data: Uint8Array) {
+// IDEA: To store variable length data (for example strings)
+// we could encode the length of the string and add it before the string data itself.
+// This way, we know where to begin and end parsing, before starting with the next reflection entry
+// The protocol needs to be updated to handle that some data is of known length while some fields are of variable length
+// But if this works, we have a way to transfer rich data across devices
+export function encodeInt16(n: number) {
+    const num = Math.min(256 * 256 - 1, Math.floor(n))
+    const res = new Uint8Array(2)
+    res[0] = num >> 8
+    res[1] = num & 0xff
+    return res
+}
+
+export function decodeInt32(data: Uint8Array) {
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
+}
+
+export function decodeInt16(data: Uint8Array) {
+    return (data[0] << 8) | data[1]
 }
 
 export const formatHeader = ({

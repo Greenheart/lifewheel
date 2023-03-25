@@ -2,11 +2,11 @@ import { base64url } from 'rfc4648'
 import QRCode from 'qrcode'
 
 import type { ReflectionEntry, ProtocolVersion } from './types'
-import { encodeInt, formatHeader, mergeTypedArrays } from './utils'
+import { encodeInt32, formatHeader, mergeTypedArrays } from './utils'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000
-    return encodeInt(timestamp)
+    return encodeInt32(timestamp)
 }
 
 function encodeEntry(entry: ReflectionEntry) {
@@ -15,7 +15,7 @@ function encodeEntry(entry: ReflectionEntry) {
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     const encodedEntries = reflections.map(encodeEntry)
-    return mergeTypedArrays(encodeInt(reflections.length), ...encodedEntries)
+    return mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
 }
 
 /**
