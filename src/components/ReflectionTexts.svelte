@@ -1,6 +1,11 @@
-<script>
+<script lang="ts" context="module">
+    import type { ReflectionStep } from '$lib/types'
+    import type { Readable } from 'svelte/store'
     import { cx, isLifewheelStep } from '../lib/utils'
-    import { reflectionStep } from '../lib/stores'
+</script>
+
+<script lang="ts">
+    export let reflectionStep: Readable<ReflectionStep>
 </script>
 
 <h2

@@ -1,11 +1,17 @@
-<script>
+<script lang="ts" context="module">
     import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
-    import { lifewheel, reflectionStep } from '../lib/stores'
+    import type { ReflectionStep } from '$lib/types'
+    import type { Readable } from 'svelte/store'
+    import { lifewheel } from '../lib/stores'
     import { cx, isLifewheelStep } from '../lib/utils'
 
     let min = MIN_LEVEL
     let max = MAX_LEVEL
     let step = 1
+</script>
+
+<script lang="ts">
+    export let reflectionStep: Readable<ReflectionStep>
 </script>
 
 <div

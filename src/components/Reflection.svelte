@@ -5,16 +5,22 @@
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
     import InputSlider from './InputSlider.svelte'
+    import Lifewheel from './Lifewheel.svelte'
 
     import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
     import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
-    import type { LifewheelState, LifewheelStep } from '$lib/types'
+    import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
 </script>
 
 <script lang="ts">
-    import { reflectionStep, lifewheel, reflections } from '$lib/stores'
-    import Lifewheel from './Lifewheel.svelte'
+    import { lifewheel, reflections } from '$lib/stores'
     import { goto } from '$app/navigation'
+    import { writable } from 'svelte/store'
+
+    /**
+     * The currently visible reflection step.
+     */
+    export const reflectionStep = writable<ReflectionStep>(allReflectionSteps[0])
 
     /**
      * A tweened representation of the lifewheel state. This allows smooth tweened motions when values change.
@@ -81,11 +87,11 @@
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4 pb-4">
         <div class="h-40 xs:h-52">
-            <ReflectionTexts />
+            <ReflectionTexts {reflectionStep} />
         </div>
     </div>
 
-    <InputSlider />
+    <InputSlider {reflectionStep} />
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}

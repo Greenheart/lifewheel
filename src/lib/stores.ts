@@ -7,17 +7,14 @@ import type { LifewheelState, ReflectionEntry, ReflectionStep } from './types'
 import { browser } from '$app/environment'
 
 /**
- * The currently visible reflection step.
- */
-export const reflectionStep = writable<ReflectionStep>(allReflectionSteps[0])
-
-/**
  * The actual lifewheel state.
  */
 export const lifewheel = writable<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
 
 /**
  * Whether or not the app is auto-importing a link.
+ *
+ * TODO: Consider removing if this is not needed as a global store. Maybe could be replaced by local state
  */
 export const hasLink = writable<boolean>(false)
 
