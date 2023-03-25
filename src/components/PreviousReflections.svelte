@@ -1,14 +1,27 @@
 <script lang="ts" context="module">
-    import LifewheelStatic from './LifewheelStatic.svelte'
     import Button from './Button.svelte'
+    import Lifewheel from './Lifewheel.svelte'
+    import type { LifewheelState } from '$lib/types'
+
+    import { derived, writable } from 'svelte/store'
+    import { tweened } from 'svelte/motion'
+    import { cubicOut } from 'svelte/easing'
 </script>
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import { fade } from 'svelte/transition'
-    import { writable } from 'svelte/store'
 
     const index = writable(Math.max($reflections.length - 1, 0))
+    const tweenedLifewheel = tweened<LifewheelState>($reflections[$index].data, {
+        duration: 500,
+        easing: cubicOut,
+    })
+    const currentEntry = derived([index, reflections], ([currentIndex, entries]) => {
+        tweenedLifewheel.set(entries[currentIndex].data)
+        return entries[currentIndex]
+    })
+
+    const data = derived(currentEntry, (entry) => entry.data)
 
     const onPrev = () => {
         $index = $index - 1
@@ -17,26 +30,24 @@
     const onNext = () => {
         $index = $index + 1
     }
-
-    $: currentEntry = $reflections[$index]
 </script>
 
 {#if $reflections.length}
-    <section in:fade={{ duration: 300 }}>
+    <section>
         <h2 class="pt-16 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
                 IDEA: On both mobile and desktop, keep the same UI layout
                 
                 Lifewheel
-                    Show the lifewheel visualisation for the current entry
-                    Uses a tweened store to visualise how values change over time as you step through your previous reflections
-                    Uses the same in:fade as the regular lifewheel
+                    ✅ Show the lifewheel visualisation for the current entry
+                    ✅ Uses a tweened store to visualise how values change over time as you step through your previous reflections
+                    ✅ Uses the same in:fade as the regular lifewheel
 
                 Navigation + date
-                    Show round arrow buttons (for prev and next) on the sides, and the date of the current reflection in the center
-                    When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
-                    Add keyboard support for navigating to the prev / next entry with arrow left and arrow right
+                    ✅ Show round arrow buttons (for prev and next) on the sides, and the date of the current reflection in the center
+                    ✅ When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
+                    ✅ Add keyboard support for navigating to the prev / next entry with arrow left and arrow right
 
                 Note - if we add notes in the future
                     If the entry has a note, this could be a nice place to show the note attached to the refleciton
@@ -61,7 +72,7 @@
                     If the graph gets too large for the screen width, only show the section closest to the currently selected index
                     Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
             -->
-            <LifewheelStatic data={currentEntry.data} class="max-w-xs xs:max-w-md sm:max-w-lg" />
+            <Lifewheel {data} {tweenedLifewheel} class="max-w-xs xs:max-w-md sm:max-w-lg" />
 
             <div
                 class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4 pb-4"
@@ -72,9 +83,9 @@
                     on:click={onPrev}>←</Button
                 >
                 <h3 class="select-none whitespace-pre-wrap text-center">
-                    {`${currentEntry.time.toLocaleString('en-GB', {
+                    {`${$currentEntry.time.toLocaleString('en-GB', {
                         dateStyle: 'long',
-                    })}\n${currentEntry.time.toLocaleString('en-GB', { timeStyle: 'short' })}`}
+                    })}\n${$currentEntry.time.toLocaleString('en-GB', { timeStyle: 'short' })}`}
                 </h3>
                 <Button
                     variant="roundOutline"
@@ -98,8 +109,3 @@
         }
     }}
 />
-
-<!--
-    IDEA: For the life wheel dimensions, maybe use a staggered transition (delay increasing with dimension index)
-    when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes
--->
