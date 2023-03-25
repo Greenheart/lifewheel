@@ -82,25 +82,6 @@
                     on:click={onNext}>→</Button
                 >
             </div>
-
-            <!-- <div class="flex w-full max-w-lg items-center justify-between px-4 pb-4">
-                <Button
-                    variant="roundOutline"
-                    class={$index < 1 ? 'invisible' : undefined}
-                    on:click={onPrev}>←</Button
-                >
-                <h3 class="select-none text-center">
-                    {$currentEntry.time.toLocaleString('en-GB', {
-                        dateStyle: 'long',
-                        timeStyle: 'short',
-                    })}
-                </h3>
-                <Button
-                    variant="roundSolid"
-                    class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
-                    on:click={onNext}>→</Button
-                >
-            </div> -->
         </div>
     </section>
 {/if}
