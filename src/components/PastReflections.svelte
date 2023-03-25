@@ -20,11 +20,14 @@
                 IDEA: On both mobile and desktop, keep the same UI layout
                 
                 Lifewheel
-                    Below the heading, show a preview of the lifewheel.
+                    Show the lifewheel visualisation for the current entry
+                    Uses a tweened store to visualise how values change over time as you step through your previous reflections
+                    Uses the same in:fade as the regular lifewheel
 
                 Navigation + date
                     Show round arrow buttons (for prev and next) on the sides, and the date of the current reflection in the center
                     When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
+                    Add keyboard support for navigating to the prev / next entry with arrow left and arrow right
 
                 Note - if we add notes in the future
                     If the entry has a note, this could be a nice place to show the note attached to the refleciton
@@ -45,13 +48,6 @@
                     The current reflection entry is highlighted vertically in the graph
                     Changing the current reflection entry updates the 
             -->
-
-            <!--
-                IDEA: Another idea could be to use a tweened store for the preview state, and simply set the new values as you step through the entries.
-                This way, it will be easy to see how values change over time.
-             -->
-            <!-- IDEA: Add keyboard navigation to allow stepping through with arrow keys. -->
-            <!-- IDEA: when fading in the previous entries, perhaps using the delayed transition, but for the list items rather than the life wheels -->
             {#each $reflections
                 .slice()
                 .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time, data }, i}
