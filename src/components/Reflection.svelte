@@ -7,7 +7,12 @@
     import ReflectionInputSlider from './ReflectionInputSlider.svelte'
     import Lifewheel from './Lifewheel.svelte'
 
-    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
+    import {
+        allReflectionSteps,
+        INITIAL_LIFEWHEEL_STATE,
+        MAX_LEVEL,
+        MIN_LEVEL,
+    } from '$lib/constants'
     import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
     import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
 </script>
@@ -16,6 +21,7 @@
     import { lifewheel, reflections } from '$lib/stores'
     import { goto } from '$app/navigation'
     import { writable } from 'svelte/store'
+    import InputSlider from './InputSlider.svelte'
 
     /**
      * The currently visible reflection step.
@@ -91,7 +97,16 @@
         </div>
     </div>
 
-    <ReflectionInputSlider {reflectionStep} />
+    {#if isLifewheelStep($reflectionStep)}
+        <InputSlider
+            value={$lifewheel[$reflectionStep.i]}
+            min={MIN_LEVEL}
+            max={MAX_LEVEL}
+            inputClass={$reflectionStep.colors
+                ? `${$reflectionStep.colors.from} ${$reflectionStep.colors.to}`
+                : undefined}
+        />
+    {/if}
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}
@@ -105,11 +120,29 @@
 <!-- Make it easy to navigate between sections with the keyboard -->
 <svelte:body
     on:keyup={(event) => {
-        if (document.activeElement?.id !== 'input-slider') {
+        if (document.activeElement?.className.includes('input-slider')) {
             if (event.key === 'ArrowLeft') {
                 if (canGoBack) onPrev()
             } else if (event.key === 'ArrowRight') {
                 onNext()
+            }
+        }
+    }}
+    on:keydown={(event) => {
+        if (
+            !document.activeElement?.className.includes('input-slider') &&
+            isLifewheelStep($reflectionStep)
+        ) {
+            if (event.key === 'ArrowDown') {
+                $lifewheel[$reflectionStep.i] = Math.max(
+                    MIN_LEVEL,
+                    $lifewheel[$reflectionStep.i] - 1,
+                )
+            } else if (event.key === 'ArrowUp') {
+                $lifewheel[$reflectionStep.i] = Math.min(
+                    MAX_LEVEL,
+                    $lifewheel[$reflectionStep.i] + 1,
+                )
             }
         }
     }}
