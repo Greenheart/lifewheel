@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-    import { loading } from '$lib/stores'
+    import { loading, reflections } from '$lib/stores'
     import { REPO_URL } from '$lib/constants'
 </script>
 
@@ -47,7 +47,9 @@
 
         <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
 
-        <PreviousReflections />
+        {#if $reflections.length}
+            <PreviousReflections />
+        {/if}
         <!-- <ReflectionActions /> -->
     {/if}
 </div>
