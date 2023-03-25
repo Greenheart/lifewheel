@@ -76,7 +76,7 @@
 >
     <Lifewheel class="max-w-xs xs:max-w-md sm:max-w-lg" {tweenedLifewheel} data={lifewheel} />
 
-    <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4 pb-4">
+    <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4">
         <div class="h-40 xs:h-52">
             <ReflectionTexts {reflectionStep} />
         </div>

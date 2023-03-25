@@ -19,7 +19,10 @@
 >
     {#if isLifewheelStep($reflectionStep)}
         <span>{min}</span>
-        <!-- TODO: Add number label for the selected value that appears over the slider dot as you move it -->
+        <!--
+            TODO: Add number label for the selected value that appears over the slider dot as you move it
+            IDEA: Maybe use https://floating-ui.com/
+        -->
         <input
             type="range"
             {min}

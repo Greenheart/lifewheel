@@ -33,18 +33,16 @@
         <p class="pt-4 text-xl text-white xs:text-2xl">Reflect on Your Life Balance</p>
     </div>
 
+    <!-- TODO: figure out why this causes layout shift on inital page load -->
+    <div class="mx-auto grid max-w-sm justify-items-center pt-16">
+        <LinkButton href="/reflection" class="flex max-w-max items-center gap-2 pr-4"
+            ><PlusCircle />New reflection</LinkButton
+        >
+    </div>
+
     <AutoImport />
 
     {#if !$loading}
-        <!-- NOTE: Maybe simplify unless we want two buttons here in the future -->
-        <div class="mx-auto grid max-w-sm grid-cols-2 gap-2 pt-16">
-            <LinkButton
-                href="/reflection"
-                class="col-span-2 flex max-w-max items-center gap-2 justify-self-center pr-4"
-                ><PlusCircle />New reflection</LinkButton
-            >
-        </div>
-
         <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
 
         {#if $reflections.length}
