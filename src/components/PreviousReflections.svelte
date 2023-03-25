@@ -1,18 +1,29 @@
 <script lang="ts" context="module">
     import LifewheelStatic from './LifewheelStatic.svelte'
+    import Button from './Button.svelte'
 </script>
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
     import { fade } from 'svelte/transition'
+    import { writable } from 'svelte/store'
 
-    let index = Math.max($reflections.length - 1, 0)
-    $: currentEntry = $reflections[index]
+    const index = writable(Math.max($reflections.length - 1, 0))
+
+    const onPrev = () => {
+        $index = $index - 1
+    }
+
+    const onNext = () => {
+        $index = $index + 1
+    }
+
+    $: currentEntry = $reflections[$index]
 </script>
 
 {#if $reflections.length}
-    <section>
-        <h2 class="pt-16 text-center text-3xl font-extrabold">Previous reflections</h2>
+    <section in:fade={{ duration: 300 }}>
+        <h2 class="pt-16 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
                 IDEA: On both mobile and desktop, keep the same UI layout
@@ -44,17 +55,52 @@
                     Horisontally, each entry is equally spaced on the x-axis
                     On the y-axis, the values 1 to 10 are shown
                     The current reflection entry is highlighted vertically in the graph
-                    Changing the current reflection entry updates the 
+                    Changing the current reflection entry updates the graph
+                    Clicking in the graph selects the entry at that point.
+                    Hovering the graph shows
+                    If the graph gets too large for the screen width, only show the section closest to the currently selected index
+                    Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
             -->
-            <div in:fade={{ duration: 300 }}>
-                <LifewheelStatic data={currentEntry.data} />
+            <LifewheelStatic data={currentEntry.data} class="max-w-xs xs:max-w-md sm:max-w-lg" />
+
+            <div
+                class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4 pb-4"
+            >
+                <Button
+                    variant="roundOutline"
+                    class={$index < 1 ? 'invisible' : undefined}
+                    on:click={onPrev}>←</Button
+                >
+                <h3 class="select-none whitespace-pre-wrap text-center">
+                    {`${currentEntry.time.toLocaleString('en-GB', {
+                        dateStyle: 'long',
+                    })}\n${currentEntry.time.toLocaleString('en-GB', { timeStyle: 'short' })}`}
+                </h3>
+                <Button
+                    variant="roundOutline"
+                    class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
+                    on:click={onNext}>→</Button
+                >
             </div>
-            <h3>
-                {currentEntry.time.toLocaleString('en-GB', {
-                    dateStyle: 'long',
-                    timeStyle: 'short',
-                })}
-            </h3>
+
+            <!-- <div class="flex w-full max-w-lg items-center justify-between px-4 pb-4">
+                <Button
+                    variant="roundOutline"
+                    class={$index < 1 ? 'invisible' : undefined}
+                    on:click={onPrev}>←</Button
+                >
+                <h3 class="select-none text-center">
+                    {$currentEntry.time.toLocaleString('en-GB', {
+                        dateStyle: 'long',
+                        timeStyle: 'short',
+                    })}
+                </h3>
+                <Button
+                    variant="roundSolid"
+                    class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
+                    on:click={onNext}>→</Button
+                >
+            </div> -->
         </div>
     </section>
 {/if}

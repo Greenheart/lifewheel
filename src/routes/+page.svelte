@@ -45,7 +45,9 @@
             >
         </div>
 
+        <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
+
         <PreviousReflections />
-        <ReflectionActions />
+        <!-- <ReflectionActions /> -->
     {/if}
 </div>
