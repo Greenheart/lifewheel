@@ -1,11 +1,15 @@
 <script context="module" lang="ts">
     import { arc } from 'd3-shape'
+    import type { Tweened } from 'svelte/motion'
+    import type { Readable } from 'svelte/store'
     import { colors, INITIAL_LIFEWHEEL_STATE, lifewheelSteps, MAX_LEVEL } from '$lib/constants'
+    import type { LifewheelState } from '$lib/types'
     import { cx } from '../lib/utils'
 
     const oneEigthRadians = (Math.PI * 2) / 8
     const levelWidth = 20
     const levels = MAX_LEVEL
+    const LEVELS = Array(10)
 
     const generateArcPath = (value: number, i: number) =>
         arc()
@@ -25,7 +29,9 @@
 <script lang="ts">
     import { onDestroy, onMount } from 'svelte'
     import { scale } from 'svelte/transition'
-    import { lifewheel, tweenedLifewheel } from '../lib/stores'
+
+    export let data: Readable<LifewheelState>
+    export let tweenedLifewheel: Tweened<LifewheelState>
 
     let className = ''
     export { className as class }
@@ -35,7 +41,7 @@
 
     onMount(() => {
         visible = true
-        tweenedLifewheel.set($lifewheel)
+        tweenedLifewheel.set($data)
         dimensions = getArcPaths($tweenedLifewheel)
     })
 
@@ -45,7 +51,7 @@
     })
 
     $: {
-        tweenedLifewheel.set($lifewheel)
+        tweenedLifewheel.set($data)
         dimensions = getArcPaths($tweenedLifewheel)
     }
 </script>
@@ -81,7 +87,7 @@
             </defs>
 
             <!-- Only render actual lifewheel when first data is available -->
-            {#if $lifewheel[0] !== 0}
+            {#if $data[0] !== 0}
                 {#each dimensions as path, i}
                     <path
                         d={path}
@@ -92,7 +98,7 @@
             {/if}
 
             <!-- Render outlined circles to show levels -->
-            {#each Array(10) as _, i}
+            {#each LEVELS as _, i}
                 <circle
                     cx={250}
                     cy={250}

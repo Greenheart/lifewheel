@@ -1,6 +1,4 @@
 import { writable, type Writable } from 'svelte/store'
-import { tweened } from 'svelte/motion'
-import { cubicOut } from 'svelte/easing'
 import { z } from 'zod'
 import storedWritable from '@efstajas/svelte-stored-writable'
 
@@ -17,14 +15,6 @@ export const reflectionStep = writable<ReflectionStep>(allReflectionSteps[0])
  * The actual lifewheel state.
  */
 export const lifewheel = writable<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
-
-/**
- * A tweened representation of the lifewheel state. This allows smooth tweened motions when values change.
- */
-export const tweenedLifewheel = tweened<LifewheelState>(INITIAL_LIFEWHEEL_STATE, {
-    duration: 400,
-    easing: cubicOut,
-})
 
 /**
  * Whether or not the app is auto-importing a link.
