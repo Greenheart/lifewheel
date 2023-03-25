@@ -132,45 +132,43 @@
         In that case, show the section by default, and move all the import/export buttons here too.
     -->
 
-    <div>
-        <!--
-            IDEA: Maybe make this into a tab group that can be opened or closed. See SkillTabs for more info.
-            The two tabs should be Save and Load.
-            
-            For Save, you get the options "Copy link", "Show QR code" (maybe keep it separate to respect the user's intention) and "Export JSON file"
-            For Load, you get the options "Import JSON file" and instructions for how to load via a link
-         -->
-        <div class="grid max-w-xl gap-2 pb-16 sm:grid-cols-3">
-            {#if $reflections.length}
-                <Button
-                    on:click={() =>
-                        copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
-                    class="flex items-center gap-2"><Link />{copyText}</Button
-                >
-                <Button on:click={saveFile} variant="outline" class="flex items-center gap-2"
-                    ><Download />Save file</Button
-                >
-            {/if}
-            <Button variant="outline" on:click={loadFile} class="flex items-center gap-2"
-                ><FolderOpen />Open file</Button
+    <!--
+        IDEA: Maybe make this into a tab group that can be opened or closed. See SkillTabs for more info.
+        The two tabs should be Save and Load.
+        
+        For Save, you get the options "Copy link", "Show QR code" (maybe keep it separate to respect the user's intention) and "Export JSON file"
+        For Load, you get the options "Import JSON file" and instructions for how to load via a link
+        -->
+    <div class="grid max-w-xl gap-2 pt-16 sm:grid-cols-3">
+        {#if $reflections.length}
+            <Button
+                on:click={() =>
+                    copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
+                class="flex items-center gap-2"><Link />{copyText}</Button
             >
-            <Button variant="outline" on:click={encrypt}>Encrypt</Button>
-            <Button variant="outline" on:click={decrypt}>Decrypt</Button>
-            {#if $reflections.length}
-                <Button variant="outline" on:click={() => reflections.clear()}>Reset</Button>
-            {/if}
-        </div>
+            <Button on:click={saveFile} variant="outline" class="flex items-center gap-2"
+                ><Download />Save file</Button
+            >
+        {/if}
+        <Button variant="outline" on:click={loadFile} class="flex items-center gap-2"
+            ><FolderOpen />Open file</Button
+        >
+        <Button variant="outline" on:click={encrypt}>Encrypt</Button>
+        <Button variant="outline" on:click={decrypt}>Decrypt</Button>
+        {#if $reflections.length}
+            <Button variant="outline" on:click={() => reflections.clear()}>Reset</Button>
+        {/if}
+    </div>
 
-        <div class="pt-16" class:hidden={!isQRReady}>
-            <h2 class="pb-4 text-xl font-extrabold">QR code for your link:</h2>
-            <canvas bind:this={canvas} />
-        </div>
+    <div class="pt-16" class:hidden={!isQRReady}>
+        <h2 class="pb-4 text-xl font-extrabold">QR code for your link:</h2>
+        <canvas bind:this={canvas} />
     </div>
 
     <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
 </div>
 
-<div class="pb-16">
+<div class="pt-16 pb-16">
     <h3>Debug data</h3>
     <a
         href="/#0e1pAAAAA2QVhRAJBggFBggJBGQVhUwGCAkECAQIBGQVhjwIAwkGCQYIBg=="
