@@ -1,13 +1,14 @@
 <script lang="ts" context="module">
     import LinkButton from '$components/LinkButton.svelte'
-    import ReflectionEntriesOverview from '$components/ReflectionEntriesOverview.svelte'
     import AutoImport from '$components/AutoImport.svelte'
+    import PreviousReflections from '$components/PreviousReflections.svelte'
+    import ReflectionActions from '$components/ReflectionActions.svelte'
+    import PlusCircle from '$icons/PlusCircle.svelte'
+    import GitHub from '$icons/GitHub.svelte'
 </script>
 
 <script lang="ts">
     import { loading } from '$lib/stores'
-    import PlusCircle from '$icons/PlusCircle.svelte'
-    import GitHub from '$icons/GitHub.svelte'
     import { REPO_URL } from '$lib/constants'
 </script>
 
@@ -44,6 +45,7 @@
             >
         </div>
 
-        <ReflectionEntriesOverview />
+        <PreviousReflections />
+        <ReflectionActions />
     {/if}
 </div>

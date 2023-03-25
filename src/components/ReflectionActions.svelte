@@ -12,9 +12,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import PastReflections from './PastReflections.svelte'
 
-    // TODO: extract logic to library outside of the component
     const saveFile = async () => {
         const date = new Date().toLocaleString('sv-SE', {
             month: 'numeric',
@@ -46,7 +44,6 @@
         })
     }
 
-    // TODO: extract logic to library outside of the component
     const loadFile = async () => {
         const blob = await fileOpen({
             mimeTypes: ['application/json'],
@@ -125,13 +122,6 @@
 -->
 
 <div class="pt-16">
-    <PastReflections />
-
-    <!--
-        IDEA: Maybe show loading... when loading data from file/link etc.
-        In that case, show the section by default, and move all the import/export buttons here too.
-    -->
-
     <!--
         IDEA: Maybe make this into a tab group that can be opened or closed. See SkillTabs for more info.
         The two tabs should be Save and Load.

@@ -6,8 +6,6 @@
     import { reflections } from '$lib/stores'
     import { fade } from 'svelte/transition'
 
-    // get the current entry
-
     let index = Math.max($reflections.length - 1, 0)
     $: currentEntry = $reflections[index]
 </script>
@@ -48,21 +46,15 @@
                     The current reflection entry is highlighted vertically in the graph
                     Changing the current reflection entry updates the 
             -->
-            {#each $reflections
-                .slice()
-                .sort((a, b) => b.time.getTime() - a.time.getTime()) as { time, data }, i}
-                {#key time.toISOString()}
-                    <div in:fade={{ duration: 300, delay: i * 200 }}>
-                        <p>
-                            {time.toLocaleString('en-GB', {
-                                dateStyle: 'long',
-                                timeStyle: 'short',
-                            })}
-                        </p>
-                        <LifewheelStatic {data} />
-                    </div>
-                {/key}
-            {/each}
+            <div in:fade={{ duration: 300 }}>
+                <LifewheelStatic data={currentEntry.data} />
+            </div>
+            <h3>
+                {currentEntry.time.toLocaleString('en-GB', {
+                    dateStyle: 'long',
+                    timeStyle: 'short',
+                })}
+            </h3>
         </div>
     </section>
 {/if}
