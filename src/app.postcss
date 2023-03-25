@@ -38,3 +38,53 @@ html {
         animation-delay: 0.01ms !important;
     }
 }
+
+.slider {
+    --thumb-size: 32px;
+}
+
+input[type='range'] {
+    appearance: none;
+}
+
+input[type='range']::-moz-range-thumb {
+    appearance: none;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    height: var(--thumb-size);
+    width: var(--thumb-size);
+    border: 0;
+    border-radius: 50%;
+    background: white;
+    transition: background 0.3s ease-in-out;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    height: var(--thumb-size);
+    width: var(--thumb-size);
+    border: 0;
+    border-radius: 50%;
+    background: white;
+    transition: background 0.3s ease-in-out;
+}
+
+input[type='range']::-moz-range-track {
+    appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+    appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+@media (min-width: 400px) {
+    .slider {
+        --thumb-size: 36px;
+    }
+}

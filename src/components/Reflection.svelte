@@ -1,27 +1,26 @@
 <script lang="ts" context="module">
     import { cubicOut } from 'svelte/easing'
     import { tweened } from 'svelte/motion'
+    import { writable } from 'svelte/store'
 
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
     import ReflectionInputSlider from './ReflectionInputSlider.svelte'
     import Lifewheel from './Lifewheel.svelte'
 
-    import {
-        allReflectionSteps,
-        INITIAL_LIFEWHEEL_STATE,
-        MAX_LEVEL,
-        MIN_LEVEL,
-    } from '$lib/constants'
+    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
     import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
     import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
 </script>
 
 <script lang="ts">
-    import { lifewheel, reflections } from '$lib/stores'
+    import { reflections } from '$lib/stores'
     import { goto } from '$app/navigation'
-    import { writable } from 'svelte/store'
-    import InputSlider from './InputSlider.svelte'
+
+    /**
+     * The actual lifewheel state.
+     */
+    export const lifewheel = writable<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
 
     /**
      * The currently visible reflection step.
@@ -42,20 +41,6 @@
     let currentIndex = getCurrentIndex()
     let canGoBack = currentIndex >= 1
 
-    const resetReflection = async () => {
-        window.setTimeout(async () => {
-            $lifewheel = INITIAL_LIFEWHEEL_STATE
-            tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
-            currentIndex = 0
-            canGoBack = true
-            $reflectionStep = allReflectionSteps[currentIndex]
-
-            // TODO: Fix bug with resetting that doesn't work as expected.
-
-            await goto('/')
-        }, 200)
-    }
-
     const onPrev = () => {
         currentIndex = getCurrentIndex()
         if (currentIndex <= 1) {
@@ -64,12 +49,12 @@
         $reflectionStep = allReflectionSteps[currentIndex - 1]
     }
 
-    const onNext = () => {
+    const onNext = async () => {
         currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
             $reflections = [...$reflections, createReflectionEntry($lifewheel)]
 
-            resetReflection()
+            await goto('/')
         } else {
             $reflectionStep = allReflectionSteps[currentIndex + 1]
 
@@ -97,16 +82,7 @@
         </div>
     </div>
 
-    {#if isLifewheelStep($reflectionStep)}
-        <InputSlider
-            value={$lifewheel[$reflectionStep.i]}
-            min={MIN_LEVEL}
-            max={MAX_LEVEL}
-            inputClass={$reflectionStep.colors
-                ? `${$reflectionStep.colors.from} ${$reflectionStep.colors.to}`
-                : undefined}
-        />
-    {/if}
+    <ReflectionInputSlider {reflectionStep} {lifewheel} />
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}
@@ -120,29 +96,11 @@
 <!-- Make it easy to navigate between sections with the keyboard -->
 <svelte:body
     on:keyup={(event) => {
-        if (document.activeElement?.className.includes('input-slider')) {
+        if (!document.activeElement?.className.includes('input-slider')) {
             if (event.key === 'ArrowLeft') {
                 if (canGoBack) onPrev()
             } else if (event.key === 'ArrowRight') {
                 onNext()
-            }
-        }
-    }}
-    on:keydown={(event) => {
-        if (
-            !document.activeElement?.className.includes('input-slider') &&
-            isLifewheelStep($reflectionStep)
-        ) {
-            if (event.key === 'ArrowDown') {
-                $lifewheel[$reflectionStep.i] = Math.max(
-                    MIN_LEVEL,
-                    $lifewheel[$reflectionStep.i] - 1,
-                )
-            } else if (event.key === 'ArrowUp') {
-                $lifewheel[$reflectionStep.i] = Math.min(
-                    MAX_LEVEL,
-                    $lifewheel[$reflectionStep.i] + 1,
-                )
             }
         }
     }}

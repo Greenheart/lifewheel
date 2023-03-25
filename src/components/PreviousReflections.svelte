@@ -99,8 +99,7 @@
 
 <svelte:body
     on:keyup={(event) => {
-        // TODO: update with id of the new input slider
-        if (document.activeElement?.id !== 'input-slider') {
+        if (!document.activeElement?.className.includes('input-slider')) {
             if (event.key === 'ArrowLeft' && $index > 0) {
                 onPrev()
             } else if (event.key === 'ArrowRight' && $index < $reflections.length - 1) {

@@ -1,8 +1,7 @@
 <script lang="ts" context="module">
     import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
-    import type { ReflectionStep } from '$lib/types'
-    import type { Readable } from 'svelte/store'
-    import { lifewheel } from '../lib/stores'
+    import type { LifewheelState, ReflectionStep } from '$lib/types'
+    import type { Readable, Writable } from 'svelte/store'
     import { cx, isLifewheelStep } from '../lib/utils'
 
     let min = MIN_LEVEL
@@ -11,11 +10,12 @@
 </script>
 
 <script lang="ts">
+    export let lifewheel: Writable<LifewheelState>
     export let reflectionStep: Readable<ReflectionStep>
 </script>
 
 <div
-    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 pb-4 text-lg xs:h-6 xs:text-xl"
+    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl"
 >
     {#if isLifewheelStep($reflectionStep)}
         <span>{min}</span>
@@ -54,55 +54,3 @@
         }
     }}
 />
-
-<style>
-    .slider {
-        --thumb-size: 32px;
-    }
-
-    input[type='range'] {
-        appearance: none;
-    }
-
-    input[type='range']::-moz-range-thumb {
-        appearance: none;
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        height: var(--thumb-size);
-        width: var(--thumb-size);
-        border: 0;
-        border-radius: 50%;
-        background: white;
-        transition: background 0.3s ease-in-out;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-        appearance: none;
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        height: var(--thumb-size);
-        width: var(--thumb-size);
-        border: 0;
-        border-radius: 50%;
-        background: white;
-        transition: background 0.3s ease-in-out;
-    }
-
-    input[type='range']::-moz-range-track {
-        appearance: none;
-        box-shadow: none;
-        border: none;
-        background: transparent;
-    }
-
-    input[type='range']::-webkit-slider-runnable-track {
-        appearance: none;
-        box-shadow: none;
-        border: none;
-        background: transparent;
-    }
-
-    @media (min-width: 400px) {
-        .slider {
-            --thumb-size: 36px;
-        }
-    }
-</style>

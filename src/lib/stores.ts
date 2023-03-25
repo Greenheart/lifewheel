@@ -1,14 +1,7 @@
 import { writable } from 'svelte/store'
 import { persisted } from 'svelte-local-storage-store'
 
-import { INITIAL_LIFEWHEEL_STATE } from './constants'
-import type { LifewheelState, ReflectionEntry } from './types'
-import { browser } from '$app/environment'
-
-/**
- * The actual lifewheel state.
- */
-export const lifewheel = writable<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
+import type { ReflectionEntry } from './types'
 
 /**
  * Whether or not the app is auto-importing a link.
@@ -25,21 +18,20 @@ export const loading = writable<boolean>(true)
 /**
  * Previous reflections.
  */
-export const reflections = browser
-    ? persisted<ReflectionEntry[]>('lifewheelReflections', [], {
-          serializer: {
-              parse(data: string) {
-                  return JSON.parse(data, (key, value) => {
-                      if (key === 'time') return new Date(value)
-                      return value
-                  })
-              },
-              stringify(entry) {
-                  return JSON.stringify(entry, (key, value) => {
-                      if (key === 'time') return (value as Date).toISOString()
-                      return value
-                  })
-              },
-          },
-      })
-    : writable<ReflectionEntry[]>([])
+export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', [], {
+    serializer: {
+        parse(data: string) {
+            return JSON.parse(data, (key, value) => {
+                if (key === 'time') return new Date(value)
+                return value
+            })
+        },
+        stringify(entry) {
+            return JSON.stringify(entry, (key, value) => {
+                //   if (key === 'time' && value instanceof Date)
+                // if (key === 'time') return (value as Date).toISOString()
+                return value
+            })
+        },
+    },
+})
