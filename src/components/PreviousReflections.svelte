@@ -86,6 +86,19 @@
     </section>
 {/if}
 
+<svelte:body
+    on:keyup={(event) => {
+        // TODO: update with id of the new input slider
+        if (document.activeElement?.id !== 'input-slider') {
+            if (event.key === 'ArrowLeft' && $index > 0) {
+                onPrev()
+            } else if (event.key === 'ArrowRight' && $index < $reflections.length - 1) {
+                onNext()
+            }
+        }
+    }}
+/>
+
 <!--
     IDEA: For the life wheel dimensions, maybe use a staggered transition (delay increasing with dimension index)
     when showing one dimension at a time. Add {#key ...} block to re-render when the next item to preview changes
