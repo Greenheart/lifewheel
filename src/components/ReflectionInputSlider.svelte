@@ -21,13 +21,12 @@
         <span>{min}</span>
         <!-- TODO: Add number label for the selected value that appears over the slider dot as you move it -->
         <input
-            id="input-slider"
             type="range"
             {min}
             {max}
             {step}
             class={cx(
-                'h-5 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
+                'input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
                 $reflectionStep.colors.from,
                 $reflectionStep.colors.to,
             )}
@@ -43,7 +42,10 @@
 <!-- Make it easy to change the current value with the keyboard -->
 <svelte:body
     on:keydown={(event) => {
-        if (document.activeElement?.id !== 'input-slider' && isLifewheelStep($reflectionStep)) {
+        if (
+            !document.activeElement?.className.includes('input-slider') &&
+            isLifewheelStep($reflectionStep)
+        ) {
             if (event.key === 'ArrowDown') {
                 $lifewheel[$reflectionStep.i] = Math.max(min, $lifewheel[$reflectionStep.i] - 1)
             } else if (event.key === 'ArrowUp') {
