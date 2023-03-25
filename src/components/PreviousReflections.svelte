@@ -68,7 +68,7 @@
                     The current reflection entry is highlighted vertically in the graph
                     Changing the current reflection entry updates the graph
                     Clicking in the graph selects the entry at that point.
-                    Hovering the graph shows
+                    Maybe: Hovering the graph switches to the entry at the given index - but this should be disabled when dragging with the mouse
                     If the graph gets too large for the screen width, only show the section closest to the currently selected index
                     Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
             -->
@@ -83,9 +83,9 @@
                     on:click={onPrev}>←</Button
                 >
                 <h3 class="select-none whitespace-pre-wrap text-center">
-                    {`${$currentEntry.time.toLocaleString('en-GB', {
+                    {`${$currentEntry.time.toLocaleDateString('en-GB', {
                         dateStyle: 'long',
-                    })}\n${$currentEntry.time.toLocaleString('en-GB', { timeStyle: 'short' })}`}
+                    })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
                 </h3>
                 <Button
                     variant="roundOutline"

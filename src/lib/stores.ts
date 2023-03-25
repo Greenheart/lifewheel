@@ -26,5 +26,20 @@ export const loading = writable<boolean>(true)
  * Previous reflections.
  */
 export const reflections = browser
-    ? persisted<ReflectionEntry[]>('lifewheelReflections', [])
+    ? persisted<ReflectionEntry[]>('lifewheelReflections', [], {
+          serializer: {
+              parse(data: string) {
+                  return JSON.parse(data, (key, value) => {
+                      if (key === 'time') return new Date(value)
+                      return value
+                  })
+              },
+              stringify(entry) {
+                  return JSON.stringify(entry, (key, value) => {
+                      if (key === 'time') return (value as Date).toISOString()
+                      return value
+                  })
+              },
+          },
+      })
     : writable<ReflectionEntry[]>([])
