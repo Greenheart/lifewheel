@@ -145,6 +145,7 @@
                     class={$index < 1 ? 'invisible' : undefined}
                     on:click={onPrev}>←</Button
                 >
+                <!-- IDEA: Between the buttons here might be a good spot to display notes -->
                 <div />
                 <Button
                     variant="roundOutline"

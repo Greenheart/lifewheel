@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-    import { hasLink, loading, reflections } from '$lib/stores'
+    import { loading, reflections } from '$lib/stores'
     import { onMount } from 'svelte'
     import Button from './Button.svelte'
     import { getDecryptedPayload } from '$lib/crypto'
@@ -20,7 +20,6 @@
 
     onMount(() => {
         if (window.location.hash) {
-            $hasLink = true
             const hash = window.location.hash.slice(1) // Skip # sign
 
             try {
