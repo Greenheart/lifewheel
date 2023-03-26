@@ -22,7 +22,6 @@
         if (window.location.hash) {
             $hasLink = true
             const hash = window.location.hash.slice(1) // Skip # sign
-            // const hash = HASH.slice(1) // Skip # sign
 
             try {
                 payload = parseLink(hash)
@@ -32,13 +31,11 @@
                 if (payload.encrypted && payload.data) {
                     hasProtectedLink = true
                 } else {
-                    // load unencrypted entries
                     $reflections = decodeReflectionEntries(payload.data)
                     $loading = false
                     history.pushState('', document.title, window.location.pathname)
                 }
             } catch (error) {
-                // Warn user that the link is invalid
                 console.error('Invalid link: ', error)
             }
 
