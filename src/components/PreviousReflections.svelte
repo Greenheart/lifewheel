@@ -120,7 +120,13 @@
 
 <svelte:body
     on:keyup={(event) => {
-        if (!document.activeElement?.className.includes('input-slider')) {
+        const el = document.activeElement
+
+        // Maybe we don't need the input-slider check here since it will never be rendered at the same time as this component
+        if (
+            !document.querySelector('.manage-data:focus-within') &&
+            !el?.className?.includes('input-slider')
+        ) {
             if (event.key === 'ArrowLeft' && $index > 0) {
                 onPrev()
             } else if (event.key === 'ArrowRight' && $index < $reflections.length - 1) {

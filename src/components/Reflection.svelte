@@ -98,7 +98,7 @@
 <!-- Make it easy to navigate between sections with the keyboard -->
 <svelte:body
     on:keyup={(event) => {
-        if (!document.activeElement?.className.includes('input-slider')) {
+        if (!document.activeElement?.className?.includes('input-slider')) {
             if (event.key === 'ArrowLeft') {
                 if (canGoBack) onPrev()
             } else if (event.key === 'ArrowRight') {
