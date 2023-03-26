@@ -11,7 +11,7 @@ export const lifewheelSteps: Partial<LifewheelStep>[] = [
     },
     {
         title: 'Engagements and Education',
-        text: 'How satisfied are you with your job, leisure engagements and/or school situation? Are you in the right place? Are you making meaningful contributions to a thriving future? Is your situation affecting your mental or physical health?',
+        text: 'How satisfied are you with your job, leisure engagements and/or school situation? Are you making meaningful contributions to a thriving future? Is your situation affecting your mental or physical health?',
     },
     {
         title: 'Inner Development',
