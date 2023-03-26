@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+    import type { HTMLButtonAttributes } from 'svelte/elements'
     import { cx } from '$lib/utils'
 
     export const variants = {
@@ -16,9 +17,13 @@
 </script>
 
 <script lang="ts">
-    export let disabled: boolean = false
+    interface $$Props extends HTMLButtonAttributes {
+        disabled?: boolean
+        variant?: keyof typeof variants
+        class?: string
+    }
+    export let disabled = false
     export let variant: keyof typeof variants = defaultVariant
-    export let type: 'submit' | undefined = undefined
     let className = ''
     export { className as class }
 </script>
@@ -28,7 +33,6 @@
     on:click
     {disabled}
     class={cx(defaultClasses, variants[variant], className)}
-    {type}
 >
     <slot />
 </button>
