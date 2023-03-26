@@ -84,7 +84,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl pt-16" class:invisible={$loading}>
-    <TabGroup class="manage-data" defaultIndex={1}>
+    <TabGroup class="manage-data">
         <TabList class="flex justify-center">
             <Tab
                 class={cx(tabClasses, 'inline-flex items-center gap-2')}

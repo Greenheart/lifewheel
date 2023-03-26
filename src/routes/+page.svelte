@@ -13,7 +13,7 @@
 <script lang="ts">
     import { loading, reflections } from '$lib/stores'
 
-    const isDataMenuOpen = writable(true)
+    const isDataMenuOpen = writable(false)
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
@@ -47,7 +47,7 @@
 
             <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
 
-            {#if $reflections.length && !$isDataMenuOpen}
+            {#if $reflections.length}
                 <PreviousReflections />
             {/if}
             <!-- TODO: Replace all features and remove this component -->
