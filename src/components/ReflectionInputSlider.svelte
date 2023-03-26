@@ -20,10 +20,9 @@
     let tooltip: HTMLDivElement
     let arrowElement: HTMLDivElement
 
-    const getThumbPosition = (reflectionStep: ReflectionStep, data: LifewheelState) =>
-        ((data[(reflectionStep as LifewheelStep).i] - min) * 100) / (max - min)
+    const getThumbPosition = (currentValue: number) => ((currentValue - min) * 100) / (max - min)
 
-    const updatePosition = (reflectionStep: ReflectionStep, data: LifewheelState) => {
+    const updatePosition = (currentValue: number) => {
         // We only care about updates happening when all elements are rendered
         // This is needed because we mount the component but don't show elements during the reflection intro or outro
         if (!(input && tooltip && arrowElement)) return
@@ -35,7 +34,7 @@
             const width = input.offsetWidth - 32
 
             tooltip.style.transform = `translate(${
-                x - width / 2 + (width * getThumbPosition(reflectionStep, data)) / 100
+                x - width / 2 + (width * getThumbPosition(currentValue)) / 100
             }px, ${y}px)`
 
             // @ts-expect-error
@@ -63,7 +62,7 @@
     const showTooltip = () => {
         window.clearTimeout(hiding)
         tooltip.style.display = 'block'
-        updatePosition($reflectionStep, $lifewheel)
+        updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
     }
 
     const hideTooltip = (delay = 400) => {
@@ -78,10 +77,10 @@
     }
 
     onMount(() => {
-        updatePosition($reflectionStep, $lifewheel)
+        updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
     })
 
-    $: updatePosition($reflectionStep, $lifewheel)
+    $: updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
 </script>
 
 <div
@@ -114,7 +113,7 @@
                 $reflectionStep.colors.from,
                 $reflectionStep.colors.to,
             )}
-            style={`background-size: ${getThumbPosition($reflectionStep, $lifewheel)}% 100%`}
+            style={`background-size: ${getThumbPosition($lifewheel[$reflectionStep.i])}% 100%`}
             bind:value={$lifewheel[$reflectionStep.i]}
             bind:this={input}
         />
