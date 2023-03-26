@@ -32,7 +32,7 @@
             placement: 'top',
             middleware: [offset(18), flip(), arrow({ element: arrowElement })],
         }).then(({ x, y, placement, middlewareData }) => {
-            const width = input.offsetWidth - 36
+            const width = input.offsetWidth - 32
 
             tooltip.style.transform = `translate(${
                 x - width / 2 + (width * getThumbPosition(reflectionStep, data)) / 100
@@ -92,7 +92,7 @@
         <div
             role="tooltip"
             id="tooltip"
-            class="absolute top-0 left-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm shadow-lg"
+            class="absolute top-0 left-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm"
             bind:this={tooltip}
         >
             {$lifewheel[$reflectionStep.i]}
