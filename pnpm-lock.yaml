@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@floating-ui/dom': ^1.2.5
   '@sveltejs/adapter-static': ^2.0.1
   '@sveltejs/kit': ^1.14.0
   '@types/d3-shape': ^3.1.1
@@ -25,6 +26,7 @@ specifiers:
   vite: ^4.2.1
 
 dependencies:
+  '@floating-ui/dom': 1.2.5
   browser-fs-access: 0.33.0
   d3-shape: 3.2.0
   qrcode: 1.5.1
@@ -249,6 +251,16 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@floating-ui/core/1.2.5:
+    resolution: {integrity: sha512-qrcbyfnRVziRlB6IYwjCopYhO7Vud750JlJyuljruIXcPxr22y8zdckcJGsuOdnQ639uVD1tTXddrcH3t3QYIQ==}
+    dev: false
+
+  /@floating-ui/dom/1.2.5:
+    resolution: {integrity: sha512-+sAUfpQ3Frz+VCbPCqj+cZzvEESy3fjSeT/pDWkYCWOBXYNNKZfuVsHuv8/JO2zze8+Eb/Q7a6hZVgzS81fLbQ==}
+    dependencies:
+      '@floating-ui/core': 1.2.5
+    dev: false
 
   /@jridgewell/resolve-uri/3.1.0:
     resolution: {integrity: sha512-F2msla3tad+Mfht5cJq7LSXcdudKTWCVYUgw6pLFOOHSTtZlj6SWNYAp+AhuqLmWdBO2X5hPrLcu8cVP8fy28w==}

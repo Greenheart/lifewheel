@@ -1,7 +1,10 @@
 <script lang="ts" context="module">
-    import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
-    import type { LifewheelState, ReflectionStep } from '$lib/types'
+    import { computePosition, flip, offset, arrow } from '@floating-ui/dom'
     import type { Readable, Writable } from 'svelte/store'
+    import { onMount } from 'svelte'
+
+    import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
+    import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
     import { cx, isLifewheelStep } from '../lib/utils'
 
     let min = MIN_LEVEL
@@ -12,6 +15,73 @@
 <script lang="ts">
     export let lifewheel: Writable<LifewheelState>
     export let reflectionStep: Readable<ReflectionStep>
+
+    let input: HTMLInputElement
+    let tooltip: HTMLDivElement
+    let arrowElement: HTMLDivElement
+
+    const getThumbPosition = (reflectionStep: ReflectionStep, data: LifewheelState) =>
+        ((data[(reflectionStep as LifewheelStep).i] - min) * 100) / (max - min)
+
+    const updatePosition = (reflectionStep: ReflectionStep, data: LifewheelState) => {
+        // We only care about updates happening when all elements are rendered
+        // This is needed because we mount the component but don't show elements during the reflection intro or outro
+        if (!(input && tooltip && arrowElement)) return
+
+        computePosition(input, tooltip, {
+            placement: 'top',
+            middleware: [offset(18), flip(), arrow({ element: arrowElement })],
+        }).then(({ x, y, placement, middlewareData }) => {
+            const width = input.offsetWidth - 36
+
+            tooltip.style.transform = `translate(${
+                x - width / 2 + (width * getThumbPosition(reflectionStep, data)) / 100
+            }px, ${y}px)`
+
+            // @ts-expect-error
+            const { x: arrowX, y: arrowY } = middlewareData.arrow
+
+            const staticSide = {
+                top: 'bottom',
+                right: 'left',
+                bottom: 'top',
+                left: 'right',
+            }[placement.split('-')[0]] as string
+
+            Object.assign(arrowElement.style, {
+                left: arrowX !== null ? `${arrowX}px` : '',
+                top: arrowY !== null ? `${arrowY}px` : '',
+                right: '',
+                bottom: '',
+                [staticSide]: '-4px',
+            })
+        })
+    }
+
+    let hiding: number
+
+    const showTooltip = () => {
+        window.clearTimeout(hiding)
+        tooltip.style.display = 'block'
+        updatePosition($reflectionStep, $lifewheel)
+    }
+
+    const hideTooltip = (delay = 400) => {
+        hiding = window.setTimeout(() => {
+            tooltip.style.display = ''
+        }, delay)
+    }
+
+    const flashTooltip = () => {
+        showTooltip()
+        hideTooltip()
+    }
+
+    onMount(() => {
+        updatePosition($reflectionStep, $lifewheel)
+    })
+
+    $: updatePosition($reflectionStep, $lifewheel)
 </script>
 
 <div
@@ -19,24 +89,34 @@
 >
     {#if isLifewheelStep($reflectionStep)}
         <span>{min}</span>
-        <!--
-            TODO: Add number label for the selected value that appears over the slider dot as you move it
-            IDEA: Maybe use https://floating-ui.com/
-        -->
+        <div
+            role="tooltip"
+            id="tooltip"
+            class="absolute top-0 left-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm shadow-lg"
+            bind:this={tooltip}
+        >
+            {$lifewheel[$reflectionStep.i]}
+            <div class="arrow absolute h-2 w-2 rotate-45 bg-black" bind:this={arrowElement} />
+        </div>
         <input
             type="range"
+            aria-describedby="tooltip"
             {min}
             {max}
             {step}
+            on:keydown={(event) => {
+                if (event.key.includes('Arrow')) flashTooltip()
+            }}
+            on:pointerdown={showTooltip}
+            on:pointerup={() => hideTooltip()}
             class={cx(
                 'input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
                 $reflectionStep.colors.from,
                 $reflectionStep.colors.to,
             )}
-            style={`background-size: ${
-                (($lifewheel[$reflectionStep.i] - min) * 100) / (max - min)
-            }% 100%`}
+            style={`background-size: ${getThumbPosition($reflectionStep, $lifewheel)}% 100%`}
             bind:value={$lifewheel[$reflectionStep.i]}
+            bind:this={input}
         />
         <span>{max}</span>
     {/if}
@@ -45,14 +125,16 @@
 <!-- Make it easy to change the current value with the keyboard -->
 <svelte:body
     on:keydown={(event) => {
-        if (
-            !document.activeElement?.className.includes('input-slider') &&
-            isLifewheelStep($reflectionStep)
-        ) {
+        const isFocused = document.activeElement?.className.includes('input')
+        if (isFocused && event.key.includes('Arrow')) {
+            flashTooltip()
+        } else if (!isFocused && isLifewheelStep($reflectionStep)) {
             if (event.key === 'ArrowDown') {
                 $lifewheel[$reflectionStep.i] = Math.max(min, $lifewheel[$reflectionStep.i] - 1)
+                flashTooltip()
             } else if (event.key === 'ArrowUp') {
                 $lifewheel[$reflectionStep.i] = Math.min(max, $lifewheel[$reflectionStep.i] + 1)
+                flashTooltip()
             }
         }
     }}
