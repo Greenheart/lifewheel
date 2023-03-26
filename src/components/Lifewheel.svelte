@@ -59,7 +59,7 @@
 <!-- TODO: Add icons for each dimension -->
 <!-- TODO: maybe d3 can position icons in a circle around the wheel? -->
 
-<div class={cx('aspect-square w-full', className)}>
+<div class={cx('pointer-events-none aspect-square w-full select-none', className)}>
     {#if visible}
         <!-- Render lifewheel background -->
         <svg
