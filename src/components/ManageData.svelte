@@ -34,7 +34,7 @@
     import { browser } from '$app/environment'
     import { getEncryptedPayload } from '$lib/crypto'
 
-    let expanded = false
+    let expanded = true
     const encryptionEnabled = writable(true)
 
     // IDEA: Maybe store link and encryptedLink separately?
@@ -85,8 +85,8 @@
     }
 </script>
 
-<div class="mx-auto w-full max-w-md pt-16" class:invisible={$loading}>
-    <TabGroup class="manage-data">
+<div class="mx-auto w-full max-w-screen-lg pt-16" class:invisible={$loading}>
+    <TabGroup class="manage-data" defaultIndex={2}>
         <TabList class="flex justify-center">
             <Tab
                 class={cx(tabClasses, 'inline-flex items-center gap-2')}
@@ -148,47 +148,66 @@
                         variant="outline"
                         class="flex w-36 items-center gap-2"><Link />{copyText}</Button
                     >
+                    <div class="grid md:grid-cols-2 md:gap-4">
+                        <div class="md:order-2">
+                            <h2 class="pt-8 text-lg font-bold">Your link is your "account"! :)</h2>
+                            <p class="pt-2">
+                                🔗 To add more reflections in the future, save your link / QR code
+                                and open it in any modern browser.
+                            </p>
+                            <p class="pt-2">
+                                🔐 For better privacy, protect your data with a password. Make sure
+                                to store this somewhere safe, like in your password manager.
+                            </p>
 
-                    <h2 class="pt-8 text-lg font-bold">Your link is your "account"! :)</h2>
-                    <p class="pt-2">
-                        🔗 To add more reflections in the future, save your link / QR code and open
-                        it in any modern browser.
-                    </p>
-                    <p class="pt-2">
-                        🔐 For better privacy, protect your data with a password. Make sure to store
-                        this somewhere safe, like in your password manager.
-                    </p>
-
-                    <p class="pt-2">
-                        🙌 You can open multiple links (or files) to combine all reflections and
-                        save them as one file or link. Useful to sync data across devices.
-                    </p>
-
-                    <SwitchGroup class="select-none pt-4">
-                        <div class="flex items-center gap-3 pt-2">
-                            {#if $encryptionEnabled}
-                                <LockClosed class="flex-shrink-0" />
-                            {:else}
-                                <LockOpen class="flex-shrink-0 opacity-50" />
-                            {/if}
-                            <Switch
-                                checked={$encryptionEnabled}
-                                on:change={(e) => ($encryptionEnabled = e.detail)}
-                                class={$encryptionEnabled
-                                    ? 'switch switch-enabled'
-                                    : 'switch switch-disabled'}
-                            >
-                                <span
-                                    class="toggle"
-                                    class:toggle-on={$encryptionEnabled}
-                                    class:toggle-off={!$encryptionEnabled}
-                                />
-                            </Switch>
-                            <SwitchLabel class="block cursor-pointer py-2"
-                                >Use encryption for better privacy</SwitchLabel
-                            >
+                            <p class="pt-2">
+                                🙌 You can open multiple links (or files) to combine all reflections
+                                and save them as one file or link. Useful to sync data across
+                                devices.
+                            </p>
                         </div>
-                    </SwitchGroup>
+
+                        <div class="md:order-1">
+                            <SwitchGroup class="select-none pt-8">
+                                <div class="flex items-center gap-3">
+                                    {#if $encryptionEnabled}
+                                        <LockClosed class="flex-shrink-0" />
+                                    {:else}
+                                        <LockOpen class="flex-shrink-0 opacity-50" />
+                                    {/if}
+                                    <Switch
+                                        checked={$encryptionEnabled}
+                                        on:change={(e) => ($encryptionEnabled = e.detail)}
+                                        class={$encryptionEnabled
+                                            ? 'switch switch-enabled'
+                                            : 'switch switch-disabled'}
+                                    >
+                                        <span
+                                            class="toggle"
+                                            class:toggle-on={$encryptionEnabled}
+                                            class:toggle-off={!$encryptionEnabled}
+                                        />
+                                    </Switch>
+                                    <SwitchLabel class="cursor-pointer"
+                                        >Use encryption for better privacy</SwitchLabel
+                                    >
+                                </div>
+                            </SwitchGroup>
+
+                            <div class="pt-4">
+                                {#await $qrCodeData}
+                                    <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
+                                {:then imageURL}
+                                    {#if imageURL}
+                                        <h2 class="pb-4 text-lg font-bold">
+                                            QR code for your link:
+                                        </h2>
+                                        <img src={imageURL} alt="QR code generated for your link" />
+                                    {/if}
+                                {/await}
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- TODO: If encryption is enabled, show password input, and repeat password field. These two must match and have a length greater than 8 characters -->
                     <!-- IDEA: Maybe include a passphrase generator to reduce friction, and encourage people to save it in their password manager -->
@@ -204,17 +223,6 @@
                         However, it might be worth simply prompting for password when importing and exporting encrypted. Most people will probably be able to work around it.
                         One middle way is to store the encryption keys in memory, but not in any browser storage (due to security reasons)
                     -->
-
-                    <div class="pt-4">
-                        {#await $qrCodeData}
-                            <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
-                        {:then imageURL}
-                            {#if imageURL}
-                                <h2 class="pb-4 text-lg font-bold">QR code for your link:</h2>
-                                <img src={imageURL} alt="QR code generated for your link" />
-                            {/if}
-                        {/await}
-                    </div>
                 </TabPanel>
             {/if}
         </TabPanels>
@@ -223,7 +231,6 @@
 
 <style lang="postcss">
     :global(.switch) {
-        /* @apply relative inline-flex h-8 w-16 items-center rounded-full; */
         @apply relative inline-flex h-9 w-[72px] flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
     }
 
@@ -236,7 +243,6 @@
     }
 
     .toggle {
-        /* @apply inline-block h-7 w-7 rounded-full bg-white shadow-md; */
         @apply pointer-events-none inline-block h-8 w-8 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
     }
 
