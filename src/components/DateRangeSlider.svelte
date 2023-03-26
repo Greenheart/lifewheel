@@ -29,16 +29,3 @@
         bind:value={$value}
     />
 </div>
-
-<!-- Make it easy to change the current value with the keyboard -->
-<svelte:body
-    on:keydown={(event) => {
-        if (!document.activeElement?.className.includes('input-slider')) {
-            if (event.key === 'ArrowDown') {
-                $value = Math.max(min, $value - 1)
-            } else if (event.key === 'ArrowUp') {
-                $value = Math.min(max, $value + 1)
-            }
-        }
-    }}
-/>
