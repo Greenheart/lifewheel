@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-    import { slide } from 'svelte/transition'
     import { Tab, TabGroup, TabList, TabPanels, TabPanel } from '@rgossiaux/svelte-headlessui'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
@@ -17,6 +16,7 @@
 <script lang="ts">
     import { reflections, loading } from '$lib/stores'
     import { cx } from '$lib/utils'
+    import CloseButton from './CloseButton.svelte'
 </script>
 
 <div class="mx-auto w-full max-w-md pt-16" class:invisible={$loading}>
@@ -26,8 +26,10 @@
             <Tab class={tabClasses}>Open</Tab>
             <Tab class={tabClasses}>Save</Tab>
         </TabList>
-        <TabPanels class="tab-panels mt-2 hidden rounded-md bg-gray-50/5 p-4">
+        <TabPanels class="tab-panels relative mt-2 hidden rounded-md bg-gray-50/5 p-4">
             <TabPanel>
+                <CloseButton class="absolute right-2 top-2" />
+
                 <p class="pb-4">Load your data from a file.</p>
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
                 <!-- TODO: Limit to only accept json files -->
@@ -41,7 +43,15 @@
                     instead.
                 </p>
             </TabPanel>
-            <TabPanel>Save</TabPanel>
+            <TabPanel>
+                <CloseButton class="absolute right-2 top-2" />
+
+                <Button
+                    on:click={() => saveFile($reflections)}
+                    variant="ghost"
+                    class="flex items-center gap-2"><Download />Save</Button
+                >
+            </TabPanel>
         </TabPanels>
     </TabGroup>
 
