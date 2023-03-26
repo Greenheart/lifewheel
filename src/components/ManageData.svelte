@@ -17,15 +17,6 @@
 <script lang="ts">
     import { reflections, loading } from '$lib/stores'
     import { cx } from '$lib/utils'
-
-    let openPanel: Panel | null = null
-
-    const setPanel = (panel: Panel) => {
-        // Close panel by clicking the same button
-        openPanel = openPanel === panel ? null : panel
-    }
-
-    let expanded = false
 </script>
 
 <div class="mx-auto w-full max-w-md pt-16" class:invisible={$loading}>
@@ -35,15 +26,7 @@
             <Tab class={tabClasses}>Open</Tab>
             <Tab class={tabClasses}>Save</Tab>
         </TabList>
-        <TabPanels
-            class={cx(
-                'tab-panels mt-2 rounded-md bg-gray-50/5 p-4',
-                expanded ? undefined : 'hidden',
-            )}
-            on:focusend={() => {
-                console.log('goodbye')
-            }}
-        >
+        <TabPanels class="tab-panels mt-2 hidden rounded-md bg-gray-50/5 p-4">
             <TabPanel>
                 <p class="pb-4">Load your data from a file.</p>
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
