@@ -24,7 +24,7 @@
         {min}
         {max}
         {step}
-        class="input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-no-repeat shadow-sm"
+        class="input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-no-repeat shadow-sm"
         style={`background-size: ${(($value - min) * 100) / (max - min)}% 100%`}
         bind:value={$value}
     />

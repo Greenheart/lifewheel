@@ -108,17 +108,17 @@
             {min}
             {max}
             {step}
+            class={cx(
+                'input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
+                $reflectionStep.colors.from,
+                $reflectionStep.colors.to,
+            )}
+            style={`background-size: ${getThumbPosition($lifewheel[$reflectionStep.i])}% 100%`}
             on:keydown={(event) => {
                 if (event.key.includes('Arrow')) flashTooltip()
             }}
             on:pointerdown={showTooltip}
             on:pointerup={() => hideTooltip()}
-            class={cx(
-                'input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
-                $reflectionStep.colors.from,
-                $reflectionStep.colors.to,
-            )}
-            style={`background-size: ${getThumbPosition($lifewheel[$reflectionStep.i])}% 100%`}
             bind:value={$lifewheel[$reflectionStep.i]}
             bind:this={input}
         />
