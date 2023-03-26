@@ -82,21 +82,6 @@
         }
 
         closeImportScreen()
-
-        // window.setTimeout(() => {
-        //     isDecrypting = false
-        //     password = ''
-        // }, 2000)
-        // TODO: Try decrypting
-        // TODO: if something fails, show errors
-        // TODO: show cancel button
-
-        // $loading = false
-    }
-
-    const cancel = () => {
-        $loading = false
-        history.pushState('', document.title, window.location.pathname)
     }
 </script>
 

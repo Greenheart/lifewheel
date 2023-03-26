@@ -34,10 +34,10 @@
     import { browser } from '$app/environment'
     import { getEncryptedPayload } from '$lib/crypto'
 
-    let expanded = true // TODO: temp debugging
+    let expanded = false
     const encryptionEnabled = writable(true)
 
-    // IDEA: MAybe store link and encryptedLink separately?
+    // IDEA: Maybe store link and encryptedLink separately?
     // This would allow toggling between states quickly without affecting the other one until a new item has been written
     // An alternative would be to store the derived key in sessionStorage, and only prompt for password when sessionStorage has been reset
     // This would boost crypto performance since the KDF is the most time consuming task.
@@ -86,8 +86,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-md pt-16" class:invisible={$loading}>
-    <!-- TODO: temp defaultIndex for debugging -->
-    <TabGroup class="manage-data" defaultIndex={2}>
+    <TabGroup class="manage-data">
         <TabList class="flex justify-center">
             <Tab
                 class={cx(tabClasses, 'inline-flex items-center gap-2')}
@@ -114,7 +113,6 @@
                     on:click={() => (expanded = false)}><Close /></Button
                 >
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
-                <!-- TODO: Limit to only accept json files -->
                 <Button variant="outline" on:click={openFile} class="flex w-36 items-center gap-2"
                     ><FolderOpen />Open file</Button
                 >
@@ -145,20 +143,25 @@
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
                         on:click={() => (expanded = false)}><Close /></Button
                     >
-                    <!-- TODO: describe how the link works -->
-                    <!-- Then use that state to generate the link + QR code -->
-                    <!-- TODO: preserve QR code state when tab opens/closes. Not a high prio. But need to make sure the section is only shown when there's data. -->
                     <Button
                         on:click={() => copyLink()}
                         variant="outline"
                         class="flex w-36 items-center gap-2"><Link />{copyText}</Button
                     >
 
-                    <h2 class="pt-8 text-lg font-bold">Your link is your account! :)</h2>
+                    <h2 class="pt-8 text-lg font-bold">Your link is your "account"! :)</h2>
                     <p class="pt-2">
-                        <!-- TODO: improve copy here -->
-                        You can open multiple links to combine all unique reflection entries, and then
-                        save them as one file or link.
+                        🔗 To add more reflections in the future, save your link / QR code and open
+                        it in any modern browser.
+                    </p>
+                    <p class="pt-2">
+                        🔐 For better privacy, protect your data with a password. Make sure to store
+                        this somewhere safe, like in your password manager.
+                    </p>
+
+                    <p class="pt-2">
+                        🙌 You can open multiple links (or files) to combine all reflections and
+                        save them as one file or link. Useful to sync data across devices.
                     </p>
 
                     <SwitchGroup class="select-none pt-4">
@@ -193,6 +196,14 @@
                     <!-- TODO: When password is set, enable copy link button again -->
                     <!-- IDEA: Maybe allow deriving a key from a password, and then saving it in the local session until user data is cleared, to remove friction of having to enter it all the time -->
                     <!-- TODO: figure out a way to reuse the encryption + password form in both save file and copy link tabs -->
+
+                    <!--
+                        IDEA: Add some type of Auth widget that manages a global store for the encryption + decryption key
+                        This widget could allow you to "sign in" / "sign out" and maybe even "change password".
+
+                        However, it might be worth simply prompting for password when importing and exporting encrypted. Most people will probably be able to work around it.
+                        One middle way is to store the encryption keys in memory, but not in any browser storage (due to security reasons)
+                    -->
 
                     <div class="pt-4">
                         {#await $qrCodeData}

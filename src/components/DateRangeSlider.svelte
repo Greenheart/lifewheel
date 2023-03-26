@@ -16,8 +16,8 @@
     class:invisible={max < 2}
 >
     <!--
-        TODO: Add number label for the selected value that appears over the slider dot as you move it
-        IDEA: Maybe use https://floating-ui.com/
+        IDEA: Add date label for the selected value that appears over the slider dot as you move it
+        Use same solution as for the ReflectionInputSlider
     -->
     <input
         type="range"
