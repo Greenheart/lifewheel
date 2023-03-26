@@ -12,7 +12,7 @@
 </script>
 
 <div
-    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center px-4 text-lg xs:h-6 xs:text-xl"
+    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center text-lg xs:h-6 xs:text-xl"
     class:invisible={max < 2}
 >
     <input

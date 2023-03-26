@@ -3,11 +3,22 @@
     import { derived, writable } from 'svelte/store'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
+    import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui'
 
-    import Button from './Button.svelte'
+    import Button, { defaultClasses, variants } from './Button.svelte'
     import Lifewheel from './Lifewheel.svelte'
     import DateRangeSlider from './DateRangeSlider.svelte'
+    import Delete from '$icons/Delete.svelte'
+    import Ellipsis from '$icons/Ellipsis.svelte'
+
     import type { LifewheelState } from '$lib/types'
+    import { cx } from '$lib/utils'
+
+    const menuButtonClasses = cx(
+        defaultClasses,
+        variants.roundGhost,
+        '!h-12 !w-12 !border-emerald-400/5',
+    )
 </script>
 
 <script lang="ts">
@@ -89,8 +100,52 @@
                 If the graph gets too large for the screen width, only show the section closest to the currently selected index
                 Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
         -->
+            <div class="grid w-full max-w-lg grid-cols-[48px_1fr_48px] items-center gap-4">
+                <h3 class="col-start-2 select-none whitespace-pre-wrap text-center">
+                    {`${$currentEntry.time.toLocaleDateString('en-GB', {
+                        dateStyle: 'long',
+                    })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
+                </h3>
+
+                <Popover>
+                    <PopoverButton
+                        aria-label="Open menu for this reflection"
+                        class={menuButtonClasses}><Ellipsis /></PopoverButton
+                    >
+                    <PopoverPanel class="p-2">
+                        <div class="grid">
+                            <Button
+                                aria-label="Delete reflection"
+                                on:click={() => deleteEntry()}
+                                variant="outline"
+                                class="flex w-36 items-center gap-2"><Delete />Delete entry</Button
+                            >
+                        </div>
+                    </PopoverPanel>
+                </Popover>
+
+                <!-- <Menu>
+                    <MenuButton aria-label="Open menu for this reflection" class={menuButtonClasses}
+                        ><Ellipsis /></MenuButton
+                    >
+                    <MenuItems class="p-2">
+                        <MenuItem
+                            aria-label="Delete reflection"
+                            on:click={() => deleteEntry()}
+                            class={outlineButtonClasses}
+                        >
+                            <Delete />Delete entry
+                        </MenuItem>
+                    </MenuItems>
+                </Menu> -->
+            </div>
+
+            <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-xs" />
+
+            <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
+
             <div
-                class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4"
+                class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-center gap-4 pt-4"
             >
                 <Button
                     variant="roundOutline"
@@ -98,11 +153,7 @@
                     class={$index < 1 ? 'invisible' : undefined}
                     on:click={onPrev}>←</Button
                 >
-                <h3 class="select-none whitespace-pre-wrap text-center">
-                    {`${$currentEntry.time.toLocaleDateString('en-GB', {
-                        dateStyle: 'long',
-                    })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
-                </h3>
+                <div />
                 <Button
                     variant="roundOutline"
                     aria-label="Show next reflection"
@@ -111,9 +162,10 @@
                 >
             </div>
 
-            <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-xs" />
-
-            <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
+            <!--
+                IDEA: What if buttons were visible on the sides here, and we then had the range slider in the middle
+                This is a better position, and allows us to add the delete button in the top right
+            -->
         </div>
     </section>
 {/if}
