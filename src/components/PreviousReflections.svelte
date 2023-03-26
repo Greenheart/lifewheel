@@ -44,7 +44,9 @@
     }
 
     const deleteEntry = async () => {
-        if (!confirm('Are you sure you want to delete this reflection?')) return
+        if (!confirm('Are you sure you want to delete this reflection?')) {
+            return
+        }
         const newReflections = $reflections.filter((_, i) => i !== $index)
 
         if (newReflections.length < 1) {
@@ -107,16 +109,21 @@
                     })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
                 </h3>
 
-                <Popover class="relative">
+                <Popover class="relative" let:close>
                     <PopoverButton
                         aria-label="Open menu for this reflection"
                         class={menuButtonClasses}><Ellipsis /></PopoverButton
                     >
                     <PopoverPanel class="absolute bottom-[-70px] right-0">
-                        <div class="grid rounded-lg bg-gray-50/5 p-2">
+                        <div class="grid rounded-lg bg-gray-800 p-2">
                             <Button
                                 aria-label="Delete reflection"
-                                on:click={deleteEntry}
+                                on:click={() => {
+                                    // @ts-expect-error Type bug in Popover close method
+                                    // the argument should be optional, according to the docs
+                                    close()
+                                    deleteEntry()
+                                }}
                                 variant="outline"
                                 class="flex w-36 items-center gap-2"><Delete />Delete</Button
                             >

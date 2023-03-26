@@ -103,7 +103,7 @@
         </TabList>
         <TabPanels
             class={cx(
-                'relative mt-2 rounded-md bg-gray-50/5 p-4',
+                'relative mt-2 rounded-md bg-gray-800 p-4',
                 $isDataMenuOpen ? undefined : 'hidden',
             )}
         >
