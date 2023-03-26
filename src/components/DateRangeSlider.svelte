@@ -15,10 +15,6 @@
     class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center px-4 text-lg xs:h-6 xs:text-xl"
     class:invisible={max < 2}
 >
-    <!--
-        IDEA: Add date label for the selected value that appears over the slider dot as you move it
-        Use same solution as for the ReflectionInputSlider
-    -->
     <input
         type="range"
         {min}
