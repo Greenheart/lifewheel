@@ -34,8 +34,7 @@
         <p class="pt-4 text-xl text-white xs:text-2xl">Reflect on Your Life Balance</p>
     </div>
 
-    <!-- TODO: figure out why this causes layout shift on inital page load -->
-    <div class="mx-auto grid max-w-max pt-16" class:invisible={$loading}>
+    <div class="mx-auto max-w-max pt-16" class:invisible={$loading}>
         <LinkButton href="/reflection" class="flex items-center gap-2 pr-4"
             ><PlusCircle />New reflection</LinkButton
         >
@@ -71,6 +70,7 @@
     {/if}
 
     <div class="pt-16 pb-4 text-center">
+        <p class="pb-2">Made for 🏞 with 💚</p>
         <p>
             © {new Date().getFullYear()}
             <a
