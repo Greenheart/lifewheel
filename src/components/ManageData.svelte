@@ -22,13 +22,16 @@
     let canvas: HTMLCanvasElement
     let isQRReady = false
 
-    let copyText = 'Copy your link'
+    let copyText = 'Copy link'
 
     const copyLink = async (hash: string) => {
-        copyText = 'Copied!'
-
         const url = new URL(window.location.origin)
         url.hash = hash
+
+        // Clipboard is only available in via HTTPS or localhost
+        await navigator?.clipboard?.writeText(url.toString())
+
+        copyText = 'Copied!'
 
         await showQRCode(url.toString(), canvas)
             .then(() => {
@@ -36,11 +39,8 @@
             })
             .catch((error) => console.error(error))
 
-        // Clipboard is only available in via HTTPS or localhost
-        await navigator?.clipboard?.writeText(url.toString())
-
         window.setTimeout(() => {
-            copyText = 'Copy your link'
+            copyText = 'Copy link'
         }, 2000)
     }
 </script>
@@ -72,7 +72,7 @@
                 >
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
                 <!-- TODO: Limit to only accept json files -->
-                <Button variant="ghost" on:click={openFile} class="flex items-center gap-2"
+                <Button variant="outline" on:click={openFile} class="flex w-36 items-center gap-2"
                     ><FolderOpen />Open file</Button
                 >
                 <p class="pt-4">Load your data from a file.</p>
@@ -93,8 +93,8 @@
 
                 <Button
                     on:click={() => saveFile($reflections)}
-                    variant="ghost"
-                    class="flex items-center gap-2"><Download />Save file</Button
+                    variant="outline"
+                    class="flex w-36 items-center gap-2"><Download />Save file</Button
                 >
             </TabPanel>
             <TabPanel>
@@ -110,11 +110,11 @@
                 <Button
                     on:click={() =>
                         copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
-                    variant="ghost"
-                    class="flex items-center gap-2"><Link />Copy link</Button
+                    variant="outline"
+                    class="flex w-36 items-center gap-2"><Link />{copyText}</Button
                 >
                 <div class="pt-4" class:hidden={!isQRReady}>
-                    <h2 class="pb-4 text-xl font-extrabold">QR code for your link:</h2>
+                    <h2 class="pb-4 text-lg font-bold">QR code for your link:</h2>
                     <canvas bind:this={canvas} />
                 </div>
             </TabPanel>
