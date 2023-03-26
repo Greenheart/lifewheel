@@ -10,9 +10,9 @@
         SwitchLabel,
         SwitchGroup,
     } from '@rgossiaux/svelte-headlessui'
+    import { derived, writable, type Writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
-
     import Download from '$icons/Download.svelte'
     import FolderOpen from '$icons/FolderOpen.svelte'
     import Link from '$icons/Link.svelte'
@@ -22,19 +22,17 @@
 
     import { openFile } from '$lib/import'
     import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
+    import { getEncryptedPayload } from '$lib/crypto'
+    import { cx } from '$lib/utils'
 
     const tabClasses = cx(defaultClasses, variants.ghost)
 </script>
 
 <script lang="ts">
     import { reflections, loading } from '$lib/stores'
-    import { cx } from '$lib/utils'
-
-    import { derived, writable } from 'svelte/store'
     import { browser } from '$app/environment'
-    import { getEncryptedPayload } from '$lib/crypto'
 
-    let expanded = true
+    export let isDataMenuOpen: Writable<boolean>
     const encryptionEnabled = writable(true)
 
     // IDEA: Maybe store link and encryptedLink separately?
@@ -85,32 +83,35 @@
     }
 </script>
 
-<div class="mx-auto w-full max-w-screen-lg pt-16" class:invisible={$loading}>
-    <TabGroup class="manage-data" defaultIndex={2}>
+<div class="mx-auto w-full max-w-4xl pt-16" class:invisible={$loading}>
+    <TabGroup class="manage-data" defaultIndex={1}>
         <TabList class="flex justify-center">
             <Tab
                 class={cx(tabClasses, 'inline-flex items-center gap-2')}
-                on:click={() => (expanded = true)}><FolderOpen />Open</Tab
+                on:click={() => ($isDataMenuOpen = true)}><FolderOpen />Open</Tab
             >
             {#if $reflections.length}
                 <Tab
                     class={cx(tabClasses, 'inline-flex items-center gap-2')}
-                    on:click={() => (expanded = true)}><Download />Save</Tab
+                    on:click={() => ($isDataMenuOpen = true)}><Download />Save</Tab
                 >
                 <Tab
                     class={cx(tabClasses, 'inline-flex items-center gap-2')}
-                    on:click={() => (expanded = true)}><Link />Link</Tab
+                    on:click={() => ($isDataMenuOpen = true)}><Link />Link</Tab
                 >
             {/if}
         </TabList>
         <TabPanels
-            class={cx('relative mt-2 rounded-md bg-gray-50/5 p-4', expanded ? undefined : 'hidden')}
+            class={cx(
+                'relative mt-2 rounded-md bg-gray-50/5 p-4',
+                $isDataMenuOpen ? undefined : 'hidden',
+            )}
         >
             <TabPanel>
                 <Button
                     variant="roundGhost"
                     class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                    on:click={() => (expanded = false)}><Close /></Button
+                    on:click={() => ($isDataMenuOpen = false)}><Close /></Button
                 >
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
                 <Button variant="outline" on:click={openFile} class="flex w-36 items-center gap-2"
@@ -128,7 +129,7 @@
                     <Button
                         variant="roundGhost"
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                        on:click={() => (expanded = false)}><Close /></Button
+                        on:click={() => ($isDataMenuOpen = false)}><Close /></Button
                     >
 
                     <Button
@@ -141,7 +142,7 @@
                     <Button
                         variant="roundGhost"
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                        on:click={() => (expanded = false)}><Close /></Button
+                        on:click={() => ($isDataMenuOpen = false)}><Close /></Button
                     >
                     <Button
                         on:click={() => copyLink()}
