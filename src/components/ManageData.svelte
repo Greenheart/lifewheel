@@ -88,13 +88,11 @@
                 <Button variant="outline" on:click={openFile} class="flex w-36 items-center gap-2"
                     ><FolderOpen />Open file</Button
                 >
-                <p class="pt-4">Load your data from a file.</p>
 
-                <h2 class="pt-4 text-lg font-bold">Tips</h2>
+                <h2 class="pt-8 text-lg font-bold">Using the app on other devices?</h2>
                 <p class="pt-2">
-                    Are you using this app on multiple devices? You can open multiple files to
-                    combine all unique reflection entries. This allows you to save one combined file
-                    instead.
+                    You can open multiple files to combine all unique reflection entries, and then
+                    save them as one file or link.
                 </p>
             </TabPanel>
             <TabPanel>
@@ -117,8 +115,8 @@
                     on:click={() => (expanded = false)}><Close /></Button
                 >
                 <!-- TODO: describe how the link works -->
-                <!-- TODO: Add switch to enable/disable encryption. Then use that state to generate the link + QR code -->
-                <!-- TODO: preserve QR code state when tab opens/closes -->
+                <!-- Then use that state to generate the link + QR code -->
+                <!-- TODO: preserve QR code state when tab opens/closes. Not a high prio. But need to make sure the section is only shown when there's data. -->
 
                 <Button
                     on:click={() =>
@@ -128,11 +126,11 @@
                 >
 
                 <SwitchGroup class="select-none pt-4">
-                    <div class="flex items-center gap-4 pt-2">
+                    <div class="flex items-center gap-3 pt-2">
                         {#if encryptionEnabled}
-                            <LockClosed />
+                            <LockClosed class="flex-shrink-0" />
                         {:else}
-                            <LockOpen class="opacity-50" />
+                            <LockOpen class="flex-shrink-0 opacity-50" />
                         {/if}
                         <Switch
                             checked={encryptionEnabled}
@@ -148,9 +146,8 @@
                             />
                         </Switch>
                         <SwitchLabel class="block cursor-pointer py-2"
-                            >Enable encryption for increased privacy.</SwitchLabel
+                            >Use encryption for better privacy</SwitchLabel
                         >
-                        <!-- <SwitchLabel passive>Encrypt your data for increased privacy.</SwitchLabel> -->
                     </div>
                 </SwitchGroup>
 
