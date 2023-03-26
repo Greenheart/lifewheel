@@ -9,7 +9,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import { loadFile } from '$lib/import'
+    import { openFile } from '$lib/import'
 
     let canvas: HTMLCanvasElement
     let isQRReady = false
@@ -76,7 +76,7 @@
                 class="flex items-center gap-2"><Download />Save file</Button
             >
         {/if}
-        <Button variant="outline" on:click={loadFile} class="flex items-center gap-2"
+        <Button variant="outline" on:click={openFile} class="flex items-center gap-2"
             ><FolderOpen />Open file</Button
         >
         <Button variant="outline" on:click={encrypt}>Encrypt</Button>

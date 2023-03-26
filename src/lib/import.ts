@@ -27,7 +27,7 @@ export function decodeReflectionEntries(data: Uint8Array) {
     })
 }
 
-export async function loadFile() {
+export async function openFile() {
     const blob = await fileOpen({
         mimeTypes: ['application/json'],
         id: 'documents',

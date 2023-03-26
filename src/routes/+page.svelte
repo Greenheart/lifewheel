@@ -3,18 +3,14 @@
     import AutoImport from '$components/AutoImport.svelte'
     import PreviousReflections from '$components/PreviousReflections.svelte'
     import ReflectionActions from '$components/ReflectionActions.svelte'
-    import Button from '$components/Button.svelte'
+    import ManageData from '$components/ManageData.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
-    import FolderOpen from '$icons/FolderOpen.svelte'
-    import Download from '$icons/Download.svelte'
     import { REPO_URL } from '$lib/constants'
-    import { loadFile } from '$lib/import'
 </script>
 
 <script lang="ts">
     import { loading, reflections } from '$lib/stores'
-    import { saveFile } from '$lib/export'
 </script>
 
 <div class="mx-auto max-w-screen-lg px-4">
@@ -61,18 +57,7 @@
             - Or if we use two buttons for open/save - then we can show labels too
     -->
 
-    <div class="mx-auto grid max-w-max grid-cols-2 gap-2 pt-16" class:invisible={$loading}>
-        <Button variant="ghost" on:click={loadFile} class="flex items-center gap-2"
-            ><FolderOpen />Open</Button
-        >
-        {#if $reflections.length}
-            <Button
-                on:click={() => saveFile($reflections)}
-                variant="ghost"
-                class="flex items-center gap-2"><Download />Save</Button
-            >
-        {/if}
-    </div>
+    <ManageData />
 
     <AutoImport />
 
