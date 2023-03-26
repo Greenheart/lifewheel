@@ -69,12 +69,19 @@
         if (!password.length) return
         isDecrypting = true
         try {
+            // console.log('decrypting', payload.data, password)
+
             const decrypted = await getDecryptedPayload(payload.data, password)
+            // console.log('decrypted', decrypted)
+
             $reflections = decodeReflectionEntries(decrypted)
+            // console.log('decoded', $reflections)
         } catch (error) {
             console.error(error)
             isDecrypting = false
         }
+
+        closeImportScreen()
 
         // window.setTimeout(() => {
         //     isDecrypting = false
@@ -121,9 +128,11 @@
             <Button type="submit" class="mt-4 w-full">Submit</Button>
         </form>
 
-        <Button variant="ghost" on:click={closeImportScreen} class="mx-auto mt-8 block"
-            >Cancel</Button
-        >
+        {#if !isDecrypting}
+            <Button variant="ghost" on:click={closeImportScreen} class="mx-auto mt-8 block"
+                >Cancel</Button
+            >
+        {/if}
     </div>
 
     <style>

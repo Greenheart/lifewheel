@@ -37,9 +37,9 @@
 
     {#if $loading}
         <AutoImport />
+    {:else}
+        <ManageData />
     {/if}
-
-    <ManageData />
 
     {#if !$loading}
         <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
