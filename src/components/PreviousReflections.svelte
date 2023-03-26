@@ -43,8 +43,8 @@
         $index = $index + 1
     }
 
-    // TODO: Find a good place to add this feature
     const deleteEntry = async () => {
+        if (!confirm('Are you sure you want to delete this reflection?')) return
         const newReflections = $reflections.filter((_, i) => i !== $index)
 
         if (newReflections.length < 1) {
@@ -107,37 +107,22 @@
                     })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
                 </h3>
 
-                <Popover>
+                <Popover class="relative">
                     <PopoverButton
                         aria-label="Open menu for this reflection"
                         class={menuButtonClasses}><Ellipsis /></PopoverButton
                     >
-                    <PopoverPanel class="p-2">
-                        <div class="grid">
+                    <PopoverPanel class="absolute bottom-[-70px] right-0">
+                        <div class="grid rounded-lg bg-gray-50/5 p-2">
                             <Button
                                 aria-label="Delete reflection"
-                                on:click={() => deleteEntry()}
+                                on:click={deleteEntry}
                                 variant="outline"
-                                class="flex w-36 items-center gap-2"><Delete />Delete entry</Button
+                                class="flex w-36 items-center gap-2"><Delete />Delete</Button
                             >
                         </div>
                     </PopoverPanel>
                 </Popover>
-
-                <!-- <Menu>
-                    <MenuButton aria-label="Open menu for this reflection" class={menuButtonClasses}
-                        ><Ellipsis /></MenuButton
-                    >
-                    <MenuItems class="p-2">
-                        <MenuItem
-                            aria-label="Delete reflection"
-                            on:click={() => deleteEntry()}
-                            class={outlineButtonClasses}
-                        >
-                            <Delete />Delete entry
-                        </MenuItem>
-                    </MenuItems>
-                </Menu> -->
             </div>
 
             <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-xs" />
@@ -161,23 +146,15 @@
                     on:click={onNext}>→</Button
                 >
             </div>
-
-            <!--
-                IDEA: What if buttons were visible on the sides here, and we then had the range slider in the middle
-                This is a better position, and allows us to add the delete button in the top right
-            -->
         </div>
     </section>
 {/if}
 
 <svelte:body
     on:keyup={(event) => {
-        const el = document.activeElement
-
-        // Maybe we don't need the input-slider check here since it will never be rendered at the same time as this component
         if (
             !document.querySelector('.manage-data:focus-within') &&
-            !el?.className?.includes('input-slider')
+            !document.activeElement?.className?.includes('input-slider')
         ) {
             if (event.key === 'ArrowLeft' && $index > 0) {
                 onPrev()
