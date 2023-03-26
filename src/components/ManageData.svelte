@@ -128,10 +128,17 @@
                 >
 
                 <SwitchGroup class="select-none pt-4">
-                    <SwitchLabel>Encrypt your data for increased privacy.</SwitchLabel>
+                    <SwitchLabel class="inline-flex pb-2"
+                        >Encrypt your data for increased privacy.</SwitchLabel
+                    >
 
-                    <div class="flex items-center gap-4 pt-2">
-                        <LockOpen />
+                    <div class="flex items-stretch">
+                        <button
+                            on:click={() => (encryptionEnabled = !encryptionEnabled)}
+                            class="pr-4"
+                        >
+                            <LockOpen class={encryptionEnabled ? 'opacity-50' : undefined} />
+                        </button>
                         <Switch
                             checked={encryptionEnabled}
                             on:change={(e) => (encryptionEnabled = e.detail)}
@@ -145,7 +152,12 @@
                                 class:toggle-off={!encryptionEnabled}
                             />
                         </Switch>
-                        <LockClosed />
+                        <button
+                            on:click={() => (encryptionEnabled = !encryptionEnabled)}
+                            class="pl-4"
+                        >
+                            <LockClosed class={encryptionEnabled ? undefined : 'opacity-50'} />
+                        </button>
                     </div>
                 </SwitchGroup>
 
