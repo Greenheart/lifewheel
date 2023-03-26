@@ -35,13 +35,6 @@ export const formatLink = ({
     protocolVersion?: ProtocolVersion
 }) => formatHeader({ encrypted, protocolVersion }) + base64url.stringify(data)
 
-export const showQRCode = async (text: string, canvas: HTMLCanvasElement) => {
-    if (!text) return
-    return new Promise<void>((resolve, reject) => {
-        QRCode.toCanvas(canvas, text, (error) => (error ? reject(error) : resolve()))
-    })
-}
-
 export async function saveFile(reflections: ReflectionEntry[]) {
     const date = new Date().toLocaleString('sv-SE', {
         month: 'numeric',

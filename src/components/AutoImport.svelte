@@ -32,8 +32,7 @@
                     hasProtectedLink = true
                 } else {
                     $reflections = decodeReflectionEntries(payload.data)
-                    $loading = false
-                    history.pushState('', document.title, window.location.pathname)
+                    closeImportScreen()
                 }
             } catch (error) {
                 console.error('Invalid link: ', error)
@@ -59,15 +58,19 @@
         }
     })
 
+    const closeImportScreen = () => {
+        $loading = false
+        isDecrypting = false
+        hasProtectedLink = false
+        history.pushState('', document.title, window.location.pathname)
+    }
+
     const submitPassphrase = async () => {
+        if (!password.length) return
         isDecrypting = true
         try {
             const decrypted = await getDecryptedPayload(payload.data, password)
             $reflections = decodeReflectionEntries(decrypted)
-            $loading = false
-            isDecrypting = false
-            hasProtectedLink = false
-            history.pushState('', document.title, window.location.pathname)
         } catch (error) {
             console.error(error)
             isDecrypting = false
@@ -83,10 +86,15 @@
 
         // $loading = false
     }
+
+    const cancel = () => {
+        $loading = false
+        history.pushState('', document.title, window.location.pathname)
+    }
 </script>
 
 {#if hasProtectedLink}
-    <div class="mx-auto w-full max-w-sm pt-16">
+    <div class="mx-auto w-full max-w-sm">
         <div
             class="place-items-center gap-2 text-lg"
             class:hidden={!isDecrypting}
@@ -112,6 +120,10 @@
             />
             <Button type="submit" class="mt-4 w-full">Submit</Button>
         </form>
+
+        <Button variant="ghost" on:click={closeImportScreen} class="mx-auto mt-8 block"
+            >Cancel</Button
+        >
     </div>
 
     <style>

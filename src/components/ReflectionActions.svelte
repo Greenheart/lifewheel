@@ -4,7 +4,7 @@
     import FolderOpen from '$icons/FolderOpen.svelte'
     import Download from '$icons/Download.svelte'
     import { getEncryptedPayload } from '$lib/crypto'
-    import { encodeReflectionEntries, formatLink, saveFile, showQRCode } from '$lib/export'
+    import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
 </script>
 
 <script lang="ts">
@@ -16,25 +16,25 @@
 
     let copyText = 'Copy your link'
 
-    const copyLink = async (hash: string) => {
-        copyText = 'Copied!'
+    // const copyLink = async (hash: string) => {
+    //     copyText = 'Copied!'
 
-        const url = new URL(window.location.origin)
-        url.hash = hash
+    //     const url = new URL(window.location.origin)
+    //     url.hash = hash
 
-        await showQRCode(url.toString(), canvas)
-            .then(() => {
-                isQRReady = true
-            })
-            .catch((error) => console.error(error))
+    //     await showQRCode(url.toString(), canvas)
+    //         .then(() => {
+    //             isQRReady = true
+    //         })
+    //         .catch((error) => console.error(error))
 
-        // Clipboard is only available in via HTTPS or localhost
-        await navigator?.clipboard?.writeText(url.toString())
+    //     // Clipboard is only available in via HTTPS or localhost
+    //     await navigator?.clipboard?.writeText(url.toString())
 
-        window.setTimeout(() => {
-            copyText = 'Copy your link'
-        }, 2000)
-    }
+    //     window.setTimeout(() => {
+    //         copyText = 'Copy your link'
+    //     }, 2000)
+    // }
 
     const encrypt = async () => {
         const encryptedData = await getEncryptedPayload(
@@ -43,7 +43,7 @@
             2e6,
         )
 
-        copyLink(formatLink({ data: encryptedData, encrypted: true }))
+        // copyLink(formatLink({ data: encryptedData, encrypted: true }))
     }
     const decrypt = async () => {
         //
@@ -65,11 +65,11 @@
         -->
     <div class="grid max-w-xl gap-2 pt-16 sm:grid-cols-3">
         {#if $reflections.length}
-            <Button
+            <!-- <Button
                 on:click={() =>
                     copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
                 class="flex items-center gap-2"><Link />{copyText}</Button
-            >
+            > -->
             <Button
                 on:click={() => saveFile($reflections)}
                 variant="outline"

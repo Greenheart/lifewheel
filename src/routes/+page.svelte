@@ -2,7 +2,7 @@
     import LinkButton from '$components/LinkButton.svelte'
     import AutoImport from '$components/AutoImport.svelte'
     import PreviousReflections from '$components/PreviousReflections.svelte'
-    import ReflectionActions from '$components/ReflectionActions.svelte'
+    // import ReflectionActions from '$components/ReflectionActions.svelte'
     import ManageData from '$components/ManageData.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
@@ -14,17 +14,12 @@
 </script>
 
 <div class="mx-auto max-w-screen-lg px-4">
-    <!--
-        IDEA: Add a toggleable menu in the top left, and then the github icon in the top right
-        IDEA: When the page loads, initially only the heading and tagline is visible. Then shortly after, the top menu and the app content fades in.
-        This will create a nice loading experience when opening the app.
-    -->
     <div class="flex justify-end">
         <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="-mr-4 p-4"><GitHub /></a
         >
     </div>
 
-    <div class="pt-16 text-center">
+    <div class="pt-8 text-center">
         <h1
             class="bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
         >
@@ -40,25 +35,11 @@
         >
     </div>
 
-    <!--
-        IDEA: clicking one of the ghost buttons could open a modal with the export options
-        IDEA: or expand a fold-out menu with options
-        IDEA: add a ghost button for link too - which also expands the section below
-            - Show the option to encrypt or not (with switch toggle)
-            - show the QR code when link has been generated
-        
-        IDEA: Maybe combine the link option into the Save menu, to reduce clutter
-
-        IDEA: To make it clear that users need to save their data after completing a reflection,
-              maybe add that in the outro of the reflection? Potentially only the first time.
-
-        IDEA: Maybe on mobile, only show icons (if we have three buttons)
-            - Or if we use two buttons for open/save - then we can show labels too
-    -->
+    {#if $loading}
+        <AutoImport />
+    {/if}
 
     <ManageData />
-
-    <AutoImport />
 
     {#if !$loading}
         <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
@@ -66,7 +47,8 @@
         {#if $reflections.length}
             <PreviousReflections />
         {/if}
-        <ReflectionActions />
+        <!-- TODO: Replace all features and remove this component -->
+        <!-- <ReflectionActions /> -->
 
         <div class="pt-16 pb-4 text-center">
             <p>Made for 🏞 with 💚</p>

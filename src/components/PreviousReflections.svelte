@@ -31,6 +31,22 @@
     const onNext = () => {
         $index = $index + 1
     }
+
+    // TODO: Find a good place to add this feature
+    const deleteEntry = async () => {
+        const newReflections = $reflections.filter((_, i) => i !== $index)
+
+        if (newReflections.length < 1) {
+            $reflections = newReflections
+            await tick()
+            return
+        }
+
+        if (!newReflections[$index] && newReflections.length > 0) {
+            $index = Math.max(newReflections.length - 1, 0)
+        }
+        $reflections = newReflections
+    }
 </script>
 
 {#if $currentEntry}
@@ -82,23 +98,7 @@
                     class={$index < 1 ? 'invisible' : undefined}
                     on:click={onPrev}>←</Button
                 >
-                <h3
-                    class="select-none whitespace-pre-wrap text-center"
-                    on:dblclick={async () => {
-                        const newReflections = $reflections.filter((_, i) => i !== $index)
-
-                        if (newReflections.length < 1) {
-                            $reflections = newReflections
-                            await tick()
-                            return
-                        }
-
-                        if (!newReflections[$index] && newReflections.length > 0) {
-                            $index = Math.max(newReflections.length - 1, 0)
-                        }
-                        $reflections = newReflections
-                    }}
-                >
+                <h3 class="select-none whitespace-pre-wrap text-center">
                     {`${$currentEntry.time.toLocaleDateString('en-GB', {
                         dateStyle: 'long',
                     })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}

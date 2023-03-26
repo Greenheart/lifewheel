@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+    import QRCode from 'qrcode'
     import {
         Tab,
         TabGroup,
@@ -12,44 +13,56 @@
 
     import Button, { defaultClasses, variants } from './Button.svelte'
 
-    const tabClasses = cx(defaultClasses, variants.ghost)
     import Download from '$icons/Download.svelte'
     import FolderOpen from '$icons/FolderOpen.svelte'
-
-    import { openFile } from '$lib/import'
-    import { encodeReflectionEntries, formatLink, saveFile, showQRCode } from '$lib/export'
-</script>
-
-<script lang="ts">
-    import { reflections, loading } from '$lib/stores'
-    import { cx } from '$lib/utils'
     import Link from '$icons/Link.svelte'
     import Close from '$icons/Close.svelte'
     import LockClosed from '$icons/LockClosed.svelte'
     import LockOpen from '$icons/LockOpen.svelte'
 
-    let expanded = true // TODO: temp debugging
-    let encryptionEnabled = true
+    import { openFile } from '$lib/import'
+    import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
 
-    let canvas: HTMLCanvasElement
-    let isQRReady = false
+    const tabClasses = cx(defaultClasses, variants.ghost)
+</script>
+
+<script lang="ts">
+    import { reflections, loading } from '$lib/stores'
+    import { cx } from '$lib/utils'
+
+    import { derived, writable } from 'svelte/store'
+    import { browser } from '$app/environment'
+
+    let expanded = true // TODO: temp debugging
+    const encryptionEnabled = writable(true)
+
+    const link = derived(
+        [reflections, encryptionEnabled],
+        ([entries, encrypted]) => {
+            if (!browser) return null
+
+            const url = new URL(window.location.origin)
+            url.hash = formatLink({ data: encodeReflectionEntries(entries), encrypted })
+
+            return url.toString()
+        },
+        null,
+    )
+    const qrCodeData = derived(link, (fullURL) =>
+        (async () => {
+            if (!fullURL) return null
+            return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+        })(),
+    )
 
     let copyText = 'Copy link'
 
-    const copyLink = async (hash: string) => {
-        const url = new URL(window.location.origin)
-        url.hash = hash
-
+    const copyLink = async () => {
+        if (!$link) return
         // Clipboard is only available in via HTTPS or localhost
-        await navigator?.clipboard?.writeText(url.toString())
+        await navigator?.clipboard?.writeText($link)
 
         copyText = 'Copied!'
-
-        await showQRCode(url.toString(), canvas)
-            .then(() => {
-                isQRReady = true
-            })
-            .catch((error) => console.error(error))
 
         window.setTimeout(() => {
             copyText = 'Copy link'
@@ -119,30 +132,29 @@
                 <!-- TODO: preserve QR code state when tab opens/closes. Not a high prio. But need to make sure the section is only shown when there's data. -->
 
                 <Button
-                    on:click={() =>
-                        copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
+                    on:click={() => copyLink()}
                     variant="outline"
                     class="flex w-36 items-center gap-2"><Link />{copyText}</Button
                 >
 
                 <SwitchGroup class="select-none pt-4">
                     <div class="flex items-center gap-3 pt-2">
-                        {#if encryptionEnabled}
+                        {#if $encryptionEnabled}
                             <LockClosed class="flex-shrink-0" />
                         {:else}
                             <LockOpen class="flex-shrink-0 opacity-50" />
                         {/if}
                         <Switch
-                            checked={encryptionEnabled}
-                            on:change={(e) => (encryptionEnabled = e.detail)}
-                            class={encryptionEnabled
+                            checked={$encryptionEnabled}
+                            on:change={(e) => ($encryptionEnabled = e.detail)}
+                            class={$encryptionEnabled
                                 ? 'switch switch-enabled'
                                 : 'switch switch-disabled'}
                         >
                             <span
                                 class="toggle"
-                                class:toggle-on={encryptionEnabled}
-                                class:toggle-off={!encryptionEnabled}
+                                class:toggle-on={$encryptionEnabled}
+                                class:toggle-off={!$encryptionEnabled}
                             />
                         </Switch>
                         <SwitchLabel class="block cursor-pointer py-2"
@@ -158,10 +170,14 @@
                 <!-- IDEA: Maybe allow deriving a key from a password, and then saving it in the local session until user data is cleared, to remove friction of having to enter it all the time -->
                 <!-- TODO: figure out a way to reuse the encryption + password form in both save file and copy link tabs -->
 
-                <div class="pt-4" class:hidden={!isQRReady}>
-                    <h2 class="pb-4 text-lg font-bold">QR code for your link:</h2>
-                    <canvas bind:this={canvas} />
-                </div>
+                {#await $qrCodeData then imageURL}
+                    {#if imageURL}
+                        <div class="pt-4">
+                            <h2 class="pb-4 text-lg font-bold">QR code for your link:</h2>
+                            <img src={imageURL} alt="QR code generated for your link" />
+                        </div>
+                    {/if}
+                {/await}
             </TabPanel>
         </TabPanels>
     </TabGroup>
