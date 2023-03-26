@@ -1,5 +1,14 @@
 <script lang="ts" context="module">
-    import { Tab, TabGroup, TabList, TabPanels, TabPanel } from '@rgossiaux/svelte-headlessui'
+    import {
+        Tab,
+        TabGroup,
+        TabList,
+        TabPanels,
+        TabPanel,
+        Switch,
+        SwitchLabel,
+        SwitchGroup,
+    } from '@rgossiaux/svelte-headlessui'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
 
@@ -16,8 +25,11 @@
     import { cx } from '$lib/utils'
     import Link from '$icons/Link.svelte'
     import Close from '$icons/Close.svelte'
+    import LockClosed from '$icons/LockClosed.svelte'
+    import LockOpen from '$icons/LockOpen.svelte'
 
-    let expanded = false
+    let expanded = true // TODO: temp debugging
+    let encryptionEnabled = true
 
     let canvas: HTMLCanvasElement
     let isQRReady = false
@@ -46,7 +58,8 @@
 </script>
 
 <div class="mx-auto w-full max-w-md pt-16" class:invisible={$loading}>
-    <TabGroup class="manage-data">
+    <!-- TODO: temp defaultIndex for debugging -->
+    <TabGroup class="manage-data" defaultIndex={2}>
         <TabList class="flex justify-center">
             <Tab
                 class={cx(tabClasses, 'inline-flex items-center gap-2')}
@@ -113,6 +126,36 @@
                     variant="outline"
                     class="flex w-36 items-center gap-2"><Link />{copyText}</Button
                 >
+
+                <SwitchGroup class="select-none pt-4">
+                    <SwitchLabel>Encrypt your data for increased privacy.</SwitchLabel>
+
+                    <div class="flex items-center gap-4 pt-2">
+                        <LockOpen />
+                        <Switch
+                            checked={encryptionEnabled}
+                            on:change={(e) => (encryptionEnabled = e.detail)}
+                            class={encryptionEnabled
+                                ? 'switch switch-enabled'
+                                : 'switch switch-disabled'}
+                        >
+                            <span
+                                class="toggle"
+                                class:toggle-on={encryptionEnabled}
+                                class:toggle-off={!encryptionEnabled}
+                            />
+                        </Switch>
+                        <LockClosed />
+                    </div>
+                </SwitchGroup>
+
+                <!-- TODO: If encryption is enabled, show password input, and repeat password field. These two must match and have a length greater than 8 characters -->
+                <!-- IDEA: Maybe include a passphrase generator to reduce friction, and encourage people to save it in their password manager -->
+                <!-- TODO: If encryption is enabled, disable copy link button until password has been set -->
+                <!-- TODO: When password is set, enable copy link button again -->
+                <!-- IDEA: Maybe allow deriving a key from a password, and then saving it in the local session until user data is cleared, to remove friction of having to enter it all the time -->
+                <!-- TODO: figure out a way to reuse the encryption + password form in both save file and copy link tabs -->
+
                 <div class="pt-4" class:hidden={!isQRReady}>
                     <h2 class="pb-4 text-lg font-bold">QR code for your link:</h2>
                     <canvas bind:this={canvas} />
@@ -121,3 +164,31 @@
         </TabPanels>
     </TabGroup>
 </div>
+
+<style lang="postcss">
+    :global(.switch) {
+        /* @apply relative inline-flex h-8 w-16 items-center rounded-full; */
+        @apply relative inline-flex h-9 w-[72px] flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
+    }
+
+    :global(.switch-enabled) {
+        @apply bg-emerald-500;
+    }
+
+    :global(.switch-disabled) {
+        @apply bg-emerald-400/20;
+    }
+
+    .toggle {
+        /* @apply inline-block h-7 w-7 rounded-full bg-white shadow-md; */
+        @apply pointer-events-none inline-block h-8 w-8 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
+    }
+
+    .toggle-on {
+        @apply translate-x-9;
+    }
+
+    .toggle-off {
+        @apply translate-x-px;
+    }
+</style>
