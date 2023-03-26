@@ -9,26 +9,32 @@
 
     import { openFile } from '$lib/import'
     import { saveFile } from '$lib/export'
-
-    type Panel = 'import' | 'export'
 </script>
 
 <script lang="ts">
     import { reflections, loading } from '$lib/stores'
     import { cx } from '$lib/utils'
     import CloseButton from './CloseButton.svelte'
+
+    let expanded = false
 </script>
 
 <div class="mx-auto w-full max-w-md pt-16" class:invisible={$loading}>
     <!-- IDEA: Maybe always show both the open and save buttons -->
     <TabGroup class="manage-data">
         <TabList>
-            <Tab class={tabClasses}>Open</Tab>
-            <Tab class={tabClasses}>Save</Tab>
+            <Tab class={tabClasses} on:click={() => (expanded = true)}>Open</Tab>
+            <Tab class={tabClasses} on:click={() => (expanded = true)}>Save</Tab>
         </TabList>
-        <TabPanels class="tab-panels relative mt-2 hidden rounded-md bg-gray-50/5 p-4">
+        <TabPanels
+            class={cx('relative mt-2 rounded-md bg-gray-50/5 p-4', expanded ? undefined : 'hidden')}
+        >
             <TabPanel>
-                <CloseButton class="absolute right-2 top-2" />
+                <Button
+                    variant="roundGhost"
+                    class="absolute right-4 top-4 flex !h-12 !w-12 items-center justify-center !border-emerald-400/5 pb-1 !text-xs !shadow-md"
+                    on:click={() => (expanded = false)}><span>⨉</span></Button
+                >
 
                 <p class="pb-4">Load your data from a file.</p>
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
@@ -44,7 +50,11 @@
                 </p>
             </TabPanel>
             <TabPanel>
-                <CloseButton class="absolute right-2 top-2" />
+                <Button
+                    variant="roundGhost"
+                    class="absolute right-4 top-4 flex !h-12 !w-12 items-center justify-center !border-emerald-400/5 pb-1 !text-xs !shadow-md"
+                    on:click={() => (expanded = false)}><span>⨉</span></Button
+                >
 
                 <Button
                     on:click={() => saveFile($reflections)}
@@ -85,9 +95,3 @@
         {/if}
     </div> -->
 </div>
-
-<style lang="postcss">
-    :global(.manage-data:focus-within .tab-panels) {
-        @apply block;
-    }
-</style>
