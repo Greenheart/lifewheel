@@ -146,7 +146,12 @@
         <Button variant="outline" on:click={encrypt}>Encrypt</Button>
         <Button variant="outline" on:click={decrypt}>Decrypt</Button>
         {#if $reflections.length}
-            <Button variant="outline" on:click={() => reflections.clear()}>Reset</Button>
+            <Button
+                variant="outline"
+                on:click={() => {
+                    $reflections = []
+                }}>Reset</Button
+            >
         {/if}
     </div>
 
