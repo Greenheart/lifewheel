@@ -23,6 +23,12 @@
     export { className as class }
 </script>
 
-<button on:click {disabled} class={cx(defaultClasses, variants[variant], className)} {type}>
+<button
+    {...$$restProps}
+    on:click
+    {disabled}
+    class={cx(defaultClasses, variants[variant], className)}
+    {type}
+>
     <slot />
 </button>

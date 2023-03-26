@@ -86,10 +86,12 @@
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}
-            <Button variant="roundOutline" on:click={onPrev}>←</Button>
+            <Button variant="roundOutline" on:click={onPrev} aria-label="Show previous step"
+                >←</Button
+            >
         {/if}
         <div class="flex-grow" />
-        <Button variant="roundSolid" on:click={onNext}>→</Button>
+        <Button variant="roundSolid" on:click={onNext} aria-label="Show next step">→</Button>
     </div>
 </div>
 

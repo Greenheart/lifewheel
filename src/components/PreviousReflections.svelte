@@ -78,6 +78,7 @@
             >
                 <Button
                     variant="roundOutline"
+                    aria-label="Show previous reflection"
                     class={$index < 1 ? 'invisible' : undefined}
                     on:click={onPrev}>←</Button
                 >
@@ -104,16 +105,13 @@
                 </h3>
                 <Button
                     variant="roundOutline"
+                    aria-label="Show next reflection"
                     class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
                     on:click={onNext}>→</Button
                 >
             </div>
 
-            <Lifewheel
-                data={$currentEntry.data}
-                {tweenedLifewheel}
-                class="max-w-xs xs:max-w-md sm:max-w-lg"
-            />
+            <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-xs" />
 
             <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
         </div>
