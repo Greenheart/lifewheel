@@ -1,8 +1,9 @@
 import { base64url } from 'rfc4648'
 import QRCode from 'qrcode'
 
-import type { ReflectionEntry, ProtocolVersion } from './types'
-import { encodeInt32, formatHeader, mergeTypedArrays } from './utils'
+import type { ReflectionEntry, ProtocolVersion, SaveFile } from './types'
+import { encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
+import { fileSave } from 'browser-fs-access'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000
@@ -38,5 +39,36 @@ export const showQRCode = async (text: string, canvas: HTMLCanvasElement) => {
     if (!text) return
     return new Promise<void>((resolve, reject) => {
         QRCode.toCanvas(canvas, text, (error) => (error ? reject(error) : resolve()))
+    })
+}
+
+export async function saveFile(reflections: ReflectionEntry[]) {
+    const date = new Date().toLocaleString('sv-SE', {
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+    })
+    const time = new Date()
+    time.setSeconds(0, 0)
+
+    const file: SaveFile = {
+        type: 'lifewheel',
+        version: 1,
+        time,
+        reflections: reflections,
+    }
+    const minified = minifyJSONArrays(JSON.stringify(file, null, 2))
+
+    const blob = new Blob([minified], {
+        type: 'application/json',
+    })
+
+    await fileSave(blob, {
+        fileName: `${date}-lifewheel.json`,
+        mimeTypes: ['application/json'],
+        extensions: ['.json'],
+        id: 'documents',
+        startIn: 'documents',
+        description: 'Lifewheel save files',
     })
 }

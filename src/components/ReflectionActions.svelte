@@ -4,78 +4,12 @@
     import FolderOpen from '$icons/FolderOpen.svelte'
     import Download from '$icons/Download.svelte'
     import { getEncryptedPayload } from '$lib/crypto'
-    import { encodeReflectionEntries, formatLink, showQRCode } from '$lib/export'
-    import { minifyJSONArrays } from '$lib/utils'
-    import { fileSave, fileOpen } from 'browser-fs-access'
-    import type { SaveFile } from '$lib/types'
+    import { encodeReflectionEntries, formatLink, saveFile, showQRCode } from '$lib/export'
 </script>
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-
-    const saveFile = async () => {
-        const date = new Date().toLocaleString('sv-SE', {
-            month: 'numeric',
-            day: 'numeric',
-            year: 'numeric',
-        })
-        const time = new Date()
-        time.setSeconds(0, 0)
-
-        const file: SaveFile = {
-            type: 'lifewheel',
-            version: 1,
-            time,
-            reflections: $reflections,
-        }
-        const minified = minifyJSONArrays(JSON.stringify(file, null, 2))
-
-        const blob = new Blob([minified], {
-            type: 'application/json',
-        })
-
-        await fileSave(blob, {
-            fileName: `${date}-lifewheel.json`,
-            mimeTypes: ['application/json'],
-            extensions: ['.json'],
-            id: 'documents',
-            startIn: 'documents',
-            description: 'Lifewheel save files',
-        })
-    }
-
-    const loadFile = async () => {
-        const blob = await fileOpen({
-            mimeTypes: ['application/json'],
-            id: 'documents',
-            startIn: 'documents',
-            extensions: ['.json'],
-            description: 'Lifewheel save files',
-        })
-
-        const file: SaveFile = await blob
-            .text()
-            .then((content) => JSON.parse(content))
-            .catch((err) => {
-                console.error(`Unable to open file "${blob.name}"`, blob, err)
-            })
-
-        if (!file) return
-
-        if (file.type !== 'lifewheel') {
-            console.error(
-                `Unable to open file "${blob.name}": Unsupported file type "${file.type}"`,
-                file,
-            )
-            return
-        }
-
-        // Turn timestamps back into runtime types
-        $reflections = file.reflections.map((entry) => ({
-            time: new Date(entry.time),
-            data: entry.data,
-        }))
-    }
+    import { loadFile } from '$lib/import'
 
     let canvas: HTMLCanvasElement
     let isQRReady = false
@@ -136,8 +70,10 @@
                     copyLink(formatLink({ data: encodeReflectionEntries($reflections) }))}
                 class="flex items-center gap-2"><Link />{copyText}</Button
             >
-            <Button on:click={saveFile} variant="outline" class="flex items-center gap-2"
-                ><Download />Save file</Button
+            <Button
+                on:click={() => saveFile($reflections)}
+                variant="outline"
+                class="flex items-center gap-2"><Download />Save file</Button
             >
         {/if}
         <Button variant="outline" on:click={loadFile} class="flex items-center gap-2"
