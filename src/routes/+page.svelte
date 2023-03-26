@@ -50,4 +50,16 @@
         {/if}
         <!-- <ReflectionActions /> -->
     {/if}
+
+    <div class="pt-16 pb-4 text-center">
+        <p>
+            © {new Date().getFullYear()}
+            <a
+                href="https://samuelplumppu.se"
+                rel="noopener noreferrer"
+                target="_blank"
+                class="text-emerald-400 underline hover:text-emerald-500">Samuel Plumppu</a
+            >
+        </p>
+    </div>
 </div>
