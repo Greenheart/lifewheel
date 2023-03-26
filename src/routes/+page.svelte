@@ -48,7 +48,7 @@
         {#if $reflections.length}
             <PreviousReflections />
         {/if}
-        <!-- <ReflectionActions /> -->
+        <ReflectionActions />
     {/if}
 
     <div class="pt-16 pb-4 text-center">

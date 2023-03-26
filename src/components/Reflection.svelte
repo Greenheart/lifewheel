@@ -74,7 +74,7 @@
 <div
     class="mx-auto grid max-w-screen-md grid-rows-[min-content-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
-    <Lifewheel class="max-w-xs xs:max-w-md sm:max-w-lg" {tweenedLifewheel} data={lifewheel} />
+    <Lifewheel class="max-w-xs xs:max-w-md sm:max-w-lg" {tweenedLifewheel} data={$lifewheel} />
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4">
         <div class="h-40 2xs:h-48 xs:h-52">

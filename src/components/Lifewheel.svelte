@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
     import { arc } from 'd3-shape'
     import type { Tweened } from 'svelte/motion'
-    import type { Readable } from 'svelte/store'
     import { colors, INITIAL_LIFEWHEEL_STATE, lifewheelSteps, MAX_LEVEL } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
     import { cx } from '../lib/utils'
@@ -30,7 +29,7 @@
     import { onDestroy, onMount } from 'svelte'
     import { scale } from 'svelte/transition'
 
-    export let data: Readable<LifewheelState>
+    export let data: LifewheelState
     export let tweenedLifewheel: Tweened<LifewheelState>
 
     let className = ''
@@ -41,7 +40,7 @@
 
     onMount(() => {
         visible = true
-        tweenedLifewheel.set($data)
+        tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
     })
 
@@ -51,7 +50,7 @@
     })
 
     $: {
-        tweenedLifewheel.set($data)
+        tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
     }
 </script>
@@ -87,7 +86,7 @@
             </defs>
 
             <!-- Only render actual lifewheel when first data is available -->
-            {#if $data[0] !== 0}
+            {#if data[0] !== 0}
                 {#each dimensions as path, i}
                     <path
                         d={path}

@@ -1,16 +1,17 @@
 <script lang="ts" context="module">
-    import Button from './Button.svelte'
-    import Lifewheel from './Lifewheel.svelte'
-    import type { LifewheelState } from '$lib/types'
-
+    import { tick } from 'svelte'
     import { derived, writable } from 'svelte/store'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
+
+    import Button from './Button.svelte'
+    import Lifewheel from './Lifewheel.svelte'
+    import DateRangeSlider from './DateRangeSlider.svelte'
+    import type { LifewheelState } from '$lib/types'
 </script>
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import DateRangeSlider from './DateRangeSlider.svelte'
 
     const index = writable(Math.max($reflections.length - 1, 0))
     const tweenedLifewheel = tweened<LifewheelState>($reflections[$index].data, {
@@ -18,11 +19,10 @@
         easing: cubicOut,
     })
     const currentEntry = derived([index, reflections], ([currentIndex, entries]) => {
+        if ($reflections.length < 1) return null
         tweenedLifewheel.set(entries[currentIndex].data)
         return entries[currentIndex]
     })
-
-    const data = derived(currentEntry, (entry) => entry.data)
 
     const onPrev = () => {
         $index = $index - 1
@@ -33,10 +33,11 @@
     }
 </script>
 
-<section>
-    <h2 class="pt-16 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
-    <div class="grid justify-items-center gap-2 pt-4">
-        <!--
+{#if $currentEntry}
+    <section>
+        <h2 class="pt-16 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
+        <div class="grid justify-items-center gap-2 pt-4">
+            <!--
             IDEA: On both mobile and desktop, keep the same UI layout
             
             Lifewheel
@@ -72,31 +73,52 @@
                 If the graph gets too large for the screen width, only show the section closest to the currently selected index
                 Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
         -->
-        <div
-            class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4"
-        >
-            <Button
-                variant="roundOutline"
-                class={$index < 1 ? 'invisible' : undefined}
-                on:click={onPrev}>←</Button
+            <div
+                class="grid w-full max-w-lg grid-cols-[max-content_1fr_max-content] items-center gap-4"
             >
-            <h3 class="select-none whitespace-pre-wrap text-center">
-                {`${$currentEntry.time.toLocaleDateString('en-GB', {
-                    dateStyle: 'long',
-                })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
-            </h3>
-            <Button
-                variant="roundOutline"
-                class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
-                on:click={onNext}>→</Button
-            >
+                <Button
+                    variant="roundOutline"
+                    class={$index < 1 ? 'invisible' : undefined}
+                    on:click={onPrev}>←</Button
+                >
+                <h3
+                    class="select-none whitespace-pre-wrap text-center"
+                    on:dblclick={async () => {
+                        const newReflections = $reflections.filter((_, i) => i !== $index)
+
+                        if (newReflections.length < 1) {
+                            $reflections = newReflections
+                            await tick()
+                            return
+                        }
+
+                        if (!newReflections[$index] && newReflections.length > 0) {
+                            $index = Math.max(newReflections.length - 1, 0)
+                        }
+                        $reflections = newReflections
+                    }}
+                >
+                    {`${$currentEntry.time.toLocaleDateString('en-GB', {
+                        dateStyle: 'long',
+                    })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
+                </h3>
+                <Button
+                    variant="roundOutline"
+                    class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
+                    on:click={onNext}>→</Button
+                >
+            </div>
+
+            <Lifewheel
+                data={$currentEntry.data}
+                {tweenedLifewheel}
+                class="max-w-xs xs:max-w-md sm:max-w-lg"
+            />
+
+            <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
         </div>
-
-        <Lifewheel {data} {tweenedLifewheel} class="max-w-xs xs:max-w-md sm:max-w-lg" />
-
-        <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
-    </div>
-</section>
+    </section>
+{/if}
 
 <svelte:body
     on:keyup={(event) => {

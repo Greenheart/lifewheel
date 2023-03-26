@@ -31,6 +31,7 @@
             placement: 'top',
             middleware: [offset(18), flip(), arrow({ element: arrowElement })],
         }).then(({ x, y, placement, middlewareData }) => {
+            if (!(input && tooltip && arrowElement)) return
             const width = input.offsetWidth - 32
 
             tooltip.style.transform = `translate(${
@@ -61,13 +62,17 @@
 
     const showTooltip = () => {
         window.clearTimeout(hiding)
-        tooltip.style.display = 'block'
+        if (tooltip) {
+            tooltip.style.display = 'block'
+        }
         updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
     }
 
     const hideTooltip = (delay = 400) => {
         hiding = window.setTimeout(() => {
-            tooltip.style.display = ''
+            if (tooltip) {
+                tooltip.style.display = ''
+            }
         }, delay)
     }
 
