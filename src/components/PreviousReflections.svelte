@@ -124,7 +124,7 @@
                                     close()
                                     deleteEntry()
                                 }}
-                                variant="outline"
+                                variant="ghost"
                                 class="flex w-36 items-center gap-2"><Delete />Delete</Button
                             >
                         </div>

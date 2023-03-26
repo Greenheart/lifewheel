@@ -85,7 +85,7 @@
 </script>
 
 {#if hasProtectedLink}
-    <div class="mx-auto w-full max-w-sm">
+    <div class="mx-auto w-full max-w-sm pt-16">
         <div
             class="place-items-center gap-2 text-lg"
             class:hidden={!isDecrypting}

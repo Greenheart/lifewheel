@@ -34,15 +34,15 @@
             <p class="pt-4 text-xl text-white xs:text-2xl">Reflect on Your Life Balance</p>
         </div>
 
-        <div class="mx-auto max-w-max pt-16" class:invisible={$loading}>
-            <LinkButton href="/reflection" class="flex items-center gap-2 pr-4"
-                ><PlusCircle />New reflection</LinkButton
-            >
-        </div>
-
         {#if $loading}
             <AutoImport />
         {:else}
+            <div class="mx-auto max-w-max pt-16">
+                <LinkButton href="/reflection" class="flex items-center gap-2 pr-4"
+                    ><PlusCircle />New reflection</LinkButton
+                >
+            </div>
+
             <ManageData {isDataMenuOpen} />
 
             <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
@@ -57,7 +57,7 @@
     </div>
 
     <div class="pt-16">
-        <div>
+        <div class="text-center">
             <h3>Debug data</h3>
             <a
                 href="/#0e1pAAAAA2QVhRAJBggFBggJBGQVhUwGCAkECAQIBGQVhjwIAwkGCQYIBg=="
