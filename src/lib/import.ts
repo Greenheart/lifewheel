@@ -27,7 +27,10 @@ export function decodeReflectionEntries(data: Uint8Array) {
     })
 }
 
-export async function openFile() {
+/**
+ * Open the file picker, and return a boolean indicating if it was successful or not.
+ */
+export async function openFile(): Promise<boolean> {
     const blob = await fileOpen({
         mimeTypes: ['application/json'],
         id: 'documents',
@@ -43,14 +46,14 @@ export async function openFile() {
             console.error(`Unable to open file "${blob.name}"`, blob, err)
         })
 
-    if (!file) return
+    if (!file) return false
 
     if (file.type !== 'lifewheel') {
         console.error(
             `Unable to open file "${blob.name}": Unsupported file type "${file.type}"`,
             file,
         )
-        return
+        return false
     }
 
     // Turn timestamps back into dates during runtime
@@ -60,4 +63,5 @@ export async function openFile() {
             data: entry.data,
         })),
     )
+    return true
 }

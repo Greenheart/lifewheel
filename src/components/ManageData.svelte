@@ -117,8 +117,8 @@
                 <Button
                     variant="outline"
                     on:click={() =>
-                        openFile().then(() => {
-                            $isDataMenuOpen = false
+                        openFile().then((success) => {
+                            if (success) $isDataMenuOpen = false
                         })}
                     class="flex w-36 items-center gap-2"><FolderOpen />Open file</Button
                 >
