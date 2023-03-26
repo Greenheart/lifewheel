@@ -114,8 +114,13 @@
                     on:click={() => ($isDataMenuOpen = false)}><Close /></Button
                 >
                 <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
-                <Button variant="outline" on:click={openFile} class="flex w-36 items-center gap-2"
-                    ><FolderOpen />Open file</Button
+                <Button
+                    variant="outline"
+                    on:click={() =>
+                        openFile().then(() => {
+                            $isDataMenuOpen = false
+                        })}
+                    class="flex w-36 items-center gap-2"><FolderOpen />Open file</Button
                 >
 
                 <h2 class="pt-8 text-lg font-bold">Using the app on other devices?</h2>
