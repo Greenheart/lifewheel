@@ -69,8 +69,8 @@
         <ReflectionActions />
 
         <div class="pt-16 pb-4 text-center">
-            <p class="pb-2">Made for 🏞 with 💚</p>
-            <p>
+            <p>Made for 🏞 with 💚</p>
+            <p class="pt-2">
                 © {new Date().getFullYear()}
                 <a
                     href="https://samuelplumppu.se"
