@@ -10,6 +10,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
+    import DateRangeSlider from './DateRangeSlider.svelte'
 
     const index = writable(Math.max($reflections.length - 1, 0))
     const tweenedLifewheel = tweened<LifewheelState>($reflections[$index].data, {
@@ -55,9 +56,9 @@
                         Maybe possible to use some special delimiter sequence so the parser can know where the next entry starts
 
             Slider
-                (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
-                The slider has one step for each entry, and min value 0 anv max value length - 1.
-                Changing the value of the slider updates the index of the current Entry
+                ✅ (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
+                ✅ The slider has one step for each entry, and min value 0 anv max value length - 1.
+                ✅ Changing the value of the slider updates the index of the current Entry
             
             Graph
                 Below the top section, show a graph of how the values have changed over time
@@ -92,6 +93,8 @@
         </div>
 
         <Lifewheel {data} {tweenedLifewheel} class="max-w-xs xs:max-w-md sm:max-w-lg" />
+
+        <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
     </div>
 </section>
 

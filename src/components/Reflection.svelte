@@ -8,7 +8,7 @@
     import ReflectionInputSlider from './ReflectionInputSlider.svelte'
     import Lifewheel from './Lifewheel.svelte'
 
-    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE } from '$lib/constants'
+    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE, INITIAL_LEVEL } from '$lib/constants'
     import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
     import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
 </script>
@@ -62,7 +62,7 @@
                 if ($lifewheel[$reflectionStep.i] === 0) {
                     // Add default value the first time a new dimension is active.
                     $lifewheel = $lifewheel.map((value, i) =>
-                        i === ($reflectionStep as LifewheelStep).i ? 6 : value,
+                        i === ($reflectionStep as LifewheelStep).i ? INITIAL_LEVEL : value,
                     ) as LifewheelState
                 }
             }
