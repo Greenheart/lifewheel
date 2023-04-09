@@ -42,6 +42,13 @@ export type ParsedLink = {
     data: Uint8Array
 }
 
+export type EncryptedSaveFile = {
+    type: 'lifewheel'
+    encrypted: boolean
+    version: ProtocolVersion
+    data: Uint8Array
+}
+
 export type SaveFile = {
     type: 'lifewheel'
     version: ProtocolVersion

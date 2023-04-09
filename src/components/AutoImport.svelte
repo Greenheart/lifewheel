@@ -1,20 +1,15 @@
 <script lang="ts" context="module">
     import { parseLink } from '$lib/utils'
     import { decodeReflectionEntries } from '$lib/import'
+    import { getDecryptedPayload } from '$lib/crypto'
+    import type { ParsedLink } from '$lib/types'
+
+    import PasswordForm from './PasswordForm.svelte'
 </script>
 
 <script lang="ts">
-    import { loading, reflections } from '$lib/stores'
     import { onMount } from 'svelte'
-    import Button from './Button.svelte'
-    import { getDecryptedPayload } from '$lib/crypto'
-    import type { ParsedLink } from '$lib/types'
-    import LockClosed from '$icons/LockClosed.svelte'
-
-    let isDecrypting = false
-    let password = ''
-
-    let hasProtectedLink = false
+    import { loading, reflections } from '$lib/stores'
 
     let payload: ParsedLink
 
@@ -25,11 +20,7 @@
             try {
                 payload = parseLink(hash)
 
-                console.log(payload)
-
-                if (payload.encrypted && payload.data) {
-                    hasProtectedLink = true
-                } else {
+                if (!payload.encrypted && payload.data) {
                     $reflections = decodeReflectionEntries(payload.data)
                     closeImportScreen()
                 }
@@ -59,81 +50,21 @@
 
     const closeImportScreen = () => {
         $loading = false
-        isDecrypting = false
-        hasProtectedLink = false
         history.pushState('', document.title, window.location.pathname)
     }
 
-    const submitPassphrase = async () => {
-        if (!password.length) return
-        isDecrypting = true
+    const submitPassphrase = async (password: string) => {
         try {
-            // console.log('decrypting', payload.data, password)
-
             const decrypted = await getDecryptedPayload(payload.data, password)
-            // console.log('decrypted', decrypted)
-
             $reflections = decodeReflectionEntries(decrypted)
-            // console.log('decoded', $reflections)
         } catch (error) {
             console.error(error)
-            isDecrypting = false
         }
 
         closeImportScreen()
     }
 </script>
 
-{#if hasProtectedLink}
-    <div class="mx-auto w-full max-w-sm pt-16">
-        <div
-            class="place-items-center gap-2 text-lg"
-            class:hidden={!isDecrypting}
-            class:grid={isDecrypting}
-        >
-            <p class="spinner h-7 w-7" />
-            <p>Decrypting your data...</p>
-        </div>
-        <header class="flex items-center gap-2" class:hidden={isDecrypting}>
-            <LockClosed />
-            <p id="msg">This link is password protected.</p>
-        </header>
-        <!-- svelte-ignore a11y-autofocus -->
-        <form on:submit|preventDefault={submitPassphrase} class:hidden={isDecrypting} class="mt-3">
-            <input
-                type="password"
-                name="password"
-                aria-label="Password"
-                autofocus
-                class="w-full rounded-md px-4 py-3 font-light text-black"
-                bind:value={password}
-                autocomplete="off"
-            />
-            <Button type="submit" class="mt-4 w-full">Submit</Button>
-        </form>
-
-        {#if !isDecrypting}
-            <Button variant="ghost" on:click={closeImportScreen} class="mx-auto mt-8 block"
-                >Cancel</Button
-            >
-        {/if}
-    </div>
-
-    <style>
-        .spinner {
-            pointer-events: none;
-            border: 3px solid transparent;
-            border-color: #fff;
-            border-right-width: 2px;
-            border-radius: 50%;
-            -webkit-animation: spin 0.5s linear infinite;
-            animation: spin 0.5s linear infinite;
-        }
-
-        @keyframes spin {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
+{#if payload?.encrypted}
+    <PasswordForm importType="link" onSubmit={submitPassphrase} onCancel={closeImportScreen} />
 {/if}

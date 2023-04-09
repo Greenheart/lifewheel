@@ -1,5 +1,4 @@
 import { base64url } from 'rfc4648'
-import QRCode from 'qrcode'
 
 import type { ReflectionEntry, ProtocolVersion, SaveFile } from './types'
 import { encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
