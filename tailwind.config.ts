@@ -1,6 +1,7 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+import { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
-module.exports = {
+export default {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
         screens: {
@@ -14,4 +15,4 @@ module.exports = {
             },
         },
     },
-}
+} satisfies Config
