@@ -114,8 +114,8 @@
                         aria-label="Open menu for this reflection"
                         class={menuButtonClasses}><Ellipsis /></PopoverButton
                     >
-                    <PopoverPanel class="absolute bottom-[-70px] right-0">
-                        <div class="grid rounded-lg bg-gray-800 p-2">
+                    <PopoverPanel class="absolute -bottom-16 right-0">
+                        <div class="grid rounded-lg bg-gray-800 p-1">
                             <Button
                                 aria-label="Delete reflection"
                                 on:click={() => {
