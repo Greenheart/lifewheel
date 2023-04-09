@@ -13,18 +13,18 @@ export const loading = writable<boolean>(true)
  */
 export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', [], {
     serializer: {
-        parse(data: string) {
-            return JSON.parse(data, (key, value) => {
+        parse: (data: string) =>
+            JSON.parse(data, (key, value) => {
                 if (key === 'time') return new Date(value)
                 return value
-            })
-        },
-        stringify(entry) {
-            return JSON.stringify(entry, (key, value) => {
-                //   if (key === 'time' && value instanceof Date)
-                // if (key === 'time') return (value as Date).toISOString()
-                return value
-            })
-        },
+            }),
+        stringify: JSON.stringify,
     },
 })
+
+/**
+ * If the user want to, they can store their encryption key in memory during app usage.
+ *
+ * TODO: in the future this might be persisted for example to localStorage
+ */
+export const encryptionKey = writable<CryptoKey | null>(null)

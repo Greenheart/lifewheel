@@ -1,4 +1,5 @@
-import { base64url } from 'rfc4648'
+import { get } from 'svelte/store'
+import { encryptionKey } from './stores'
 import { decodeInt32, encodeInt32 } from './utils'
 
 async function deriveKey(
@@ -35,9 +36,16 @@ export async function getEncryptedPayload(
     content: Uint8Array,
     password: string,
     iterations: number,
+    persistKey = false,
 ) {
     const salt = crypto.getRandomValues(new Uint8Array(32))
-    const key = await deriveKey(salt, password, iterations, ['encrypt'])
+
+    const currentKey = get(encryptionKey)
+    const key = currentKey ?? (await deriveKey(salt, password, iterations, ['encrypt']))
+
+    if (persistKey) {
+        encryptionKey.set(key)
+    }
 
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const iterationsBytes = encodeInt32(iterations)
