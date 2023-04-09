@@ -16,6 +16,23 @@
     const isDataMenuOpen = writable(false)
 </script>
 
+<!--
+    IDEA: Maybe add global menu in top right with user icon or padlock icon
+            This could be used to enable/disable encryption
+        If you load an encrypted note, then save the key in the "account" in the top right. And store the key in sessionStorage.
+    
+    IDEA: If additional data is loaded that is encrypted, automatically try to use the same key as has been previously used before. If it fails, prompt the user that this data usees a different password
+    IDEA: Maybe allow the auto impot/merge behavior to be disabled? Combine with existing data, or replace all state with this instead?
+    IDEA: If we show the option to enable/disable auto import behavior, we should only show that feature when you have existing data. Otherwise, we can just skip that step.
+-->
+
+<!-- IDEA: improve layout for the link panel - use space bwetween instead of space around. Or center content within two grid columns -->
+
+<!-- TODO: fix encryption for file import/export -->
+<!-- IDEA: explain how to sync data with Nextcloud or syncthing -->
+
+<!-- TODO: Maybe make input slider and thumb visually thinner, but keep same touchable area -->
+
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
     <div>
         <div class="flex justify-end">
@@ -37,7 +54,7 @@
         {#if $loading}
             <AutoImport />
         {:else}
-            <div class="mx-auto max-w-max pt-16">
+            <div class="mx-auto max-w-max pt-12">
                 <LinkButton href="/reflection" class="flex items-center gap-2 pr-4"
                     ><PlusCircle />New reflection</LinkButton
                 >
@@ -68,7 +85,7 @@
                 class="block text-emerald-400 underline">3 encrypted reflections</a
             >
         </div>
-        <div class="pt-16 pb-4 text-center">
+        <div class="pb-4 pt-16 text-center">
             <p>Made for 🏞 with 💚</p>
             <p class="pt-2">
                 © {new Date().getFullYear()}

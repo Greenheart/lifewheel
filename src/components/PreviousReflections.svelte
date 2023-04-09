@@ -23,6 +23,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
+    import MinusCircle from '$icons/MinusCircle.svelte'
 
     const index = writable(Math.max($reflections.length - 1, 0))
     const tweenedLifewheel = tweened<LifewheelState>($reflections[$index].data, {
@@ -43,7 +44,7 @@
         $index = $index + 1
     }
 
-    const deleteEntry = async () => {
+    const removeReflection = async () => {
         if (!confirm('Are you sure you want to delete this reflection?')) {
             return
         }
@@ -60,11 +61,21 @@
         }
         $reflections = newReflections
     }
+
+    const deleteAll = async () => {
+        if (!confirm('Are you sure you want to delete ALL reflections?')) {
+            return
+        }
+
+        $reflections = []
+        $index = 0
+        await tick()
+    }
 </script>
 
 {#if $currentEntry}
     <section>
-        <h2 class="pt-16 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
+        <h2 class="pt-12 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
             IDEA: On both mobile and desktop, keep the same UI layout
@@ -114,18 +125,30 @@
                         aria-label="Open menu for this reflection"
                         class={menuButtonClasses}><Ellipsis /></PopoverButton
                     >
-                    <PopoverPanel class="absolute -bottom-16 right-0">
-                        <div class="grid rounded-lg bg-gray-800 p-1">
+                    <PopoverPanel class="absolute -bottom-28 right-0">
+                        <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
                             <Button
-                                aria-label="Delete reflection"
-                                on:click={() => {
+                                aria-label="Remove reflection"
+                                on:click={async () => {
                                     // @ts-expect-error Type bug in Popover close method
                                     // the argument should be optional, according to the docs
                                     close()
-                                    deleteEntry()
+                                    await removeReflection()
                                 }}
                                 variant="ghost"
-                                class="flex w-36 items-center gap-2"><Delete />Delete</Button
+                                class="flex items-center gap-2"
+                                ><MinusCircle />Remove reflection</Button
+                            >
+                            <Button
+                                aria-label="Delete all"
+                                on:click={async () => {
+                                    // @ts-expect-error Type bug in Popover close method
+                                    // the argument should be optional, according to the docs
+                                    close()
+                                    await deleteAll()
+                                }}
+                                variant="ghost"
+                                class="flex items-center gap-2"><Delete />Delete all</Button
                             >
                         </div>
                     </PopoverPanel>

@@ -83,7 +83,7 @@
     }
 </script>
 
-<div class="mx-auto w-full max-w-4xl pt-16" class:invisible={$loading}>
+<div class="mx-auto w-full max-w-4xl pt-4" class:invisible={$loading}>
     <TabGroup class="manage-data">
         <TabList class="flex justify-center">
             <Tab
