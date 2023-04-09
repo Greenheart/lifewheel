@@ -22,14 +22,28 @@
         If you load an encrypted note, then save the key in the "account" in the top right. And store the key in sessionStorage.
     
     IDEA: If additional data is loaded that is encrypted, automatically try to use the same key as has been previously used before. If it fails, prompt the user that this data usees a different password
-    IDEA: Maybe allow the auto impot/merge behavior to be disabled? Combine with existing data, or replace all state with this instead?
-    IDEA: If we show the option to enable/disable auto import behavior, we should only show that feature when you have existing data. Otherwise, we can just skip that step.
 -->
 
 <!-- IDEA: improve layout for the link panel - use space bwetween instead of space around. Or center content within two grid columns -->
 
 <!-- TODO: fix encryption for file import/export -->
 <!-- IDEA: explain how to sync data with Nextcloud or syncthing -->
+
+<!--
+    TODO: ensure you save your passowrd in a pwd manager. There is no way to recover a lost password.
+    TODO: If you want to change your password at some point, you can re-export your data with a new password
+    TODO: Add link button "Change password" to enter a new password and overwrite the old encryption key
+-->
+
+<!-- TODO: try if it works to remember enc/dec keys and decrypt multiple files/links with the same password but with different random data (and thus potentially different keys) -->
+
+<!-- IDEA: give feedback button - maybe use github issue creation hook -->
+
+<!-- TODO: clarify that the actual password is never saved, but the derived encryption key. Add this for the nerds, for example in SECURITY.md -->
+
+<!-- IDEA: Maybe add checkbox to let user decide if they want to "remember their password" in the local device (keep me logged in) -->
+
+<!--  -->
 
 <!-- TODO: Maybe make input slider and thumb visually thinner, but keep same touchable area -->
 
