@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
     import { writable } from 'svelte/store'
+
     import LinkButton from '$components/LinkButton.svelte'
     import AutoImport from '$components/AutoImport.svelte'
     import PreviousReflections from '$components/PreviousReflections.svelte'
-    // import ReflectionActions from '$components/ReflectionActions.svelte'
     import ManageData from '$components/ManageData.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
@@ -82,23 +82,10 @@
             {#if $reflections.length}
                 <PreviousReflections />
             {/if}
-            <!-- TODO: Replace all features and remove this component -->
-            <!-- <ReflectionActions /> -->
         {/if}
     </div>
 
     <div class="pt-16">
-        <div class="text-center">
-            <h3>Debug data</h3>
-            <a
-                href="/#0e1pAAAAA2QVhRAJBggFBggJBGQVhUwGCAkECAQIBGQVhjwIAwkGCQYIBg=="
-                class="block text-emerald-400 underline">3 reflections</a
-            >
-            <a
-                href="/#1e1pjecBoTdA5SP2RkAqsIMTiKHkXJeJIJLqie5jzEBAV-qwbCpPb2rSun07TpnS9p0pAB6EgCMoDpxReehe2LUsAe5pgkB4QfhBrLI8kKo50N2V6rzZjk1j334_hswcQRIWonthUkPbF300vjCe"
-                class="block text-emerald-400 underline">3 encrypted reflections</a
-            >
-        </div>
         <div class="pb-4 pt-16 text-center">
             <p>Made for 🏞 with 💚</p>
             <p class="pt-2">
