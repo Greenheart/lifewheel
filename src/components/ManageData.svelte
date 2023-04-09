@@ -35,30 +35,50 @@
     export let isDataMenuOpen: Writable<boolean>
     const encryptionEnabled = writable(true)
 
-    // IDEA: Maybe store link and encryptedLink separately?
-    // This would allow toggling between states quickly without affecting the other one until a new item has been written
-    // An alternative would be to store the derived key in sessionStorage, and only prompt for password when sessionStorage has been reset
-    // This would boost crypto performance since the KDF is the most time consuming task.
-
     const link = derived(
-        [reflections, encryptionEnabled],
-        ([entries, encrypted]) =>
+        [reflections],
+        ([entries]) =>
             (async () => {
                 if (!browser) return null
 
-                const encoded = encodeReflectionEntries(entries)
-                const data = await (encrypted
-                    ? getEncryptedPayload(encoded, 'password', 2e6)
-                    : Promise.resolve(encoded))
+                const data = encodeReflectionEntries(entries)
 
                 const url = new URL(window.location.origin)
-                url.hash = formatLink({ data, encrypted })
+                url.hash = formatLink({ data })
 
                 return url.toString()
             })(),
         null,
     )
-    const qrCodeData = derived(link, (linkPromise) =>
+
+    /**
+     * The encrypted link (and its QR code) are stored separately since this
+     * makes it possible to quickly toggle encryption on/off and see the corresponding QR code.
+     * This ensures we only update the link and QR code when the underlying data has changed.
+     */
+    const encryptedLink = derived([reflections], ([entries]) =>
+        (async () => {
+            if (!browser) return null
+
+            const encoded = encodeReflectionEntries(entries)
+            const data = await getEncryptedPayload(encoded, 'password', 2e6)
+
+            const url = new URL(window.location.origin)
+            url.hash = formatLink({ data, encrypted: true })
+
+            return url.toString()
+        })(),
+    )
+
+    const regularQRCode = derived(link, (linkPromise) =>
+        (async () => {
+            const fullURL = await linkPromise
+            if (!fullURL) return null
+            return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+        })(),
+    )
+
+    const encryptedQRCode = derived(encryptedLink, (linkPromise) =>
         (async () => {
             const fullURL = await linkPromise
             if (!fullURL) return null
@@ -70,7 +90,7 @@
 
     const copyLink = async () => {
         // It might be a promise since it might need to be encrypted
-        const url = await $link
+        const url = await ($encryptionEnabled ? $encryptedLink : $link)
         if (!url) return
         // Clipboard is only available in via HTTPS or localhost
         await navigator?.clipboard?.writeText(url)
@@ -201,7 +221,7 @@
                             </SwitchGroup>
 
                             <div class="pt-4">
-                                {#await $qrCodeData}
+                                {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
