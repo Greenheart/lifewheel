@@ -22,14 +22,19 @@
 
     import { openFile } from '$lib/import'
     import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
-    import { getEncryptedPayload, getPersistedKey } from '$lib/crypto'
+    import {
+        clearPersistedKey,
+        getEncryptedPayload,
+        getPersistedKey,
+        setPersistedKey,
+    } from '$lib/crypto'
     import { cx } from '$lib/utils'
 
     const tabClasses = cx(defaultClasses, variants.ghost)
 </script>
 
 <script lang="ts">
-    import { reflections, loading, encryptionKey } from '$lib/stores'
+    import { reflections, loading, encryptionKey, isGeneratingKey } from '$lib/stores'
     import { browser } from '$app/environment'
     import SetPasswordForm from './SetPasswordForm.svelte'
 
@@ -57,11 +62,9 @@
      * makes it possible to quickly toggle encryption on/off and see the corresponding QR code.
      * This ensures we only update the link and QR code when the underlying data has changed.
      */
-    const encryptedLink = derived([reflections, encryptionKey], ([entries, keyPromise]) =>
+    const encryptedLink = derived([reflections, encryptionKey], ([entries, key]) =>
         (async () => {
-            if (!browser) return null
-            const key = await keyPromise
-            if (!key) return null
+            if (!browser || !key) return null
 
             const encoded = encodeReflectionEntries(entries)
             const data = await getEncryptedPayload(encoded, key, 2e6)
@@ -103,6 +106,11 @@
         window.setTimeout(() => {
             copyText = 'Copy link'
         }, 2000)
+    }
+
+    const clearEncryptionKey = () => {
+        $encryptionKey = null
+        clearPersistedKey('enc')
     }
 </script>
 
@@ -223,43 +231,40 @@
                                 </div>
                             </SwitchGroup>
 
-                            {#if $encryptionEnabled}
-                                <div class="pt-4">
-                                    {#await $encryptionKey}
-                                        <div class="grid place-items-center gap-2 pt-8 text-lg">
-                                            <p class="spinner h-7 w-7" />
-                                            <p>Generating your key...</p>
-                                        </div>
-                                    {:then key}
-                                        {#if key === null}
-                                            <SetPasswordForm />
-                                        {:else}
-                                            {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
-                                                <h2 class="pb-4 text-lg font-bold">
-                                                    Generating QR code...
-                                                </h2>
-                                            {:then imageURL}
-                                                {#if imageURL}
-                                                    <h2 class="pb-4 text-lg font-bold">
-                                                        QR code for your link:
-                                                    </h2>
-                                                    <img
-                                                        src={imageURL}
-                                                        alt="QR code generated for your link"
-                                                    />
-                                                    <Button
-                                                        variant="ghost"
-                                                        class="mt-8"
-                                                        on:click={() => {
-                                                            $encryptionKey = Promise.resolve(null)
-                                                        }}>Change password</Button
-                                                    >
-                                                {/if}
-                                            {/await}
+                            <div class="pt-4">
+                                {#if $isGeneratingKey}
+                                    <div class="grid place-items-center gap-2 pt-8 text-lg">
+                                        <p class="spinner h-7 w-7" />
+                                        <p>Generating your key...</p>
+                                    </div>
+                                {:else if $encryptionEnabled && $encryptionKey === null}
+                                    <SetPasswordForm />
+                                {:else}
+                                    {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
+                                        <h2 class="pb-4 text-lg font-bold">
+                                            Generating QR code...
+                                        </h2>
+                                    {:then imageURL}
+                                        {#if imageURL}
+                                            <h2 class="pb-4 text-lg font-bold">
+                                                QR code for your link:
+                                            </h2>
+                                            <img
+                                                src={imageURL}
+                                                alt="QR code generated for your link"
+                                            />
+                                            {#if $encryptionEnabled && $encryptionKey}
+                                                <Button
+                                                    variant="ghost"
+                                                    class="mt-4"
+                                                    on:click={clearEncryptionKey}
+                                                    >Change password</Button
+                                                >
+                                            {/if}
                                         {/if}
                                     {/await}
-                                </div>
-                            {/if}
+                                {/if}
+                            </div>
                         </div>
                     </div>
 

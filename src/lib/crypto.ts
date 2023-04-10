@@ -99,6 +99,10 @@ export async function setPersistedKey(id: string, cryptoKey: CryptoKey) {
     localStorage.setItem(id, JSON.stringify(keyData))
 }
 
+export function clearPersistedKey(id: string) {
+    localStorage.removeItem(id)
+}
+
 /**
  * Generate a random password of a given length.
  *

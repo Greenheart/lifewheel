@@ -24,18 +24,20 @@ export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', 
     },
 })
 
+export const isGeneratingKey = writable(false)
+
 /**
  * Store key in memory during app use.
  */
-export const encryptionKey = writable<Promise<CryptoKey | null>>(
-    browser ? getPersistedKey('enc') : Promise.resolve(null),
-)
+export const encryptionKey = writable<CryptoKey | null>(null)
 
 if (browser) {
-    const handleStorage = (event: StorageEvent) => {
+    encryptionKey.set(await getPersistedKey('enc'))
+
+    const handleStorage = async (event: StorageEvent) => {
         // Sync persisted key across browser tabs
         if (event.key === 'enc') {
-            encryptionKey.set(event.newValue ? getPersistedKey('enc') : Promise.resolve(null))
+            encryptionKey.set(event.newValue ? await getPersistedKey('enc') : null)
         }
 
         window.addEventListener('storage', handleStorage)

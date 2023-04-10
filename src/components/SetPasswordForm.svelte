@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-    import { encryptionKey } from '$lib/stores'
+    import { encryptionKey, isGeneratingKey } from '$lib/stores'
 
     let error: string | null = null
     let valid = false
@@ -21,15 +21,13 @@
             return
         }
 
+        $isGeneratingKey = true
         const salt = crypto.getRandomValues(new Uint8Array(32))
-        const key = deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'], true)
+        const key = await deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'], true)
 
-        if (persistKey) {
-            key.then((keyData) => {
-                setPersistedKey('enc', keyData)
-            })
-        }
+        if (persistKey) setPersistedKey('enc', key)
 
+        $isGeneratingKey = false
         $encryptionKey = key
     }
 
