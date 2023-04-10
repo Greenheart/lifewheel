@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
     import { writable } from 'svelte/store'
+    import { fade } from 'svelte/transition'
 
     import LinkButton from '$components/LinkButton.svelte'
     import AutoImport from '$components/AutoImport.svelte'
@@ -68,37 +69,41 @@
         {#if $loading}
             <AutoImport />
         {:else}
-            <div class="mx-auto max-w-max pt-12">
-                <LinkButton href="/reflection" class="flex items-center gap-2 pr-4"
-                    ><PlusCircle />New reflection</LinkButton
-                >
+            <div in:fade={{ duration: 300 }}>
+                <div class="mx-auto max-w-max pt-12">
+                    <LinkButton href="/reflection" class="flex items-center gap-2 pr-4"
+                        ><PlusCircle />New reflection</LinkButton
+                    >
+                </div>
+
+                <ManageData {isDataMenuOpen} />
+
+                <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
+                <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
+
+                {#if $reflections.length}
+                    <PreviousReflections />
+                {/if}
             </div>
-
-            <ManageData {isDataMenuOpen} />
-
-            <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
-            <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
-
-            {#if $reflections.length}
-                <PreviousReflections />
-            {/if}
         {/if}
     </div>
 
-    <div class="pt-16">
-        <div class="pb-4 pt-16 text-center">
-            <p>Made for 🏞 with 💚</p>
-            <p class="pt-2">
-                © {new Date().getFullYear()}
-                <a
-                    href="https://samuelplumppu.se"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    class="text-emerald-400 underline hover:text-emerald-500">Samuel Plumppu</a
-                >
-            </p>
+    {#if !$loading}
+        <div class="pt-16" in:fade={{ duration: 300 }}>
+            <div class="pb-4 pt-16 text-center">
+                <p>Made for 🏞 with 💚</p>
+                <p class="pt-2">
+                    © {new Date().getFullYear()}
+                    <a
+                        href="https://samuelplumppu.se"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        class="text-emerald-400 underline hover:text-emerald-500">Samuel Plumppu</a
+                    >
+                </p>
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 <!--
