@@ -14,7 +14,8 @@
             'rounded-full text-lg w-12 2xs:w-14 xs:w-16 h-12 2xs:h-14 xs:h-16 hover:bg-emerald-400/5 border-transparent hover:border-emerald-500/5 shadow-none grid place-items-center',
     }
     export const defaultVariant = 'solid'
-    export const defaultClasses = 'border-2 border-emerald-400 hover:border-emerald-500 shadow-md'
+    export const defaultClasses =
+        'border-2 border-emerald-400 hover:border-emerald-500 shadow-md disabled:cursor-not-allowed disabled:opacity-25'
 </script>
 
 <script lang="ts">

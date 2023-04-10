@@ -183,7 +183,9 @@
                     <Button
                         on:click={() => copyLink()}
                         variant="outline"
-                        class="flex w-36 items-center gap-2"><Link />{copyText}</Button
+                        class="flex w-36 items-center gap-2"
+                        disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
+                        ><Link />{copyText}</Button
                     >
                     <div class="grid md:grid-cols-2 md:gap-4">
                         <div class="md:order-2">
@@ -269,20 +271,9 @@
                         </div>
                     </div>
 
-                    <!-- TODO: If encryption is enabled, show password input, and repeat password field. These two must match and have a length greater than 8 characters -->
                     <!-- IDEA: Maybe include a passphrase generator to reduce friction, and encourage people to save it in their password manager -->
                     <!-- TODO: If encryption is enabled, disable copy link button until password has been set -->
                     <!-- TODO: When password is set, enable copy link button again -->
-                    <!-- IDEA: Maybe allow deriving a key from a password, and then saving it in the local session until user data is cleared, to remove friction of having to enter it all the time -->
-                    <!-- TODO: figure out a way to reuse the encryption + password form in both save file and copy link tabs -->
-
-                    <!--
-                        IDEA: Add some type of Auth widget that manages a global store for the encryption + decryption key
-                        This widget could allow you to "sign in" / "sign out" and maybe even "change password".
-
-                        However, it might be worth simply prompting for password when importing and exporting encrypted. Most people will probably be able to work around it.
-                        One middle way is to store the encryption keys in memory, but not in any browser storage (due to security reasons)
-                    -->
                 </TabPanel>
             {/if}
         </TabPanels>
