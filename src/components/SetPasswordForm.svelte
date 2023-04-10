@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { deriveKey } from '$lib/crypto'
+    import { deriveKey, setPersistedKey } from '$lib/crypto'
     import Button from './Button.svelte'
 </script>
 
@@ -10,15 +10,26 @@
     let valid = false
     let password = ''
     let repeat = ''
+    let persistKey = true
+    let isSubmitting = false
 
     const onSubmit = async () => {
+        isSubmitting = true
         valid = isValid()
-
-        if (!valid) return
+        if (!valid) {
+            isSubmitting = false
+            return
+        }
 
         const salt = crypto.getRandomValues(new Uint8Array(32))
-        const key = deriveKey(salt, 'password', 2e6, ['encrypt'], true)
-        console.log(password, repeat, key)
+        const key = deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'], true)
+
+        if (persistKey) {
+            key.then((keyData) => {
+                setPersistedKey('enc', keyData)
+            })
+        }
+
         $encryptionKey = key
     }
 
@@ -38,7 +49,12 @@
     }
 </script>
 
-<p class="pb-4 pt-8">Choose a password to encrypt your data. Save it in your password manager.</p>
+<p class="pb-4 pt-8">
+    <!-- Choose a password to encrypt your data{#if persistKey}<span>{' (once per device)'}</span>{/if}. -->
+    {#if persistKey}<span>Once per device, c</span>{:else}C{/if}hoose a password to encrypt your
+    data. Save it in your password manager - otherwise it's not possible to recover it if you lose
+    it.
+</p>
 
 <form on:submit|preventDefault={onSubmit} class="grid">
     <label for="repeat" class="text-sm">Password</label>
@@ -62,12 +78,14 @@
         bind:value={repeat}
     />
     <!-- IDEA: Add option to persist key or not -->
-    <!-- <label for="persist" class="text-sm mt-4">Remember me on this device</label>
-    <input type="checkbox" name="persist" id="persist" bind:value={persistKey} /> -->
+    <label for="persist" class="mt-2 flex gap-2 py-1 text-sm"
+        ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
+        Remember me on this device</label
+    >
 
     {#if error}
-        <p class="pt-4 text-red-600">{error}</p>
+        <p class="py-2 text-red-600">{error}</p>
     {/if}
 
-    <Button type="submit" class="mt-8 w-full">Save</Button>
+    <Button type="submit" class="mt-2 w-full" disabled={isSubmitting}>Save</Button>
 </form>

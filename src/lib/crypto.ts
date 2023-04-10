@@ -76,6 +76,29 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string) {
     return content
 }
 
+export async function getPersistedKey(id: string) {
+    const keyData = localStorage.getItem(id)
+    if (!keyData) return null
+
+    try {
+        const key = await crypto.subtle.importKey('jwk', JSON.parse(keyData), 'AES-GCM', true, [
+            'encrypt',
+            'decrypt',
+        ])
+        console.log('get key', key)
+
+        return key
+    } catch (error) {
+        return null
+    }
+}
+
+export async function setPersistedKey(id: string, cryptoKey: CryptoKey) {
+    const keyData = await crypto.subtle.exportKey('jwk', cryptoKey)
+    console.log('set key', keyData)
+    localStorage.setItem(id, JSON.stringify(keyData))
+}
+
 /**
  * Generate a random password of a given length.
  *

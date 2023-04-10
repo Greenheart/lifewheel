@@ -22,7 +22,7 @@
 
     import { openFile } from '$lib/import'
     import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
-    import { getEncryptedPayload } from '$lib/crypto'
+    import { getEncryptedPayload, getPersistedKey } from '$lib/crypto'
     import { cx } from '$lib/utils'
 
     const tabClasses = cx(defaultClasses, variants.ghost)
@@ -223,34 +223,43 @@
                                 </div>
                             </SwitchGroup>
 
-                            <div class="pt-4">
-                                {#await $encryptionKey}
-                                    <div class="grid place-items-center gap-2 pt-8 text-lg">
-                                        <p class="spinner h-7 w-7" />
-                                        <p>Generating your key...</p>
-                                    </div>
-                                {:then key}
-                                    {#if key === null}
-                                        <SetPasswordForm />
-                                    {:else}
-                                        {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
-                                            <h2 class="pb-4 text-lg font-bold">
-                                                Generating QR code...
-                                            </h2>
-                                        {:then imageURL}
-                                            {#if imageURL}
+                            {#if $encryptionEnabled}
+                                <div class="pt-4">
+                                    {#await $encryptionKey}
+                                        <div class="grid place-items-center gap-2 pt-8 text-lg">
+                                            <p class="spinner h-7 w-7" />
+                                            <p>Generating your key...</p>
+                                        </div>
+                                    {:then key}
+                                        {#if key === null}
+                                            <SetPasswordForm />
+                                        {:else}
+                                            {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
                                                 <h2 class="pb-4 text-lg font-bold">
-                                                    QR code for your link:
+                                                    Generating QR code...
                                                 </h2>
-                                                <img
-                                                    src={imageURL}
-                                                    alt="QR code generated for your link"
-                                                />
-                                            {/if}
-                                        {/await}
-                                    {/if}
-                                {/await}
-                            </div>
+                                            {:then imageURL}
+                                                {#if imageURL}
+                                                    <h2 class="pb-4 text-lg font-bold">
+                                                        QR code for your link:
+                                                    </h2>
+                                                    <img
+                                                        src={imageURL}
+                                                        alt="QR code generated for your link"
+                                                    />
+                                                    <Button
+                                                        variant="ghost"
+                                                        class="mt-8"
+                                                        on:click={() => {
+                                                            $encryptionKey = Promise.resolve(null)
+                                                        }}>Change password</Button
+                                                    >
+                                                {/if}
+                                            {/await}
+                                        {/if}
+                                    {/await}
+                                </div>
+                            {/if}
                         </div>
                     </div>
 
