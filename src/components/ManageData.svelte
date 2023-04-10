@@ -213,6 +213,7 @@
                                         <LockOpen class="flex-shrink-0 opacity-50" />
                                     {/if}
                                     <Switch
+                                        disabled={$isGeneratingKey}
                                         checked={$encryptionEnabled}
                                         on:change={(e) => ($encryptionEnabled = e.detail)}
                                         class={$encryptionEnabled
