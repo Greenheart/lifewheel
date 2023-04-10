@@ -50,8 +50,7 @@
 <p class="pb-4 pt-8">
     <!-- Choose a password to encrypt your data{#if persistKey}<span>{' (once per device)'}</span>{/if}. -->
     {#if persistKey}<span>Once per device, c</span>{:else}C{/if}hoose a password to encrypt your
-    data. Save it in your password manager - otherwise it's not possible to recover it if you lose
-    it.
+    data. Save it in your password manager - it's not possible to recover a lost password.
 </p>
 
 <form on:submit|preventDefault={onSubmit} class="grid">

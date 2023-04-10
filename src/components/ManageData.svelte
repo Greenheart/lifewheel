@@ -272,8 +272,11 @@
                     </div>
 
                     <!-- IDEA: Maybe include a passphrase generator to reduce friction, and encourage people to save it in their password manager -->
-                    <!-- TODO: If encryption is enabled, disable copy link button until password has been set -->
-                    <!-- TODO: When password is set, enable copy link button again -->
+                    <!-- IDEA: for the passphrase generator, show a suggested passphrase by default, and a button to regenerate a new passphrase -->
+                    <!-- IDEA: In the text, explain "save your passphrase directly", also explain securely generated passphrase -->
+                    <!-- IDEA: add checkbox "I have saved my passphrase somewhere securely". After checking the checkbox, the Save button gets enabled and you can generate your key -->
+                    <!-- IDEA: add text link at the bottom (or ghost button) to set a custom password. This shows the regular SetPasswordForm -->
+                    <!-- IDEA: In the regular SetPasswordForm, show a link (or ghost button) at the bottom to "genererate a passphrase" and get back to the default view -->
                 </TabPanel>
             {/if}
         </TabPanels>
@@ -282,7 +285,7 @@
 
 <style lang="postcss">
     :global(.switch) {
-        @apply relative inline-flex h-9 w-[72px] flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
+        @apply relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
     }
 
     :global(.switch-enabled) {
@@ -294,11 +297,11 @@
     }
 
     .toggle {
-        @apply pointer-events-none inline-block h-8 w-8 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
+        @apply pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
     }
 
     .toggle-on {
-        @apply translate-x-9;
+        @apply translate-x-[27px];
     }
 
     .toggle-off {
