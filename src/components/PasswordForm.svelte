@@ -58,21 +58,3 @@
         <Button variant="ghost" on:click={onCancel} class="mx-auto mt-8 block">Cancel</Button>
     {/if}
 </div>
-
-<style>
-    .spinner {
-        pointer-events: none;
-        border: 3px solid transparent;
-        border-color: #fff;
-        border-right-width: 2px;
-        border-radius: 50%;
-        -webkit-animation: spin 0.5s linear infinite;
-        animation: spin 0.5s linear infinite;
-    }
-
-    @keyframes spin {
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-</style>

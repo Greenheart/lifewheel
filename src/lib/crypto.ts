@@ -1,26 +1,25 @@
-import { get } from 'svelte/store'
-import { encryptionKey } from './stores'
 import { decodeInt32, encodeInt32 } from './utils'
 
-async function deriveKey(
+export async function deriveKey(
     salt: Uint8Array,
     password: string,
     iterations: number,
     keyUsages: Iterable<KeyUsage>,
+    extractable = false,
 ): Promise<CryptoKey> {
     const encoder = new TextEncoder()
-    const baseKey = await window.crypto.subtle.importKey(
+    const baseKey = await crypto.subtle.importKey(
         'raw',
         encoder.encode(password),
         'PBKDF2',
-        false,
+        extractable,
         ['deriveKey'],
     )
-    return await window.crypto.subtle.deriveKey(
+    return await crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
         baseKey,
         { name: 'AES-GCM', length: 256 },
-        false,
+        extractable,
         keyUsages,
     )
 }
@@ -29,23 +28,16 @@ async function deriveKey(
  * Encrypt a string and turn it into an encrypted payload.
  *
  * @param content The data to encrypt
- * @param password The password used to encrypt + decrypt the content.
+ * @param key The key used to encrypt the content.
  * @param iterations The number of iterations to derive the key from the password.
  */
 export async function getEncryptedPayload(
     content: Uint8Array,
-    password: string,
+    // IDEA: Maybe use cryptokey instead and move out the crypto key persistance outside of this lib
+    key: CryptoKey,
     iterations: number,
-    persistKey = false,
 ) {
     const salt = crypto.getRandomValues(new Uint8Array(32))
-
-    const currentKey = get(encryptionKey)
-    const key = currentKey ?? (await deriveKey(salt, password, iterations, ['encrypt']))
-
-    if (persistKey) {
-        encryptionKey.set(key)
-    }
 
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const iterationsBytes = encodeInt32(iterations)

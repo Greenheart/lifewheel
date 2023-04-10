@@ -26,5 +26,8 @@ export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', 
  * If the user want to, they can store their encryption key in memory during app usage.
  *
  * TODO: in the future this might be persisted for example to localStorage
+ * The key needs to have `extractable: true`, and then we call `exportKey('raw', key)`
+ *
+ * For parsing, we need to import the crypto key
  */
-export const encryptionKey = writable<CryptoKey | null>(null)
+export const encryptionKey = writable<Promise<CryptoKey | null>>(Promise.resolve(null))
