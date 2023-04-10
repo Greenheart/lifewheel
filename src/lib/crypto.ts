@@ -85,7 +85,6 @@ export async function getPersistedKey(id: string) {
             'encrypt',
             'decrypt',
         ])
-        console.log('get key', key)
 
         return key
     } catch (error) {
@@ -95,7 +94,6 @@ export async function getPersistedKey(id: string) {
 
 export async function setPersistedKey(id: string, cryptoKey: CryptoKey) {
     const keyData = await crypto.subtle.exportKey('jwk', cryptoKey)
-    console.log('set key', keyData)
     localStorage.setItem(id, JSON.stringify(keyData))
 }
 
