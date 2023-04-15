@@ -13,7 +13,7 @@
     let valid = false
     let password = ''
     let repeat = ''
-    let persistKey = true
+    let persistKey = false
     let isSubmitting = false
 
     const onSubmit = async () => {
@@ -50,7 +50,7 @@
     }
 </script>
 
-<p class="pb-4 pt-8">
+<p class="pb-4">
     <!-- Choose a password to encrypt your data{#if persistKey}<span>{' (once per device)'}</span>{/if}. -->
     {#if persistKey}<span>Once per device, c</span>{:else}C{/if}hoose a password to encrypt your
     data. Save it in your password manager - it's not possible to recover a lost password.
@@ -75,7 +75,6 @@
         autocomplete="off"
         bind:value={repeat}
     />
-    <!-- IDEA: Add option to persist key or not -->
     <label for="persist" class="mt-2 flex gap-2 py-1 text-sm"
         ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
         Remember me on this device</label

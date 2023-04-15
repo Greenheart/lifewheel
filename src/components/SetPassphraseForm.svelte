@@ -35,30 +35,38 @@
         await navigator?.clipboard?.writeText(text)
         copyText = 'Copied!'
 
-        window.setTimeout(() => (copyText = 'Copy'), 2000)
+        window.setTimeout(() => {
+            copyText = 'Copy'
+        }, 2000)
     }
+
+    let saved = false
 </script>
 
-<h2 class="pt-8 text-lg font-bold">Securely generated passphrase</h2>
-<div class="grid gap-2 pt-8">
+<h2 class="pb-2 text-lg font-bold">Your generated passphrase:</h2>
+<div class="grid gap-2">
     {#await passphrase then generated}
-        <code>{generated}</code>
+        <code class="rounded-md bg-gray-900 px-2 py-3">{generated}</code>
     {/await}
     <div class="grid grid-cols-2 gap-2">
-        <Button variant="outline" on:click={copy}>Copy</Button>
+        <Button variant="outline" on:click={copy}>{copyText}</Button>
         <Button
             variant="outline"
             on:click={() => {
                 passphrase = generatePassphrase({ words })
             }}
         >
-            <!-- IDEA: Maybe add regenerate/refresh icon instead of the text label, though we need to use it for the aria label -->
             Regenerate
         </Button>
     </div>
+    <label for="persist" class="flex gap-2 py-2 text-sm"
+        ><input type="checkbox" name="persist" id="persist" bind:checked={saved} />
+        I have saved my passphrase somewhere safe</label
+    >
     <Button
+        disabled={!saved}
         on:click={() => {
             // TODO: use this passphrase to generate the key and encrypt data
-        }}>Save</Button
+        }}>Continue</Button
     >
 </div>

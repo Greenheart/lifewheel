@@ -25,6 +25,7 @@
     import { browser } from '$app/environment'
     import SetPasswordForm from './SetPasswordForm.svelte'
     import SetPassphraseForm from './SetPassphraseForm.svelte'
+    import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     export let isDataMenuOpen: Writable<boolean>
     const encryptionEnabled = writable(true)
@@ -209,7 +210,7 @@
                         </div>
 
                         <div class="md:order-1">
-                            <div class="flex select-none items-center gap-3 pt-8">
+                            <div class="flex select-none items-center gap-3 pb-8 pt-8">
                                 {#if $encryptionEnabled}
                                     <LockClosed class="flex-shrink-0" />
                                 {:else}
@@ -224,44 +225,34 @@
                                 </Switch>
                             </div>
 
-                            <SetPassphraseForm {isGeneratingKey} />
-
-                            <div class="pt-4">
-                                {#if $isGeneratingKey}
-                                    <div class="grid place-items-center gap-2 pt-8 text-lg">
-                                        <p class="spinner h-7 w-7" />
-                                        <p>Encrypting your data...</p>
-                                    </div>
-                                {:else if $encryptionEnabled && $encryptionKey === null}
-                                    <SetPasswordForm {isGeneratingKey} />
-                                {:else}
-                                    {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
+                            {#if $isGeneratingKey}
+                                <div class="grid place-items-center gap-2 pt-8 text-lg">
+                                    <p class="spinner h-7 w-7" />
+                                    <p>Encrypting your data...</p>
+                                </div>
+                            {:else if $encryptionEnabled && $encryptionKey === null}
+                                <CryptoKeyForm {isGeneratingKey} />
+                            {:else}
+                                {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
+                                    <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
+                                {:then imageURL}
+                                    {#if imageURL}
                                         <h2 class="pb-4 text-lg font-bold">
-                                            Generating QR code...
+                                            QR code for your {$encryptionEnabled ? 'encrypted' : ''}
+                                            link:
                                         </h2>
-                                    {:then imageURL}
-                                        {#if imageURL}
-                                            <h2 class="pb-4 text-lg font-bold">
-                                                QR code for your {$encryptionEnabled
-                                                    ? 'encrypted'
-                                                    : ''} link:
-                                            </h2>
-                                            <img
-                                                src={imageURL}
-                                                alt="QR code generated for your link"
-                                            />
-                                            {#if $encryptionEnabled && $encryptionKey}
-                                                <Button
-                                                    variant="ghost"
-                                                    class="mt-4"
-                                                    on:click={clearEncryptionKey}
-                                                    >Change password</Button
-                                                >
-                                            {/if}
+                                        <img src={imageURL} alt="QR code generated for your link" />
+                                        {#if $encryptionEnabled && $encryptionKey}
+                                            <Button
+                                                variant="ghost"
+                                                class="mt-4"
+                                                on:click={clearEncryptionKey}
+                                                >Change password</Button
+                                            >
                                         {/if}
-                                    {/await}
-                                {/if}
-                            </div>
+                                    {/if}
+                                {/await}
+                            {/if}
                         </div>
                     </div>
 
