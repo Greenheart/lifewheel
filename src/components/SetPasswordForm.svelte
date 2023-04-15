@@ -1,10 +1,13 @@
 <script lang="ts" context="module">
+    import type { Writable } from 'svelte/store'
+
     import { deriveKey, setPersistedKey } from '$lib/crypto'
     import Button from './Button.svelte'
 </script>
 
 <script lang="ts">
-    import { encryptionKey, isGeneratingKey } from '$lib/stores'
+    import { encryptionKey } from '$lib/stores'
+    export let isGeneratingKey: Writable<boolean>
 
     let error: string | null = null
     let valid = false

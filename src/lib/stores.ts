@@ -24,8 +24,6 @@ export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', 
     },
 })
 
-export const isGeneratingKey = writable(false)
-
 /**
  * Store key in memory during app use.
  */

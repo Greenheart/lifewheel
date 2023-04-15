@@ -21,13 +21,14 @@
 </script>
 
 <script lang="ts">
-    import { reflections, loading, encryptionKey, isGeneratingKey } from '$lib/stores'
+    import { reflections, loading, encryptionKey } from '$lib/stores'
     import { browser } from '$app/environment'
     import SetPasswordForm from './SetPasswordForm.svelte'
     import SetPassphraseForm from './SetPassphraseForm.svelte'
 
     export let isDataMenuOpen: Writable<boolean>
     const encryptionEnabled = writable(true)
+    const isGeneratingKey = writable(false)
 
     const link = derived(
         [reflections],
@@ -223,7 +224,7 @@
                                 </Switch>
                             </div>
 
-                            <SetPassphraseForm />
+                            <SetPassphraseForm {isGeneratingKey} />
 
                             <div class="pt-4">
                                 {#if $isGeneratingKey}
@@ -232,7 +233,7 @@
                                         <p>Encrypting your data...</p>
                                     </div>
                                 {:else if $encryptionEnabled && $encryptionKey === null}
-                                    <SetPasswordForm />
+                                    <SetPasswordForm {isGeneratingKey} />
                                 {:else}
                                     {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
                                         <h2 class="pb-4 text-lg font-bold">
