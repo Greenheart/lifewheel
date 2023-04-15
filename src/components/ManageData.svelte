@@ -1,18 +1,10 @@
 <script lang="ts" context="module">
     import QRCode from 'qrcode'
-    import {
-        Tab,
-        TabGroup,
-        TabList,
-        TabPanels,
-        TabPanel,
-        Switch,
-        SwitchLabel,
-        SwitchGroup,
-    } from '@rgossiaux/svelte-headlessui'
+    import { Tab, TabGroup, TabList, TabPanels, TabPanel } from '@rgossiaux/svelte-headlessui'
     import { derived, writable, type Writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
+    import Switch from './Switch.svelte'
     import Download from '$icons/Download.svelte'
     import FolderOpen from '$icons/FolderOpen.svelte'
     import Link from '$icons/Link.svelte'
@@ -207,29 +199,20 @@
                         </div>
 
                         <div class="md:order-1">
-                            <SwitchGroup class="select-none pt-8">
-                                <div class="flex items-center gap-3">
-                                    {#if $encryptionEnabled}
-                                        <LockClosed class="flex-shrink-0" />
-                                    {:else}
-                                        <LockOpen class="flex-shrink-0 opacity-50" />
-                                    {/if}
-                                    <Switch
-                                        disabled={$isGeneratingKey}
-                                        checked={$encryptionEnabled}
-                                        on:change={(e) => ($encryptionEnabled = e.detail)}
-                                        class={cx(
-                                            'switch',
-                                            $encryptionEnabled ? 'switch-on' : null,
-                                        )}
-                                    >
-                                        <span class="toggle" />
-                                    </Switch>
-                                    <SwitchLabel class="cursor-pointer"
-                                        >Use encryption for better privacy</SwitchLabel
-                                    >
-                                </div>
-                            </SwitchGroup>
+                            <div class="flex select-none items-center gap-3 pt-8">
+                                {#if $encryptionEnabled}
+                                    <LockClosed class="flex-shrink-0" />
+                                {:else}
+                                    <LockOpen class="flex-shrink-0 opacity-50" />
+                                {/if}
+                                <Switch
+                                    checked={encryptionEnabled}
+                                    id="enable-encryption"
+                                    name="enable-encryption"
+                                >
+                                    <span slot="label">Use encryption for better privacy</span>
+                                </Switch>
+                            </div>
 
                             <div class="pt-4">
                                 {#if $isGeneratingKey}
@@ -281,21 +264,3 @@
         </TabPanels>
     </TabGroup>
 </div>
-
-<style lang="postcss">
-    :global(.switch) {
-        @apply relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-emerald-400/20 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
-    }
-
-    :global(.switch-on) {
-        @apply bg-emerald-500;
-    }
-
-    .toggle {
-        @apply pointer-events-none inline-block h-6 w-6 translate-x-px transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
-    }
-
-    :global(.switch-on) .toggle {
-        @apply translate-x-[27px];
-    }
-</style>
