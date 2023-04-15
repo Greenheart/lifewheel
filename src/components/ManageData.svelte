@@ -228,7 +228,7 @@
                                 {#if $isGeneratingKey}
                                     <div class="grid place-items-center gap-2 pt-8 text-lg">
                                         <p class="spinner h-7 w-7" />
-                                        <p>Generating your key...</p>
+                                        <p>Encrypting your data...</p>
                                     </div>
                                 {:else if $encryptionEnabled && $encryptionKey === null}
                                     <SetPasswordForm />
