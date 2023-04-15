@@ -150,3 +150,11 @@ IDEA: Maybe store encrypted output in a store, to allow it to be exported in var
     
 
 -->
+
+<!-- IDEA: Feedback
+
+    maybe improve copy for each reflection
+    500 characters max length for written check-in
+    how did this feel during the check-in, what did you think about?
+    "for your encrypted QR code"
+-->
