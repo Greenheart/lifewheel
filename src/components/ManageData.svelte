@@ -250,7 +250,7 @@
                                     {:then imageURL}
                                         {#if imageURL}
                                             <h2 class="pb-4 text-lg font-bold">
-                                                QR code for your link:
+                                                QR code for your {$encryptionEnabled && $encryptionKey ? 'encrypted' : ''} link:
                                             </h2>
                                             <img
                                                 src={imageURL}
