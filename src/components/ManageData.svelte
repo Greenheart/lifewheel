@@ -218,15 +218,12 @@
                                         disabled={$isGeneratingKey}
                                         checked={$encryptionEnabled}
                                         on:change={(e) => ($encryptionEnabled = e.detail)}
-                                        class={$encryptionEnabled
-                                            ? 'switch switch-enabled'
-                                            : 'switch switch-disabled'}
+                                        class={cx(
+                                            'switch',
+                                            $encryptionEnabled ? 'switch-on' : null,
+                                        )}
                                     >
-                                        <span
-                                            class="toggle"
-                                            class:toggle-on={$encryptionEnabled}
-                                            class:toggle-off={!$encryptionEnabled}
-                                        />
+                                        <span class="toggle" />
                                     </Switch>
                                     <SwitchLabel class="cursor-pointer"
                                         >Use encryption for better privacy</SwitchLabel
@@ -250,7 +247,9 @@
                                     {:then imageURL}
                                         {#if imageURL}
                                             <h2 class="pb-4 text-lg font-bold">
-                                                QR code for your {$encryptionEnabled && $encryptionKey ? 'encrypted' : ''} link:
+                                                QR code for your {$encryptionEnabled
+                                                    ? 'encrypted'
+                                                    : ''} link:
                                             </h2>
                                             <img
                                                 src={imageURL}
@@ -285,26 +284,18 @@
 
 <style lang="postcss">
     :global(.switch) {
-        @apply relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
+        @apply relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-emerald-400/20 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
     }
 
-    :global(.switch-enabled) {
+    :global(.switch-on) {
         @apply bg-emerald-500;
     }
 
-    :global(.switch-disabled) {
-        @apply bg-emerald-400/20;
-    }
-
     .toggle {
-        @apply pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
+        @apply pointer-events-none inline-block h-6 w-6 translate-x-px transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out;
     }
 
-    .toggle-on {
+    :global(.switch-on) .toggle {
         @apply translate-x-[27px];
-    }
-
-    .toggle-off {
-        @apply translate-x-px;
     }
 </style>
