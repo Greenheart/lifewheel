@@ -14,15 +14,10 @@
 
     import { openFile } from '$lib/import'
     import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
-    import {
-        clearPersistedKey,
-        getEncryptedPayload,
-        getPersistedKey,
-        setPersistedKey,
-    } from '$lib/crypto'
+    import { clearPersistedKey, getEncryptedPayload } from '$lib/crypto'
     import { cx } from '$lib/utils'
 
-    const tabClasses = cx(defaultClasses, variants.ghost)
+    const tabClasses = cx(defaultClasses, variants.ghost, 'inline-flex items-center gap-2')
 </script>
 
 <script lang="ts">
@@ -108,19 +103,22 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl pt-4" class:invisible={$loading}>
-    <TabGroup class="manage-data">
-        <TabList class="flex justify-center">
+    <TabGroup class="manage-data" defaultIndex={2}>
+        <TabList class="flex justify-center gap-1" on:focusin={() => ($isDataMenuOpen = true)}>
             <Tab
-                class={cx(tabClasses, 'inline-flex items-center gap-2')}
+                class={({ selected }) =>
+                    cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
                 on:click={() => ($isDataMenuOpen = true)}><FolderOpen />Open</Tab
             >
             {#if $reflections.length}
                 <Tab
-                    class={cx(tabClasses, 'inline-flex items-center gap-2')}
+                    class={({ selected }) =>
+                        cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
                     on:click={() => ($isDataMenuOpen = true)}><Download />Save</Tab
                 >
                 <Tab
-                    class={cx(tabClasses, 'inline-flex items-center gap-2')}
+                    class={({ selected }) =>
+                        cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
                     on:click={() => ($isDataMenuOpen = true)}><Link />Link</Tab
                 >
             {/if}

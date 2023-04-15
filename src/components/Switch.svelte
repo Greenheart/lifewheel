@@ -45,7 +45,7 @@
 
     :global(.toggle-track) {
         border: 1px solid transparent;
-        @apply relative mr-3 flex cursor-pointer rounded-full bg-emerald-400/20;
+        @apply relative mr-3 flex shrink-0 cursor-pointer rounded-full bg-emerald-400/20;
         height: 30px;
         width: 60px;
     }
