@@ -34,7 +34,7 @@
     }
 
     :global(.toggle input:not([disabled]):focus-visible + .toggle-track) {
-        /* Use default browser focus styles */
+        /* Use default browser focus styles for keyboard users */
         outline: 5px auto Highlight;
         outline: 5px auto -webkit-focus-ring-color;
     }
