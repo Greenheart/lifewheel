@@ -101,36 +101,38 @@ export function clearPersistedKey(id: string) {
     localStorage.removeItem(id)
 }
 
-/**
- * Generate a random password of a given length.
- *
- * @param length The password length.
- * @param characters The set of characters to pick from.
- */
-export function generatePassword(
-    length = 80,
-    characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-) {
-    return Array.from({ length }, (_) => getRandomCharacter(characters)).join('')
-}
-
-/**
- * Get a random character from a given set of characters.
- *
- * @param characters The set of characters to pick from.
- */
-function getRandomCharacter(characters: string) {
+function secureRandomInt(min: number, max: number) {
     let randomNumber
     // Due to the repeating nature of results from the remainder
     // operator, we potentially need to regenerate the random number
-    // several times. This is required to ensure all characters have
+    // several times. This is required to ensure all numbers have
     // the same probability to get picked. Otherwise, the first
-    // characters would appear more often, resulting in a weaker
-    // password security.
+    // numbers would appear more often, resulting in a weaker password security.
     // Learn more: https://samuelplumppu.se/blog/generate-password-in-browser-web-crypto-api
     do {
         randomNumber = crypto.getRandomValues(new Uint8Array(1))[0]
-    } while (randomNumber >= 256 - (256 % characters.length))
+    } while (randomNumber >= 256 - (256 % max))
 
-    return characters[randomNumber % characters.length]
+    return min + (randomNumber % max)
+}
+
+export async function generatePassphrase({
+    length = 4,
+    words,
+}: {
+    length?: number
+    words: { [id: string]: string }
+}) {
+    if (length < 4)
+        throw new Error('Passphrase length must be at least 4 to work with the word list')
+    const selected: string[] = []
+
+    while (selected.length < length) {
+        const id = Array.from({ length }, () => secureRandomInt(1, 6)).join('')
+        if (!selected.includes(words[id])) {
+            selected.push(words[id])
+        }
+    }
+
+    return selected.join('-')
 }

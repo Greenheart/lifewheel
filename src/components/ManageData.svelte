@@ -29,6 +29,7 @@
     import { reflections, loading, encryptionKey, isGeneratingKey } from '$lib/stores'
     import { browser } from '$app/environment'
     import SetPasswordForm from './SetPasswordForm.svelte'
+    import SetPassphraseForm from './SetPassphraseForm.svelte'
 
     export let isDataMenuOpen: Writable<boolean>
     const encryptionEnabled = writable(true)
@@ -223,6 +224,8 @@
                                     <span slot="label">Use encryption for better privacy</span>
                                 </Switch>
                             </div>
+
+                            <SetPassphraseForm />
 
                             <div class="pt-4">
                                 {#if $isGeneratingKey}
