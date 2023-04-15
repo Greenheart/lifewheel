@@ -165,6 +165,16 @@
                         variant="outline"
                         class="flex w-36 items-center gap-2"><Download />Save file</Button
                     >
+                    <div class="flex select-none items-center gap-3 pt-8">
+                        {#if $encryptionEnabled}
+                            <LockClosed class="flex-shrink-0" />
+                        {:else}
+                            <LockOpen class="flex-shrink-0 opacity-50" />
+                        {/if}
+                        <Switch checked={encryptionEnabled} id="encrypt-file" name="encrypt-file">
+                            <span slot="label">Use encryption for better privacy</span>
+                        </Switch>
+                    </div>
                 </TabPanel>
                 <TabPanel>
                     <Button
@@ -207,8 +217,8 @@
                                 {/if}
                                 <Switch
                                     checked={encryptionEnabled}
-                                    id="enable-encryption"
-                                    name="enable-encryption"
+                                    id="encrypt-link"
+                                    name="encrypt-link"
                                 >
                                     <span slot="label">Use encryption for better privacy</span>
                                 </Switch>
