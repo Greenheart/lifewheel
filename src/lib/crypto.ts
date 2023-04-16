@@ -141,7 +141,9 @@ export async function generateKey(password: string, persistKey = false) {
     const salt = crypto.getRandomValues(new Uint8Array(32))
     const key = await deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'], true)
 
-    if (persistKey) setPersistedKey('enc', key)
+    if (persistKey) {
+        await setPersistedKey('enc', key)
+    }
 
     return key
 }

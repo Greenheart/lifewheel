@@ -1,5 +1,3 @@
-<!-- IDEA: Implement <SetPasswordForm /> as separate component -->
-
 <script lang="ts" context="module">
     import Button from './Button.svelte'
     import LockClosed from '$icons/LockClosed.svelte'
