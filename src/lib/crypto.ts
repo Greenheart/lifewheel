@@ -76,7 +76,6 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string, p
         await setPersistedKey('enc', userKey)
     }
 
-    console.log('manual set encryptionKey')
     encryptionKey.set(userKey)
 
     return content

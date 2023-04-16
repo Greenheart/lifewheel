@@ -44,21 +44,30 @@
             })(),
         null,
     )
+    
+    /**
+     * Encrypted data can be reused and exported into multiple formats (link, QR, file)
+     */
+    const encryptedData = derived([reflections, encryptionKey], ([entries, key]) =>
+        (async () => {
+            if (!browser || !key) return null
 
-    // TODO: figure out why we don't see the QR code when decrypting data and choosing "remember me on this device"
-    // the app should be able to use the key, and when opening the link export tab, it should show the QR code created using that key
+            const encoded = encodeReflectionEntries(entries)
+            const data = await getEncryptedPayload(encoded, key, 2e6)
+
+            return data
+        })(),
+    )
 
     /**
      * The encrypted link (and its QR code) are stored separately since this
      * makes it possible to quickly toggle encryption on/off and see the corresponding QR code.
      * This ensures we only update the link and QR code when the underlying data has changed.
      */
-    const encryptedLink = derived([reflections, encryptionKey], ([entries, key]) =>
+    const encryptedLink = derived([encryptedData], ([dataPromise]) =>
         (async () => {
-            if (!browser || !key) return null
-
-            const encoded = encodeReflectionEntries(entries)
-            const data = await getEncryptedPayload(encoded, key, 2e6)
+            const data = await dataPromise
+            if (!browser || !data) return null
 
             const url = new URL(window.location.origin)
             url.hash = formatLink({ data, encrypted: true })
