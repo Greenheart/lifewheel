@@ -60,22 +60,24 @@
 
                 {#if $reflections.length}
                     <PreviousReflections />
-                {:else}
-                    <div class="mx-auto max-w-prose">
-                        <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">Welcome!</h2>
+                {/if}
+                <div class="mx-auto max-w-prose">
+                    <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">
+                        Welcome{$reflections.length > 1 ? ' back' : ''}!
+                    </h2>
 
-                        <ul class="grid gap-6 pt-8 text-lg">
-                            <li>🧘 Reflect on your life balance.</li>
-                            <li>
-                                🌱 Follow your progress over time and reconnect to what matters in
-                                your life.
-                            </li>
-                            <li>
-                                📊 Make reflection a habit and gain new insights about your
-                                wellbeing.
-                            </li>
-                        </ul>
+                    <ul class="grid gap-6 pt-8 text-lg">
+                        <li>🧘 Reflect on your life balance.</li>
+                        <li>
+                            🌱 Follow your progress over time and reconnect to what matters in your
+                            life.
+                        </li>
+                        <li>
+                            📊 Make reflection a habit and gain new insights about your wellbeing.
+                        </li>
+                    </ul>
 
+                    {#if !$reflections.length}
                         <h2 class="pt-16 text-2xl font-extrabold 2xs:text-3xl">
                             Project Vision and Key Features
                         </h2>
@@ -141,8 +143,8 @@
                         <LinkButton href="/reflection" class="mx-auto mt-8 w-52"
                             >Get started</LinkButton
                         >
-                    </div>
-                {/if}
+                    {/if}
+                </div>
             </div>
         {/if}
     </div>
