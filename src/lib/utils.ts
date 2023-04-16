@@ -31,19 +31,6 @@ export const createReflectionEntry = (data: LifewheelState): ReflectionEntry => 
     }
 }
 
-/**
- * Remove duplicate entries to keep the UI clean.
- *
- * This saves data in future exports, if some entries were imported more than once.
- */
-export const getUniqueEntries = (items: ReflectionEntry[]) =>
-    // TODO: Improve this to do proper deep equality check to see if all fields are equal
-    items.filter(
-        (item, index, array) =>
-            array.findIndex((otherItem) => item.time.getTime() === otherItem.time.getTime()) ===
-            index,
-    )
-
 export function mergeTypedArrays(...arrays: Uint8Array[]) {
     const size = arrays.reduce((totalLength, array) => totalLength + array.length, 0)
     const merged = new Uint8Array(size)

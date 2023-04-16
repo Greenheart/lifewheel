@@ -71,11 +71,6 @@
     }
 </script>
 
-<!--
-    IDEA: To make it clear that users need to save their data after completing a reflection,
-          maybe add that in the outro of the reflection? Potentially only the first time.
--->
-
 <div
     class="mx-auto grid max-w-screen-md grid-rows-[min-content-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >

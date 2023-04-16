@@ -3,6 +3,7 @@ import { fileOpen } from 'browser-fs-access'
 import type { BaseSaveFile, EncryptedSaveFile, ReflectionEntry, SaveFile } from './types'
 import { decodeInt32 } from './utils'
 import { encryptedFile, loading, reflections } from './stores'
+import { get } from 'svelte/store'
 
 function decodeTime(data: Uint8Array) {
     const timestamp = decodeInt32(data)
@@ -69,16 +70,39 @@ export async function openFile(): Promise<boolean> {
     }
 
     // Finish loading unencrypted file
-    reflections.set(reviveTimestamps((file as SaveFile).data))
+    reflections.set(importUniqueEntries(get(reflections), (file as SaveFile).data))
     return true
 }
 
 /**
- * Turn timestamps back into dates during runtime
+ * Remove duplicate entries to keep both the UI and exported data clean.
  */
-export function reviveTimestamps(reflections: ReflectionEntry[]) {
-    return reflections.map((entry) => ({
-        time: new Date(entry.time),
-        data: entry.data,
-    }))
+export const getUniqueEntries = (items: ReflectionEntry[]) =>
+    items.filter(
+        (item, index, array) =>
+            array.findIndex(
+                (otherItem) =>
+                    item.time.getTime() === otherItem.time.getTime() &&
+                    item.data.join('') === otherItem.data.join(''),
+            ) === index,
+    )
+
+export const importUniqueEntries = (
+    currentEntries: ReflectionEntry[],
+    newReflectionsData: Uint8Array | ReflectionEntry[],
+) => {
+    const newEntries =
+        newReflectionsData instanceof Uint8Array
+            ? decodeReflectionEntries(newReflectionsData)
+            : newReflectionsData
+    const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries])
+
+    console.log(
+        `Imported ${Math.abs(
+            updatedEntries.length - currentEntries.length,
+        )} - filtered out ${Math.abs(newEntries.length - updatedEntries.length)}`,
+        updatedEntries.map((e) => e.time.getTime()),
+    )
+
+    return updatedEntries
 }
