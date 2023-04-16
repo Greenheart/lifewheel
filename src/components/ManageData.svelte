@@ -204,8 +204,9 @@
                                 and open it in any modern browser.
                             </p>
                             <p class="pt-2">
-                                🔐 For better privacy, protect your data with a password. Make sure
-                                to store this somewhere safe, like in your password manager.
+                                🔐 For better privacy, protect your data with a password. Save it in
+                                your password manager - it's not possible to recover a lost
+                                password.
                             </p>
 
                             <p class="pt-2">

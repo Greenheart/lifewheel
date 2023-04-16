@@ -2,6 +2,7 @@ import { set, get, del } from 'idb-keyval'
 
 import { decodeInt32, encodeInt32 } from './utils'
 import type { UserKey } from './types'
+import { encryptionKey } from './stores'
 
 export async function deriveKey(
     salt: Uint8Array,
@@ -68,10 +69,15 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string, p
         await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext),
     )
     if (!content) throw new Error('Malformed content')
+    const userKey = { key, salt }
 
     if (persistKey) {
-        await setPersistedKey('enc', { key, salt })
+        console.log('persistKey enc', userKey)
+        await setPersistedKey('enc', userKey)
     }
+
+    console.log('manual set encryptionKey')
+    encryptionKey.set(userKey)
 
     return content
 }

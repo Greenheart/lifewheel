@@ -35,6 +35,7 @@ if (browser) {
     const handleStorage = async (event: StorageEvent) => {
         // Sync persisted key across browser tabs
         if (event.key === 'enc') {
+            console.log('enc newValue', event)
             encryptionKey.set(event.newValue ? await getPersistedKey('enc') : null)
         }
 

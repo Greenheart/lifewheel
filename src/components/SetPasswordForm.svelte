@@ -9,12 +9,14 @@
     import { encryptionKey } from '$lib/stores'
 
     export let isGeneratingKey: Writable<boolean>
+    export let toggleForm: () => void
 
     let error: string | null = null
     let valid = false
     let password = ''
     let repeat = ''
     let persistKey = false
+    let saved = false
     let isSubmitting = false
 
     const onSubmit = async () => {
@@ -46,14 +48,8 @@
     }
 </script>
 
-<p class="pb-4">
-    <!-- Choose a password to encrypt your data{#if persistKey}<span>{' (once per device)'}</span>{/if}. -->
-    {#if persistKey}<span>Once per device, c</span>{:else}C{/if}hoose a password to encrypt your
-    data. Save it in your password manager - it's not possible to recover a lost password.
-</p>
-
 <form on:submit|preventDefault={onSubmit} class="grid">
-    <label for="repeat" class="text-sm">Password</label>
+    <label for="repeat" class="text-sm">Your password</label>
     <input
         type="password"
         name="pwd"
@@ -71,14 +67,23 @@
         autocomplete="off"
         bind:value={repeat}
     />
-    <label for="persist" class="mt-2 flex gap-2 py-1 text-sm"
-        ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
-        Remember me on this device</label
-    >
+    <div class="py-2">
+        <label for="saved" class="flex gap-2 py-2 text-sm"
+            ><input type="checkbox" name="saved" id="saved" bind:checked={saved} />
+            I have saved my password somewhere safe</label
+        >
+        <label for="persist" class="flex gap-2 py-2 text-sm"
+            ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
+            Remember me on this device</label
+        >
+    </div>
 
     {#if error}
-        <p class="py-2 text-red-600">{error}</p>
+        <p class="pb-2 text-red-600">{error}</p>
     {/if}
 
-    <Button type="submit" class="mt-2 w-full" disabled={isSubmitting}>Save</Button>
+    <Button type="submit" class="mb-2" disabled={!saved || isSubmitting}>Continue</Button>
+    <Button variant="ghost" on:click={toggleForm} disabled={isSubmitting}
+        >Generate passphrase instead</Button
+    >
 </form>

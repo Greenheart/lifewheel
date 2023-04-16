@@ -27,9 +27,11 @@
     import { encryptionKey } from '$lib/stores'
 
     export let isGeneratingKey: Writable<boolean>
+    export let toggleForm: () => void
 
     let passphrase = browser ? generatePassphrase({ words }) : Promise.resolve('')
     let persistKey = false
+    let isSubmitting = false
     let copyText = 'Copy'
 
     const copy = async () => {
@@ -45,8 +47,6 @@
 
     let saved = false
 </script>
-
-<!-- TODO: Maybe add better instructions here -->
 
 <h2 class="pb-2 text-lg font-bold">Your generated passphrase:</h2>
 <div class="grid gap-2">
@@ -64,7 +64,7 @@
             Regenerate
         </Button>
     </div>
-    <div class="py-2">
+    <div>
         <label for="saved" class="flex gap-2 py-2 text-sm"
             ><input type="checkbox" name="saved" id="saved" bind:checked={saved} />
             I have saved my passphrase somewhere safe</label
@@ -75,12 +75,17 @@
         >
     </div>
     <Button
-        disabled={!saved}
+        disabled={!saved || isSubmitting}
         on:click={async () => {
+            isSubmitting = true
             const pwd = await passphrase
             $isGeneratingKey = true
             $encryptionKey = await generateUserKey(pwd, persistKey)
             $isGeneratingKey = false
+            isSubmitting = false
         }}>Continue</Button
+    >
+    <Button variant="ghost" on:click={toggleForm} disabled={isSubmitting}
+        >Use custom password instead</Button
     >
 </div>
