@@ -11,6 +11,7 @@ specifiers:
   autoprefixer: ^10.4.14
   browser-fs-access: ^0.33.0
   d3-shape: ^3.2.0
+  idb-keyval: ^6.2.0
   postcss: ^8.4.21
   postcss-load-config: ^4.0.1
   prettier: ^2.8.7
@@ -31,6 +32,7 @@ dependencies:
   '@rgossiaux/svelte-headlessui': 1.0.2_svelte@3.58.0
   browser-fs-access: 0.33.0
   d3-shape: 3.2.0
+  idb-keyval: 6.2.0
   qrcode: 1.5.1
   rfc4648: 1.5.2
   svelte-local-storage-store: 0.4.0_svelte@3.58.0
@@ -810,6 +812,12 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  /idb-keyval/6.2.0:
+    resolution: {integrity: sha512-uw+MIyQn2jl3+hroD7hF8J7PUviBU7BPKWw4f/ISf32D4LoGu98yHjrzWWJDASu9QNrX10tCJqk9YY0ClWm8Ng==}
+    dependencies:
+      safari-14-idb-fix: 3.0.0
+    dev: false
+
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -1318,6 +1326,10 @@ packages:
     dependencies:
       mri: 1.2.0
     dev: true
+
+  /safari-14-idb-fix/3.0.0:
+    resolution: {integrity: sha512-eBNFLob4PMq8JA1dGyFn6G97q3/WzNtFK4RnzT1fnLq+9RyrGknzYiM/9B12MnKAxuj1IXr7UKYtTNtjyKMBog==}
+    dev: false
 
   /sander/0.5.1:
     resolution: {integrity: sha512-3lVqBir7WuKDHGrKRDn/1Ye3kwpXaDOMsiRP1wd6wpZW56gJhsbp5RqQpA6JG/P+pkXizygnr1dKR8vzWaVsfA==}

@@ -1,12 +1,12 @@
 <script lang="ts" context="module">
     import type { Writable } from 'svelte/store'
 
-    import { generateKey } from '$lib/crypto'
+    import { generateUserKey } from '$lib/crypto'
     import Button from './Button.svelte'
 </script>
 
 <script lang="ts">
-    import { encryptionKey } from '$lib/stores'
+    import { encryptionKey, encryptionSalt } from '$lib/stores'
 
     export let isGeneratingKey: Writable<boolean>
 
@@ -26,7 +26,7 @@
         }
 
         $isGeneratingKey = true
-        $encryptionKey = await generateKey(password, persistKey)
+        $encryptionKey = await generateUserKey(password, persistKey)
         $isGeneratingKey = false
     }
 

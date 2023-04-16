@@ -3,13 +3,13 @@
     import { browser } from '$app/environment'
 
     import Button from './Button.svelte'
-    import { generateKey, generatePassphrase } from '$lib/crypto'
+    import { generateUserKey, generatePassphrase } from '$lib/crypto'
 
     const rawWords = browser
         ? (await fetch('words.txt')
               .then((res) => res.text())
               .catch((err) => {
-                  console.log(err)
+                  console.error(err)
               })) ?? ''
         : ''
 
@@ -79,7 +79,7 @@
         on:click={async () => {
             const pwd = await passphrase
             $isGeneratingKey = true
-            $encryptionKey = await generateKey(pwd, persistKey)
+            $encryptionKey = await generateUserKey(pwd, persistKey)
             $isGeneratingKey = false
         }}>Continue</Button
     >

@@ -55,3 +55,8 @@ export type SaveFile = {
     time: Date
     reflections: ReflectionEntry[]
 }
+
+export type UserKey = {
+    key: CryptoKey
+    salt: Uint8Array
+}

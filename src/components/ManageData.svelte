@@ -11,6 +11,7 @@
     import Close from '$icons/Close.svelte'
     import LockClosed from '$icons/LockClosed.svelte'
     import LockOpen from '$icons/LockOpen.svelte'
+    import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
     import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
@@ -23,9 +24,6 @@
 <script lang="ts">
     import { reflections, loading, encryptionKey } from '$lib/stores'
     import { browser } from '$app/environment'
-    import SetPasswordForm from './SetPasswordForm.svelte'
-    import SetPassphraseForm from './SetPassphraseForm.svelte'
-    import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     export let isDataMenuOpen: Writable<boolean>
     const encryptionEnabled = writable(true)

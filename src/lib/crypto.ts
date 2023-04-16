@@ -1,25 +1,27 @@
+import { set, get, del } from 'idb-keyval'
+
 import { decodeInt32, encodeInt32 } from './utils'
+import type { UserKey } from './types'
 
 export async function deriveKey(
     salt: Uint8Array,
     password: string,
     iterations: number,
     keyUsages: Iterable<KeyUsage>,
-    extractable = false,
 ): Promise<CryptoKey> {
     const encoder = new TextEncoder()
     const baseKey = await crypto.subtle.importKey(
         'raw',
         encoder.encode(password),
         'PBKDF2',
-        extractable,
+        false,
         ['deriveKey'],
     )
     return await crypto.subtle.deriveKey(
         { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
         baseKey,
         { name: 'AES-GCM', length: 256 },
-        extractable,
+        false,
         keyUsages,
     )
 }
@@ -31,18 +33,12 @@ export async function deriveKey(
  * @param key The key used to encrypt the content.
  * @param iterations The number of iterations to derive the key from the password.
  */
-export async function getEncryptedPayload(
-    content: Uint8Array,
-    // IDEA: Maybe use cryptokey instead and move out the crypto key persistance outside of this lib
-    key: CryptoKey,
-    iterations: number,
-) {
-    const salt = crypto.getRandomValues(new Uint8Array(32))
-
+export async function getEncryptedPayload(content: Uint8Array, key: UserKey, iterations: number) {
+    const salt = key.salt
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const iterationsBytes = encodeInt32(iterations)
     const ciphertext = new Uint8Array(
-        await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, content),
+        await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key.key, content),
     )
 
     const totalLength = salt.length + iv.length + iterationsBytes.length + ciphertext.length
@@ -76,29 +72,16 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string) {
     return content
 }
 
+export async function setPersistedKey(id: string, key: UserKey) {
+    await set(id, key)
+}
+
 export async function getPersistedKey(id: string) {
-    const keyData = localStorage.getItem(id)
-    if (!keyData) return null
-
-    try {
-        const key = await crypto.subtle.importKey('jwk', JSON.parse(keyData), 'AES-GCM', true, [
-            'encrypt',
-            'decrypt',
-        ])
-
-        return key
-    } catch (error) {
-        return null
-    }
+    return (await get<UserKey>(id)) ?? null
 }
 
-export async function setPersistedKey(id: string, cryptoKey: CryptoKey) {
-    const keyData = await crypto.subtle.exportKey('jwk', cryptoKey)
-    localStorage.setItem(id, JSON.stringify(keyData))
-}
-
-export function clearPersistedKey(id: string) {
-    localStorage.removeItem(id)
+export async function clearPersistedKey(id: string) {
+    await del(id)
 }
 
 function secureRandomInt(min: number, max: number) {
@@ -137,13 +120,14 @@ export async function generatePassphrase({
     return selected.join('-')
 }
 
-export async function generateKey(password: string, persistKey = false) {
+export async function generateUserKey(password: string, persistKey = false): Promise<UserKey> {
     const salt = crypto.getRandomValues(new Uint8Array(32))
-    const key = await deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'], true)
+    const key = await deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'])
+    const userKey = { key, salt }
 
     if (persistKey) {
-        await setPersistedKey('enc', key)
+        await setPersistedKey('enc', userKey)
     }
 
-    return key
+    return userKey
 }
