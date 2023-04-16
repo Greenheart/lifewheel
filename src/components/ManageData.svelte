@@ -14,7 +14,7 @@
     import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
-    import { encodeReflectionEntries, formatLink, saveFile } from '$lib/export'
+    import { encodeReflectionEntries, formatLink, saveEncryptedFile, saveFile } from '$lib/export'
     import { clearPersistedKey, getEncryptedPayload } from '$lib/crypto'
     import { cx } from '$lib/utils'
 
@@ -122,7 +122,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl pt-4" class:invisible={$loading}>
-    <TabGroup class="manage-data" defaultIndex={2}>
+    <TabGroup class="manage-data" defaultIndex={1}>
         <TabList class="flex justify-center gap-1" on:focusin={() => ($isDataMenuOpen = true)}>
             <Tab
                 class={({ selected }) =>
@@ -179,24 +179,73 @@
                     >
 
                     <Button
-                        on:click={() => saveFile($reflections)}
+                        on:click={async () => {
+                            if ($encryptionEnabled) {
+                                const data = await $encryptedData
+                                if (!data) return
+                                await saveEncryptedFile(data)
+                            } else {
+                                await saveFile($reflections)
+                            }
+                        }}
                         variant="outline"
-                        class="flex w-36 items-center gap-2"><Download />Save file</Button
+                        class="flex w-36 items-center gap-2"
+                        disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
+                        ><Download />Save file</Button
                     >
-                    <div class="flex select-none items-center gap-3 pt-8">
-                        {#if $encryptionEnabled}
-                            <LockClosed class="flex-shrink-0" />
-                        {:else}
-                            <LockOpen class="flex-shrink-0 opacity-50" />
-                        {/if}
-                        <Switch
-                            checked={encryptionEnabled}
-                            id="encrypt-file"
-                            name="encrypt-file"
-                            disabled={$isGeneratingKey}
-                        >
-                            <span slot="label">Use encryption for better privacy</span>
-                        </Switch>
+                    <div class="grid md:grid-cols-2 md:gap-8">
+                        <div class="grid content-start gap-4 md:order-2">
+                            <h2 class="pt-8 text-lg font-bold">Your file is your "account"! :)</h2>
+                            <p>
+                                🔗 To add more reflections in the future, save your file and open it
+                                in any modern browser.
+                            </p>
+                            <p>
+                                🔐 For better privacy, protect your data with a password. Save it in
+                                your password manager - it's not possible to recover a lost
+                                password.
+                            </p>
+                            <p>
+                                🙌 You can open multiple files (or links) to combine all reflections
+                                and save them as one file or link. Useful to sync data across
+                                devices.
+                            </p>
+                        </div>
+
+                        <div class="md:order-1">
+                            <div class="flex select-none items-center gap-3 pb-8 pt-8">
+                                {#if $encryptionEnabled}
+                                    <LockClosed class="flex-shrink-0" />
+                                {:else}
+                                    <LockOpen class="flex-shrink-0 opacity-50" />
+                                {/if}
+                                <Switch
+                                    checked={encryptionEnabled}
+                                    id="encrypt-file"
+                                    name="encrypt-file"
+                                    disabled={$isGeneratingKey}
+                                >
+                                    <span slot="label">Use encryption for better privacy</span>
+                                </Switch>
+                            </div>
+
+                            {#if $isGeneratingKey}
+                                <div class="grid place-items-center gap-2 pt-8 text-lg">
+                                    <p class="spinner h-7 w-7" />
+                                    <p>Encrypting your data...</p>
+                                </div>
+                            {:else if $encryptionEnabled}
+                                {#if $encryptionKey === null}
+                                    <CryptoKeyForm {isGeneratingKey} />
+                                {:else if $encryptionKey}
+                                    <Button
+                                        variant="ghost"
+                                        class="absolute bottom-4 left-4"
+                                        on:click={clearEncryptionKey}>Change password</Button
+                                    >
+                                {/if}
+                            {/if}
+                        </div>
                     </div>
                 </TabPanel>
                 <TabPanel>
@@ -212,20 +261,19 @@
                         disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
                         ><Link />{copyText}</Button
                     >
-                    <div class="grid md:grid-cols-2 md:gap-4">
-                        <div class="md:order-2">
+                    <div class="grid md:grid-cols-2 md:gap-8">
+                        <div class="grid content-start gap-4 md:order-2">
                             <h2 class="pt-8 text-lg font-bold">Your link is your "account"! :)</h2>
-                            <p class="pt-2">
+                            <p>
                                 🔗 To add more reflections in the future, save your link / QR code
                                 and open it in any modern browser.
                             </p>
-                            <p class="pt-2">
+                            <p>
                                 🔐 For better privacy, protect your data with a password. Save it in
                                 your password manager - it's not possible to recover a lost
                                 password.
                             </p>
-
-                            <p class="pt-2">
+                            <p>
                                 🙌 You can open multiple links (or files) to combine all reflections
                                 and save them as one file or link. Useful to sync data across
                                 devices.

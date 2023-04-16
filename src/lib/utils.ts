@@ -115,7 +115,7 @@ export const parseLink = (link: string): ParsedLink => {
 }
 
 /**
- * Remove excess whitespace in JSON arrays. Useful to compress number arrays.
+ * Remove excess whitespace in pretty-printed JSON arrays. Useful to compress number arrays.
  */
 export const minifyJSONArrays = (jsonString: string) => {
     const getAllDataRegEx = /\"data\": \[([^\]]*)\]/g

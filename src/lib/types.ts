@@ -42,18 +42,21 @@ export type ParsedLink = {
     data: Uint8Array
 }
 
-export type EncryptedSaveFile = {
+export type BaseSaveFile = {
     type: 'lifewheel'
-    encrypted: boolean
+    url: string
     version: ProtocolVersion
-    data: Uint8Array
+    encrypted: boolean
 }
 
-export type SaveFile = {
-    type: 'lifewheel'
-    version: ProtocolVersion
-    time: Date
-    reflections: ReflectionEntry[]
+export type EncryptedSaveFile = BaseSaveFile & {
+    data: string
+    encrypted: true
+}
+
+export type SaveFile = BaseSaveFile & {
+    data: ReflectionEntry[]
+    encrypted: false
 }
 
 export type UserKey = {

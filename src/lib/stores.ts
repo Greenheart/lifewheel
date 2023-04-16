@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store'
 import { persisted } from 'svelte-local-storage-store'
 
-import type { ReflectionEntry, UserKey } from './types'
+import type { EncryptedSaveFile, ReflectionEntry, UserKey } from './types'
 import { getPersistedKey } from './crypto'
 import { browser } from '$app/environment'
 
@@ -9,6 +9,11 @@ import { browser } from '$app/environment'
  * Delay rendering until the app has loaded.
  */
 export const loading = writable<boolean>(true)
+
+/**
+ * Temporary store used when loading encrypted files.
+ */
+export const encryptedFile = writable<EncryptedSaveFile | null>(null)
 
 /**
  * Previous reflections.

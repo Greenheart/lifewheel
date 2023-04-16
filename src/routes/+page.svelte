@@ -3,18 +3,21 @@
     import { fade } from 'svelte/transition'
 
     import LinkButton from '$components/LinkButton.svelte'
-    import AutoImport from '$components/AutoImport.svelte'
+    import LinkImport from '$components/LinkImport.svelte'
     import PreviousReflections from '$components/PreviousReflections.svelte'
     import ManageData from '$components/ManageData.svelte'
+    import FileImport from '$components/FileImport.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
     import { REPO_URL } from '$lib/constants'
+    import type { EncryptedSaveFile } from '$lib/types'
 </script>
 
 <script lang="ts">
     import { loading, reflections } from '$lib/stores'
 
     const isDataMenuOpen = writable(false)
+    const encryptedFile = writable<EncryptedSaveFile | null>(null)
 </script>
 
 <!-- TODO: fix encryption for file import/export -->
@@ -39,7 +42,11 @@
         </div>
 
         {#if $loading}
-            <AutoImport />
+            {#if $encryptedFile}
+                <FileImport />
+            {:else}
+                <LinkImport />
+            {/if}
         {:else}
             <div in:fade={{ duration: 300 }}>
                 <div class="mx-auto max-w-max pt-12">

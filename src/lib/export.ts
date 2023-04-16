@@ -1,6 +1,6 @@
 import { base64url } from 'rfc4648'
 
-import type { ReflectionEntry, ProtocolVersion, SaveFile } from './types'
+import type { ReflectionEntry, ProtocolVersion, SaveFile, EncryptedSaveFile } from './types'
 import { encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
 import { fileSave } from 'browser-fs-access'
 
@@ -34,29 +34,51 @@ export const formatLink = ({
     protocolVersion?: ProtocolVersion
 }) => formatHeader({ encrypted, protocolVersion }) + base64url.stringify(data)
 
-export async function saveFile(reflections: ReflectionEntry[]) {
+export function getFileName() {
     const date = new Date().toLocaleString('sv-SE', {
         month: 'numeric',
         day: 'numeric',
         year: 'numeric',
     })
-    const time = new Date()
-    time.setSeconds(0, 0)
+    return `${date}-lifewheel.json`
+}
 
+export async function saveFile(reflections: ReflectionEntry[]) {
     const file: SaveFile = {
         type: 'lifewheel',
         version: 1,
-        time,
-        reflections: reflections,
+        url: window.location.href,
+        data: reflections,
+        encrypted: false,
     }
-    const minified = minifyJSONArrays(JSON.stringify(file, null, 2))
 
-    const blob = new Blob([minified], {
+    const blob = new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
         type: 'application/json',
     })
 
     await fileSave(blob, {
-        fileName: `${date}-lifewheel.json`,
+        fileName: getFileName(),
+        mimeTypes: ['application/json'],
+        extensions: ['.json'],
+        id: 'documents',
+        startIn: 'documents',
+        description: 'Lifewheel save files',
+    })
+}
+
+export async function saveEncryptedFile(encryptedData: Uint8Array) {
+    const file: EncryptedSaveFile = {
+        type: 'lifewheel',
+        url: window.location.href,
+        version: 1,
+        data: base64url.stringify(encryptedData),
+        encrypted: true,
+    }
+
+    const blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' })
+
+    await fileSave(blob, {
+        fileName: getFileName(),
         mimeTypes: ['application/json'],
         extensions: ['.json'],
         id: 'documents',

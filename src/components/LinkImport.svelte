@@ -15,14 +15,12 @@
 
     onMount(() => {
         if (window.location.hash) {
-            const hash = window.location.hash.slice(1) // Skip # sign
-
             try {
-                payload = parseLink(hash)
+                payload = parseLink(window.location.hash.slice(1))
 
                 if (!payload.encrypted && payload.data) {
                     $reflections = decodeReflectionEntries(payload.data)
-                    closeImportScreen()
+                    closeLinkImport()
                 }
             } catch (error) {
                 console.error('Invalid link: ', error)
@@ -48,7 +46,7 @@
         }
     })
 
-    const closeImportScreen = () => {
+    const closeLinkImport = () => {
         $loading = false
         history.pushState('', document.title, window.location.pathname)
     }
@@ -61,10 +59,10 @@
             console.error(error)
         }
 
-        closeImportScreen()
+        closeLinkImport()
     }
 </script>
 
 {#if payload?.encrypted}
-    <PasswordForm importType="link" onSubmit={submitPassphrase} onCancel={closeImportScreen} />
+    <PasswordForm importType="link" onSubmit={submitPassphrase} onCancel={closeLinkImport} />
 {/if}
