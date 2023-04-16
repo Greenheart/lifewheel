@@ -56,6 +56,10 @@ export type EncryptedSaveFile = BaseSaveFile & {
 
 export type SaveFile = BaseSaveFile & {
     data: ReflectionEntry[]
+    /**
+     * TODO: Remove when backwards compatibility is no longer needed.
+     */
+    reflections?: ReflectionEntry[]
     encrypted: false
 }
 

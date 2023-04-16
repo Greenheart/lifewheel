@@ -70,8 +70,24 @@ export async function openFile(): Promise<boolean> {
     }
 
     // Finish loading unencrypted file
-    reflections.set(importUniqueEntries(get(reflections), (file as SaveFile).data))
+    reflections.set(
+        importUniqueEntries(
+            get(reflections),
+            // TODO: Remove loading of `file.reflections` when backwards compatibility is no longer needed.
+            (file as SaveFile).data ?? (file as SaveFile).reflections,
+        ),
+    )
     return true
+}
+
+/**
+ * Turn timestamps back into dates during runtime
+ */
+export function reviveTimestamps(reflections: ReflectionEntry[]) {
+    return reflections.map((entry) => ({
+        time: new Date(entry.time),
+        data: entry.data,
+    }))
 }
 
 /**
@@ -94,7 +110,8 @@ export const importUniqueEntries = (
     const newEntries =
         newReflectionsData instanceof Uint8Array
             ? decodeReflectionEntries(newReflectionsData)
-            : newReflectionsData
+            : reviveTimestamps(newReflectionsData)
+
     const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries])
 
     console.log(
