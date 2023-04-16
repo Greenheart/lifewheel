@@ -127,9 +127,20 @@
                                     rel="noopener noreferrer"
                                     class="text-emerald-400 underline hover:text-emerald-500"
                                     >free software</a
-                                >, and you're welcome to help make it even better!
+                                >, and you're welcome to
+                                <a
+                                    href={REPO_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >help make it even better!</a
+                                >
                             </li>
                         </ul>
+
+                        <LinkButton href="/reflection" class="mx-auto mt-8 w-52"
+                            >Get started</LinkButton
+                        >
                     </div>
                 {/if}
             </div>
