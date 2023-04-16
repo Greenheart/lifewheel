@@ -8,7 +8,7 @@ Designed using the [Humane Tech](https://www.humanetech.com/) principles, this p
 
 **[DEMO LINK]**
 
-## Project vision and key features
+## Project Vision and Key Features
 
 -   🧘 Reflect on your life balance.
 -   🌱 Follow your progress over time and reconnect to what matters in your life.
@@ -16,10 +16,10 @@ Designed using the [Humane Tech](https://www.humanetech.com/) principles, this p
 -   👌 Keep 100% control of your private data.
 -   😇 No signup or account needed. Designed to be used offline.
 <!-- -   📲 Install the Progressive Web App to reflect on the go. -->
--   📥 Easy exports and imports, giving you full control over data syncing and backups.
+-   📥 Seamless file exports and imports, giving you full control over data syncing and backups. Integrates well with services like [Nextcloud](https://nextcloud.com/) and [Syncthing](https://syncthing.net/).
 -   🔐 Optionally encrypt your data to improve your security and privacy. Let the app generate a strong passphrase - or choose your own.
--   🔗 Save your data into a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server). Copy your link (for example in your password manager), or save the generated QR code.
--   ✨ Easily access your data on any device by opening a file, clicking your private link - or by scanning your QR code.
+-   🔗 Save your data as a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server). Store your link somewhere safe (for example in your password manager), or save your code.
+-   ✨ Easily access your data on any device by clicking your private link or by scanning your QR code.
 -   🆓 Free as in freedom. This is [free software](https://fsfe.org/freesoftware/), and you're welcome to help make it even better!
 
 **Now check out the [DEMO LINK]!**

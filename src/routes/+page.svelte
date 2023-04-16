@@ -60,6 +60,77 @@
 
                 {#if $reflections.length}
                     <PreviousReflections />
+                {:else}
+                    <div class="mx-auto max-w-prose">
+                        <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">Welcome!</h2>
+
+                        <ul class="grid gap-6 pt-8 text-lg">
+                            <li>🧘 Reflect on your life balance.</li>
+                            <li>
+                                🌱 Follow your progress over time and reconnect to what matters in
+                                your life.
+                            </li>
+                            <li>
+                                📊 Make reflection a habit and gain new insights about your
+                                wellbeing.
+                            </li>
+                        </ul>
+
+                        <h2 class="pt-16 text-2xl font-extrabold 2xs:text-3xl">
+                            Project Vision and Key Features
+                        </h2>
+                        <ul class="grid gap-6 pt-8 text-lg">
+                            <li>👌 Keep 100% control of your private data.</li>
+                            <li>😇 No signup or account needed. Designed to be used offline.</li>
+                            <li>
+                                📥 Seamless file exports and imports, giving you full control over
+                                data syncing and backups. Integrates well with services like
+                                <a
+                                    href="https://nextcloud.com/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >Nextcloud</a
+                                >
+                                and
+                                <a
+                                    href="https://syncthing.net/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >Syncthing</a
+                                >.
+                            </li>
+                            <li>
+                                🔐 Optionally encrypt your data to improve your security and
+                                privacy. Let the app generate a strong passphrase - or choose your
+                                own.
+                            </li>
+                            <li>
+                                🔗 Save your data as a private link (using the <a
+                                    href="https://en.wikipedia.org/wiki/URI_fragment"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >URI fragment</a
+                                > which is never sent to the server). Store your link somewhere safe
+                                (for example in your password manager), or save your code.
+                            </li>
+                            <li>
+                                ✨ Easily access your data on any device by clicking your private
+                                link or by scanning your QR code.
+                            </li>
+                            <li>
+                                🆓 Free as in freedom. This is <a
+                                    href="https://fsfe.org/freesoftware/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >free software</a
+                                >, and you're welcome to help make it even better!
+                            </li>
+                        </ul>
+                    </div>
                 {/if}
             </div>
         {/if}
