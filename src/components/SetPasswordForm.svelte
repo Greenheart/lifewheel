@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-    import { encryptionKey, encryptionSalt } from '$lib/stores'
+    import { encryptionKey } from '$lib/stores'
 
     export let isGeneratingKey: Writable<boolean>
 

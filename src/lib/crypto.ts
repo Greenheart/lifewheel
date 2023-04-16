@@ -57,17 +57,21 @@ export async function getEncryptedPayload(content: Uint8Array, key: UserKey, ite
  * @param bytes The payload to decrypt.
  * @param password The password used for decryption.
  */
-export async function getDecryptedPayload(bytes: Uint8Array, password: string) {
+export async function getDecryptedPayload(bytes: Uint8Array, password: string, persistKey = false) {
     const salt = bytes.slice(0, 32)
     const iv = bytes.slice(32, 32 + 16)
     const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
     const ciphertext = bytes.slice(32 + 16 + 4)
 
-    const key = await deriveKey(salt, password, decodeInt32(iterations), ['decrypt'])
+    const key = await deriveKey(salt, password, decodeInt32(iterations), ['encrypt', 'decrypt'])
     const content = new Uint8Array(
         await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext),
     )
     if (!content) throw new Error('Malformed content')
+
+    if (persistKey) {
+        await setPersistedKey('enc', { key, salt })
+    }
 
     return content
 }

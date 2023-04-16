@@ -69,6 +69,7 @@
 
         $reflections = []
         $index = 0
+        // TODO: when link or save file is open and $isDataMenuOpen is true, we also need to close that dialog since it otherwise will show an empty gray box
         await tick()
     }
 </script>

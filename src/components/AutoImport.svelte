@@ -53,9 +53,9 @@
         history.pushState('', document.title, window.location.pathname)
     }
 
-    const submitPassphrase = async (password: string) => {
+    const submitPassphrase = async (password: string, persistKey = false) => {
         try {
-            const decrypted = await getDecryptedPayload(payload.data, password)
+            const decrypted = await getDecryptedPayload(payload.data, password, persistKey)
             $reflections = decodeReflectionEntries(decrypted)
         } catch (error) {
             console.error(error)

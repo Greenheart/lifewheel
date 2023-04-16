@@ -5,17 +5,18 @@
 
 <script lang="ts">
     export let importType: 'file' | 'link'
-    export let onSubmit: (password: string) => Promise<void>
+    export let onSubmit: (password: string, persistKey?: boolean) => Promise<void>
     export let onCancel: () => void
 
     let isDecrypting = false
     let password = ''
+    let persistKey = false
 
     const submitPassphrase = async () => {
         if (!password.length) return
         isDecrypting = true
 
-        await onSubmit(password)
+        await onSubmit(password, persistKey)
             .catch((error) => {
                 console.error(error)
             })
@@ -49,7 +50,11 @@
             bind:value={password}
             autocomplete="off"
         />
-        <Button type="submit" class="mt-4 w-full">Submit</Button>
+        <label for="persist" class="flex gap-2 py-3 text-sm"
+            ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
+            Remember me on this device</label
+        >
+        <Button type="submit" class="w-full">Submit</Button>
     </form>
 
     {#if !isDecrypting}
