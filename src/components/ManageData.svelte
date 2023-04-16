@@ -44,7 +44,7 @@
             })(),
         null,
     )
-    
+
     /**
      * Encrypted data can be reused and exported into multiple formats (link, QR, file)
      */
@@ -111,6 +111,13 @@
     const clearEncryptionKey = () => {
         $encryptionKey = null
         clearPersistedKey('enc')
+    }
+
+    $: {
+        // Close menu if all entries were removed and we no longer have something to export
+        if ($reflections.length === 0) {
+            $isDataMenuOpen = false
+        }
     }
 </script>
 
@@ -272,13 +279,6 @@
                             {/if}
                         </div>
                     </div>
-
-                    <!-- IDEA: Maybe include a passphrase generator to reduce friction, and encourage people to save it in their password manager -->
-                    <!-- IDEA: for the passphrase generator, show a suggested passphrase by default, and a button to regenerate a new passphrase -->
-                    <!-- IDEA: In the text, explain "save your passphrase directly", also explain securely generated passphrase -->
-                    <!-- IDEA: add checkbox "I have saved my passphrase somewhere securely". After checking the checkbox, the Save button gets enabled and you can generate your key -->
-                    <!-- IDEA: add text link at the bottom (or ghost button) to set a custom password. This shows the regular SetPasswordForm -->
-                    <!-- IDEA: In the regular SetPasswordForm, show a link (or ghost button) at the bottom to "genererate a passphrase" and get back to the default view -->
                 </TabPanel>
             {/if}
         </TabPanels>

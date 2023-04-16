@@ -69,7 +69,6 @@
 
         $reflections = []
         $index = 0
-        // TODO: when link or save file is open and $isDataMenuOpen is true, we also need to close that dialog since it otherwise will show an empty gray box
         await tick()
     }
 </script>
@@ -96,6 +95,7 @@
                 Maybe show first lines and then toggle to expand (which resets for each entry)
                 TODO: Figure out how to encode variable length string in the entries.
                         Maybe possible to use some special delimiter sequence so the parser can know where the next entry starts
+                        potential solution: encode the length of the variable length content, so that the parser knows when to start and stop
 
             Slider
                 ✅ (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
