@@ -1,6 +1,4 @@
 import { fileOpen } from 'browser-fs-access'
-// IDEA: Maybe base64url is more efficient at encoding than the regular base64?
-// import { base64url } from 'rfc4648'
 
 import type { BaseSaveFile, EncryptedSaveFile, ReflectionEntry, SaveFile } from './types'
 import { decodeInt32 } from './utils'
@@ -66,10 +64,6 @@ export async function openFile(): Promise<boolean> {
     if (isEncryptedSaveFile(file)) {
         encryptedFile.set(file)
         loading.set(true)
-        // ✅ set a global store (or for the page) with encryptedFile
-        // ✅ return true from this function to close the ManageData menu, and let the FileImport component handle the rest - or even press cancel which could remove the encrypted file that was loaded into memory
-        // ✅ show UI to decrypt - maybe show a separate component (inspired by LinkImport) that handles loading of encrypted files
-        // ✅ Maybe rename files to LinkImport and FileImport
 
         return true
     }

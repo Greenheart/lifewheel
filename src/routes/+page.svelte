@@ -10,18 +10,13 @@
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
     import { REPO_URL } from '$lib/constants'
-    import type { EncryptedSaveFile } from '$lib/types'
 </script>
 
 <script lang="ts">
-    import { loading, reflections } from '$lib/stores'
+    import { loading, reflections, encryptedFile } from '$lib/stores'
 
     const isDataMenuOpen = writable(false)
-    const encryptedFile = writable<EncryptedSaveFile | null>(null)
 </script>
-
-<!-- TODO: fix encryption for file import/export -->
-<!-- IDEA: explain how to sync data with Nextcloud or syncthing -->
 
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
     <div>
@@ -61,6 +56,7 @@
 
                 <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
                 <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
+                <!-- IDEA: explain how to sync data with Nextcloud or syncthing -->
 
                 {#if $reflections.length}
                     <PreviousReflections />
