@@ -84,6 +84,7 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string, p
 
 export async function setPersistedKey(id: string, key: UserKey) {
     await set(id, key)
+    localStorage.setItem('keyUpdate', Date.now().toString())
 }
 
 export async function getPersistedKey(id: string) {
@@ -92,6 +93,7 @@ export async function getPersistedKey(id: string) {
 
 export async function clearPersistedKey(id: string) {
     await del(id)
+    localStorage.setItem('keyUpdate', Date.now().toString())
 }
 
 function secureRandomInt(min: number, max: number) {
