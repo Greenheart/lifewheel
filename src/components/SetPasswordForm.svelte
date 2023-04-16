@@ -1,12 +1,13 @@
 <script lang="ts" context="module">
     import type { Writable } from 'svelte/store'
 
-    import { deriveKey, setPersistedKey } from '$lib/crypto'
+    import { generateKey } from '$lib/crypto'
     import Button from './Button.svelte'
 </script>
 
 <script lang="ts">
     import { encryptionKey } from '$lib/stores'
+
     export let isGeneratingKey: Writable<boolean>
 
     let error: string | null = null
@@ -25,13 +26,8 @@
         }
 
         $isGeneratingKey = true
-        const salt = crypto.getRandomValues(new Uint8Array(32))
-        const key = await deriveKey(salt, password, 2e6, ['encrypt', 'decrypt'], true)
-
-        if (persistKey) setPersistedKey('enc', key)
-
+        $encryptionKey = await generateKey(password, persistKey)
         $isGeneratingKey = false
-        $encryptionKey = key
     }
 
     const isValid = () => {

@@ -172,7 +172,12 @@
                         {:else}
                             <LockOpen class="flex-shrink-0 opacity-50" />
                         {/if}
-                        <Switch checked={encryptionEnabled} id="encrypt-file" name="encrypt-file">
+                        <Switch
+                            checked={encryptionEnabled}
+                            id="encrypt-file"
+                            name="encrypt-file"
+                            disabled={$isGeneratingKey}
+                        >
                             <span slot="label">Use encryption for better privacy</span>
                         </Switch>
                     </div>
@@ -220,6 +225,7 @@
                                     checked={encryptionEnabled}
                                     id="encrypt-link"
                                     name="encrypt-link"
+                                    disabled={$isGeneratingKey}
                                 >
                                     <span slot="label">Use encryption for better privacy</span>
                                 </Switch>

@@ -1,13 +1,12 @@
 <script lang="ts" context="module">
     import { writable, type Writable } from 'svelte/store'
 
+    import Button from './Button.svelte'
     import SetPassphraseForm from './SetPassphraseForm.svelte'
     import SetPasswordForm from './SetPasswordForm.svelte'
 </script>
 
 <script lang="ts">
-    import Button from './Button.svelte'
-
     export let isGeneratingKey: Writable<boolean>
     const keyType = writable<'password' | 'passphrase'>('passphrase')
 </script>
@@ -26,5 +25,5 @@
     }}
     >{$keyType === 'password'
         ? 'Generate passphrase instead'
-        : 'Set custom password instead'}</Button
+        : 'Use custom password instead'}</Button
 >

@@ -3,7 +3,7 @@
     import { browser } from '$app/environment'
 
     import Button from './Button.svelte'
-    import { generatePassphrase } from '$lib/crypto'
+    import { generateKey, generatePassphrase } from '$lib/crypto'
 
     const rawWords = browser
         ? (await fetch('words.txt')
@@ -24,15 +24,18 @@
 </script>
 
 <script lang="ts">
-    export let isGeneratingKey: Writable<boolean>
-    let passphrase = browser ? generatePassphrase({ words }) : Promise.resolve('')
+    import { encryptionKey } from '$lib/stores'
 
+    export let isGeneratingKey: Writable<boolean>
+
+    let passphrase = browser ? generatePassphrase({ words }) : Promise.resolve('')
+    let persistKey = false
     let copyText = 'Copy'
 
     const copy = async () => {
-        const text = await passphrase
+        const pwd = await passphrase
         // Clipboard is only available in via HTTPS or localhost
-        await navigator?.clipboard?.writeText(text)
+        await navigator?.clipboard?.writeText(pwd)
         copyText = 'Copied!'
 
         window.setTimeout(() => {
@@ -42,6 +45,8 @@
 
     let saved = false
 </script>
+
+<!-- TODO: Maybe add better instructions here -->
 
 <h2 class="pb-2 text-lg font-bold">Your generated passphrase:</h2>
 <div class="grid gap-2">
@@ -59,14 +64,23 @@
             Regenerate
         </Button>
     </div>
-    <label for="persist" class="flex gap-2 py-2 text-sm"
-        ><input type="checkbox" name="persist" id="persist" bind:checked={saved} />
-        I have saved my passphrase somewhere safe</label
-    >
+    <div class="py-2">
+        <label for="saved" class="flex gap-2 py-2 text-sm"
+            ><input type="checkbox" name="saved" id="saved" bind:checked={saved} />
+            I have saved my passphrase somewhere safe</label
+        >
+        <label for="persist" class="flex gap-2 py-2 text-sm"
+            ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
+            Remember me on this device</label
+        >
+    </div>
     <Button
         disabled={!saved}
-        on:click={() => {
-            // TODO: use this passphrase to generate the key and encrypt data
+        on:click={async () => {
+            const pwd = await passphrase
+            $isGeneratingKey = true
+            $encryptionKey = await generateKey(pwd, persistKey)
+            $isGeneratingKey = false
         }}>Continue</Button
     >
 </div>
