@@ -2,6 +2,8 @@
 
 > Privacy-friendly Web App for Your Personal Wellbeing
 
+<img src="screenshot.png" width="214" height="463" alt="Screenshot of the Lifewheel app. Overview of previous reflections, showing colored circle segments representing eight dimensions of your life.">
+
 Designed using the [Humane Tech](https://www.humanetech.com/) principles, this project explores the possibilities of offline-first web apps. Specifically - is it possible to give users full control over their private data, while still providing a smooth user experience? For the answer... well, you have to see it yourself! 😄
 
 **[DEMO LINK]**
