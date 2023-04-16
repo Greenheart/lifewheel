@@ -96,7 +96,7 @@
         <div
             role="tooltip"
             id="tooltip"
-            class="absolute top-0 left-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm"
+            class="absolute left-0 top-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm"
             bind:this={tooltip}
         >
             {$lifewheel[$reflectionStep.i]}
@@ -109,7 +109,7 @@
             {max}
             {step}
             class={cx(
-                'input-slider h-5 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
+                'input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
                 $reflectionStep.colors.from,
                 $reflectionStep.colors.to,
             )}
