@@ -41,7 +41,7 @@ export const wordList = writable<{ [id: string]: string } | null>(null)
 
 async function getWordList() {
     const rawWords =
-        (await fetch('/lifewheel/words.txt')
+        (await fetch('/words.txt')
             .then((res) => res.text())
             .catch((err) => {
                 console.error(err)
