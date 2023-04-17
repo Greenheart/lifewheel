@@ -158,26 +158,30 @@
 
             <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-xs" />
 
-            <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
+            {#if $reflections.length > 2}
+                <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
+            {/if}
 
-            <div
-                class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-center gap-4 pt-4"
-            >
-                <Button
-                    variant="roundOutline"
-                    aria-label="Show previous reflection"
-                    class={$index < 1 ? 'invisible' : undefined}
-                    on:click={onPrev}>←</Button
+            {#if $reflections.length > 1}
+                <div
+                    class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-center gap-4 pt-4"
                 >
-                <!-- IDEA: Between the buttons here might be a good spot to display notes -->
-                <div />
-                <Button
-                    variant="roundOutline"
-                    aria-label="Show next reflection"
-                    class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
-                    on:click={onNext}>→</Button
-                >
-            </div>
+                    <Button
+                        variant="roundOutline"
+                        aria-label="Show previous reflection"
+                        class={$index < 1 ? 'invisible' : undefined}
+                        on:click={onPrev}>←</Button
+                    >
+                    <!-- IDEA: Between the buttons here might be a good spot to display notes -->
+                    <div />
+                    <Button
+                        variant="roundOutline"
+                        aria-label="Show next reflection"
+                        class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
+                        on:click={onNext}>→</Button
+                    >
+                </div>
+            {/if}
         </div>
     </section>
 {/if}
