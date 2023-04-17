@@ -1,35 +1,19 @@
 <script lang="ts" context="module">
     import type { Writable } from 'svelte/store'
-    import { browser } from '$app/environment'
 
+    import { browser } from '$app/environment'
     import Button from './Button.svelte'
     import { generateUserKey, generatePassphrase } from '$lib/crypto'
-
-    const rawWords = browser
-        ? (await fetch('words.txt')
-              .then((res) => res.text())
-              .catch((err) => {
-                  console.error(err)
-              })) ?? ''
-        : ''
-
-    const words = rawWords
-        .trim()
-        .split('\n')
-        .reduce<{ [id: string]: string }>((result, row) => {
-            const [id, word] = row.split('\t')
-            result[id] = word
-            return result
-        }, {})
 </script>
 
 <script lang="ts">
-    import { encryptionKey } from '$lib/stores'
+    import { encryptionKey, wordList } from '$lib/stores'
 
     export let isGeneratingKey: Writable<boolean>
     export let toggleForm: () => void
 
-    let passphrase = browser ? generatePassphrase({ words }) : Promise.resolve('')
+    $: passphrase =
+        browser && $wordList ? generatePassphrase({ words: $wordList }) : Promise.resolve('')
     let persistKey = false
     let isSubmitting = false
     let copyText = 'Copy'
@@ -58,7 +42,8 @@
         <Button
             variant="outline"
             on:click={() => {
-                passphrase = generatePassphrase({ words })
+                if (!$wordList) return
+                passphrase = generatePassphrase({ words: $wordList })
             }}
         >
             Regenerate

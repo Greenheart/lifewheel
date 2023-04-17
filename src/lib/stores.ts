@@ -30,29 +30,50 @@ export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', 
 })
 
 /**
-TEST DATA
-
-https://192.168.0.242:5173/#1e1pekQCqWgLKB1QcR1m36x2JSj1TsDCzdhULFKOWhflu2SwVnaqjWm9awSH7DSC2MRUAB6EgCjoukf54Wwmt_pFarMuGCHM5pykin-8KQ5xeottw91F4Fl__fq0aYhmWx71tJN122FFSyCdRt0-jszRgtoIvH8IXozn
-gnarly-kneecap-editor-decal
-
-*/
-
-/**
  * Store key in memory during app use.
  */
 export const encryptionKey = writable<UserKey | null>(null)
 
-if (browser) {
-    encryptionKey.set(await getPersistedKey('enc'))
+/**
+ * Used for passphrase generator
+ */
+export const wordList = writable<{ [id: string]: string } | null>(null)
 
-    const handleStorage = async (event: StorageEvent) => {
-        // Sync persisted key across browser tabs
-        // TODO: doesn't seem to work as expected, will need further investigation
-        if (event.key === 'keyUpdate') {
-            console.log('keyUpdate', event)
-            encryptionKey.set(await getPersistedKey('enc'))
+async function getWordList() {
+    const rawWords =
+        (await fetch('/lifewheel/words.txt')
+            .then((res) => res.text())
+            .catch((err) => {
+                console.error(err)
+            })) ?? ''
+
+    return rawWords
+        .trim()
+        .split('\n')
+        .reduce<{ [id: string]: string }>((result, row) => {
+            const [id, word] = row.split('\t')
+            result[id] = word
+            return result
+        }, {})
+}
+
+async function init() {
+    if (browser) {
+        encryptionKey.set(await getPersistedKey('enc'))
+
+        const handleStorage = async (event: StorageEvent) => {
+            // Sync persisted key across browser tabs
+            // TODO: doesn't seem to work as expected, will need further investigation
+            if (event.key === 'keyUpdate') {
+                console.log('keyUpdate', event)
+                encryptionKey.set(await getPersistedKey('enc'))
+            }
+
+            window.addEventListener('storage', handleStorage)
         }
 
-        window.addEventListener('storage', handleStorage)
+        wordList.set(await getWordList())
     }
 }
+
+init()
