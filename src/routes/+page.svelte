@@ -45,7 +45,9 @@
         {:else}
             <div in:fade={{ duration: 300 }}>
                 <div class="mx-auto w-52 pt-12">
-                    <LinkButton href="/reflection" class="flex items-center justify-center"
+                    <LinkButton
+                        href="/lifewheel/reflection"
+                        class="flex items-center justify-center"
                         ><span class="flex max-w-max items-center gap-1"
                             ><PlusCircle />New reflection</span
                         ></LinkButton
@@ -140,7 +142,7 @@
                             </li>
                         </ul>
 
-                        <LinkButton href="/reflection" class="mx-auto mt-8 w-52"
+                        <LinkButton href="/lifewheel/reflection" class="mx-auto mt-8 w-52"
                             >Get started</LinkButton
                         >
                     {/if}
