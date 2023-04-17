@@ -82,17 +82,31 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string, p
 }
 
 export async function setPersistedKey(id: string, key: UserKey) {
-    await set(id, key)
-    localStorage.setItem('keyUpdate', Date.now().toString())
+    try {
+        await set(id, key)
+        localStorage.setItem('keyUpdate', Date.now().toString())
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 export async function getPersistedKey(id: string) {
-    return (await get<UserKey>(id)) ?? null
+    try {
+        return (await get<UserKey>(id)) ?? null
+    } catch (error) {
+        console.error(error)
+    }
+
+    return null
 }
 
 export async function clearPersistedKey(id: string) {
-    await del(id)
-    localStorage.setItem('keyUpdate', Date.now().toString())
+    try {
+        await del(id)
+        localStorage.setItem('keyUpdate', Date.now().toString())
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 function secureRandomInt(min: number, max: number) {
