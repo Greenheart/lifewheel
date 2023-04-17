@@ -6,7 +6,9 @@ import { resolve } from 'path'
 const config = {
     preprocess: vitePreprocess(),
     kit: {
-        adapter: adapter(),
+        adapter: adapter({
+            fallback: 'index.html',
+        }),
         alias: {
             $lib: resolve('./src/lib'),
             $components: resolve('./src/components'),
