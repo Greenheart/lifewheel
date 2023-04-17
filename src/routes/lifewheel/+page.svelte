@@ -56,10 +56,6 @@
 
                 <ManageData {isDataMenuOpen} />
 
-                <!-- IDEA: If no previous entries shown here, show a nice landing page with intro and instructions -->
-                <!-- IDEA: We should probably write a guide for how to manage your data - e.g. syncing to other devices, taking backups etc -->
-                <!-- IDEA: explain how to sync data with Nextcloud or syncthing -->
-
                 {#if $reflections.length}
                     <PreviousReflections />
                 {/if}
@@ -68,22 +64,85 @@
                         Welcome{$reflections.length > 1 ? ' back' : ''}!
                     </h2>
 
-                    <ul class="grid gap-6 pt-8 text-lg">
-                        <li>🧘 Reflect on your life balance.</li>
-                        <li>
-                            🌱 Follow your progress over time and reconnect to what matters in your
-                            life.
-                        </li>
-                        <li>
-                            📊 Make reflection a habit and gain new insights about your wellbeing.
-                        </li>
-                    </ul>
+                    {#if !$reflections.length}
+                        <div class="grid gap-6 pt-8 text-lg">
+                            <p class="font-bold">
+                                Offline-first, privacy-friendly web app for your personal
+                                well-being.
+                            </p>
+
+                            <p>
+                                Reflect on your life balance. Visualise your progress over time
+                                (using Svelte's
+                                <a
+                                    href="https://svelte.dev/docs#run-time-svelte-motion-tweened"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >tweened</a
+                                > stores), and reconnect to what matters in your life. Make reflection
+                                a habit and gain new insights for your well-being.
+                            </p>
+
+                            <p>
+                                Seamlessly sync your data across devices with a private link (using
+                                the <a
+                                    href="https://en.wikipedia.org/wiki/URI_fragment"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >URI fragment</a
+                                >
+                                which is never sent to the server), QR code or file. For additional security
+                                and privacy, let the app generate a passphrase and encrypt your data
+                                using the
+                                <a
+                                    href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >Web Crypto API</a
+                                >. Experience how smooth the modern web can be!
+                            </p>
+                        </div>
+                    {:else}
+                        <ul class="grid gap-6 pt-8 text-lg">
+                            <li>🧘 Reflect on your life balance.</li>
+                            <li>
+                                🌱 Follow your progress over time and reconnect to what matters in
+                                your life.
+                            </li>
+                            <li>
+                                📊 Make reflection a habit and gain new insights for your
+                                well-being.
+                            </li>
+                        </ul>
+                    {/if}
 
                     {#if !$reflections.length}
+                        <div class="mx-auto w-52 pt-12">
+                            <LinkButton
+                                href="/lifewheel/reflection"
+                                class="flex items-center justify-center"
+                                ><span class="flex max-w-max items-center gap-1"
+                                    ><PlusCircle />Get started</span
+                                ></LinkButton
+                            >
+                        </div>
+
                         <h2 class="pt-16 text-2xl font-extrabold 2xs:text-3xl">
                             Project Vision and Key Features
                         </h2>
                         <ul class="grid gap-6 pt-8 text-lg">
+                            <li>🧘 Reflect on your life balance.</li>
+                            <li>
+                                🌱 Follow your progress over time and reconnect to what matters in
+                                your life.
+                            </li>
+                            <li>
+                                📊 Make reflection a habit and gain new insights for your
+                                well-being.
+                            </li>
                             <li>👌 Keep 100% control of your private data.</li>
                             <li>😇 No signup or account needed. Designed to be used offline.</li>
                             <li>
@@ -106,9 +165,14 @@
                                 >.
                             </li>
                             <li>
-                                🔐 Optionally encrypt your data to improve your security and
-                                privacy. Let the app generate a strong passphrase - or choose your
-                                own.
+                                🔐 Optionally encrypt your data using the <a
+                                    href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-emerald-400 underline hover:text-emerald-500"
+                                    >Web Crypto API</a
+                                > to improve your security and privacy. Let the app generate a strong
+                                passphrase - or choose your own.
                             </li>
                             <li>
                                 🔗 Save your data as a private link (using the <a
@@ -118,11 +182,15 @@
                                     class="text-emerald-400 underline hover:text-emerald-500"
                                     >URI fragment</a
                                 > which is never sent to the server). Store your link somewhere safe
-                                (for example in your password manager), or save your code.
+                                (for example in your password manager), or save your QR code.
                             </li>
                             <li>
                                 ✨ Easily access your data on any device by clicking your private
                                 link or by scanning your QR code.
+                            </li>
+                            <li>
+                                ⌨️ Keyboard shortcuts (primarily with the arrow keys) for extra
+                                comfort.
                             </li>
                             <li>
                                 🆓 Free as in freedom. This is <a
@@ -142,9 +210,15 @@
                             </li>
                         </ul>
 
-                        <LinkButton href="/lifewheel/reflection" class="mx-auto mt-8 w-52"
-                            >Get started</LinkButton
-                        >
+                        <div class="mx-auto w-52 pt-8">
+                            <LinkButton
+                                href="/lifewheel/reflection"
+                                class="flex items-center justify-center"
+                                ><span class="flex max-w-max items-center gap-1"
+                                    ><PlusCircle />New reflection</span
+                                ></LinkButton
+                            >
+                        </div>
                     {/if}
                 </div>
             </div>
