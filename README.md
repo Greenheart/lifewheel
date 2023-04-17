@@ -4,9 +4,9 @@
 
 <img src="screenshot.png" width="214" height="463" alt="Screenshot of the Lifewheel app. Overview of previous reflections, showing colored circle segments representing eight dimensions of your life.">
 
-Designed using the [Humane Tech](https://www.humanetech.com/) principles, this project explores the possibilities of offline-first web apps. Specifically - is it possible to give users full control over their private data, while still providing a smooth user experience? For the answer... well, you have to see it yourself! 😄
+Designed with inspiration from the [Humane Tech](https://www.humanetech.com/) principles, this project explores the possibilities of offline-first web apps. Specifically - is it possible to give users full control over their private data, while still providing a smooth user experience? For the answer... well, you have to see it yourself! 😄
 
-**[DEMO LINK]**
+[Try the Life Wheel app](https://reconnect.earth/lifewheel)
 
 ## Project Vision and Key Features
 
@@ -22,7 +22,7 @@ Designed using the [Humane Tech](https://www.humanetech.com/) principles, this p
 -   ✨ Easily access your data on any device by clicking your private link or by scanning your QR code.
 -   🆓 Free as in freedom. This is [free software](https://fsfe.org/freesoftware/), and you're welcome to help make it even better!
 
-**Now check out the [DEMO LINK]!**
+**Now check out the [Life Wheel app](https://reconnect.earth/lifewheel)!**
 
 ## License
 
