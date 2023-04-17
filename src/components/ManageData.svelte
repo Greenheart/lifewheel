@@ -238,8 +238,10 @@
                             </div>
 
                             {#if $isGeneratingKey}
-                                <div class="grid place-items-center gap-2 pb-8 pt-4 text-lg">
-                                    <p class="spinner h-7 w-7" />
+                                <div
+                                    class="flex flex-grow flex-col items-center justify-center pb-8 pt-8 text-lg"
+                                >
+                                    <div class="spinner h-7 w-7 pb-2" />
                                     <p>Encrypting your data...</p>
                                 </div>
                             {:else if $encryptionEnabled && $encryptionKey === null}
