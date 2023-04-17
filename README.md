@@ -6,7 +6,9 @@
 
 Reflect on your life balance. Visualise your progress over time (using Svelte's [tweened](https://svelte.dev/docs#run-time-svelte-motion-tweened) stores), and reconnect to what matters in your life. Make reflection a habit and gain new insights for your well-being.
 
-Seamlessly sync your data across devices with a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server), QR code or file. For additional security and privacy, let the app generate a passphrase and encrypt your data using the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API). Experience how smooth the modern web can be!
+Seamlessly sync your data across devices with a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server), QR code, or file. For additional security and privacy, let the app generate a passphrase and encrypt your data using the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API). Experience how smooth the modern web can be!
+
+<!-- Unique features: Seamlessly sync your data across devices with a private link (using the URI fragment = never sent to the server), QR code, or file. For more security and privacy, generate a passphrase and encrypt your data with the Web Crypto API. -->
 
 [>> DEMO LINK](https://reconnect.earth/lifewheel)
 

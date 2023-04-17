@@ -93,9 +93,9 @@
                                     class="text-emerald-400 underline hover:text-emerald-500"
                                     >URI fragment</a
                                 >
-                                which is never sent to the server), QR code or file. For additional security
-                                and privacy, let the app generate a passphrase and encrypt your data
-                                using the
+                                which is never sent to the server), QR code, or file. For additional
+                                security and privacy, let the app generate a passphrase and encrypt your
+                                data using the
                                 <a
                                     href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
                                     target="_blank"
