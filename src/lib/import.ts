@@ -42,8 +42,6 @@ export async function openFile(): Promise<boolean> {
         description: 'Lifewheel save files',
     })
 
-    // TODO: Handle import of both encrypted and regular files
-
     const file: BaseSaveFile = await blob
         .text()
         .then((content) => JSON.parse(content))
