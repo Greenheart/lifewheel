@@ -65,8 +65,6 @@
     }
 </script>
 
-<!-- TODO: Add icons for each dimension -->
-
 <div class={cx('pointer-events-none aspect-square w-full select-none', className)}>
     {#if visible}
         <!-- Render lifewheel background -->
