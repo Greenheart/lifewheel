@@ -1,7 +1,14 @@
 <script context="module" lang="ts">
     import { arc } from 'd3-shape'
     import type { Tweened } from 'svelte/motion'
-    import { colors, INITIAL_LIFEWHEEL_STATE, lifewheelSteps, MAX_LEVEL } from '$lib/constants'
+
+    import {
+        colors,
+        // icons,
+        INITIAL_LIFEWHEEL_STATE,
+        lifewheelSteps,
+        MAX_LEVEL,
+    } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
     import { cx } from '../lib/utils'
 
@@ -23,6 +30,9 @@
         values.map((value, i) => generateArcPath(value, i)())
 
     const backgrounds = getArcPaths(lifewheelSteps.map(() => levels))
+
+    // TODO: Check out if this can be applied to position icons
+    // https://www.visualcinnamon.com/2015/09/placing-text-on-arcs/
 </script>
 
 <script lang="ts">
@@ -56,7 +66,6 @@
 </script>
 
 <!-- TODO: Add icons for each dimension -->
-<!-- TODO: maybe d3 can position icons in a circle around the wheel? -->
 
 <div class={cx('pointer-events-none aspect-square w-full select-none', className)}>
     {#if visible}
@@ -106,5 +115,42 @@
                 />
             {/each}
         </svg>
+
+        <!-- <div class="icons" style={`--n: ${icons.length}`}>
+            {#each icons as d, i}
+                <div class="item" style={`--i: ${i}`}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class={colors[i].text}
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"><path fill="currentColor" {d} /></svg
+                    >
+                </div>
+            {/each}
+        </div> -->
     {/if}
 </div>
+
+<!-- <style>
+    .icons {
+        transform: rotate(-65deg) translate(9em, -4em);
+    }
+
+    .item {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -1em;
+        width: 2em;
+        height: 2em;
+        border-radius: 50%;
+        --az: calc(var(--i) * 1turn / var(--n));
+        transform: rotate(var(--az)) translate(4em) rotate(calc(-1 * var(--az))) rotate(65deg);
+        font-size: 2.5em;
+        text-align: center;
+        counter-reset: i var(--i);
+        display: grid;
+        place-items: center;
+    }
+</style> -->
