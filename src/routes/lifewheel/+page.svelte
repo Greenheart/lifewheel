@@ -210,7 +210,7 @@
                             </li>
                         </ul>
 
-                        <div class="mx-auto w-52 pt-8">
+                        <div class="mx-auto w-52 pt-12">
                             <LinkButton
                                 href="/lifewheel/reflection"
                                 class="flex items-center justify-center"
