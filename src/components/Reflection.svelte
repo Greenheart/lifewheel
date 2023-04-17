@@ -54,7 +54,7 @@
         if (currentIndex === allReflectionSteps.length - 1) {
             $reflections = [...$reflections, createReflectionEntry($lifewheel)]
 
-            await goto('/')
+            await goto('/lifewheel')
         } else {
             $reflectionStep = allReflectionSteps[currentIndex + 1]
 
