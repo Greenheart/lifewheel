@@ -38,7 +38,7 @@
 
                 const data = encodeReflectionEntries(entries)
 
-                const url = new URL(window.location.origin)
+                const url = new URL(window.location.href)
                 url.hash = formatLink({ data })
 
                 return url.toString()
@@ -70,7 +70,7 @@
             const data = await dataPromise
             if (!browser || !data) return null
 
-            const url = new URL(window.location.origin)
+            const url = new URL(window.location.href)
             url.hash = formatLink({ data, encrypted: true })
 
             return url.toString()
