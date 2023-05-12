@@ -68,13 +68,7 @@ export async function openFile(): Promise<boolean> {
     }
 
     // Finish loading unencrypted file
-    reflections.set(
-        importUniqueEntries(
-            get(reflections),
-            // TODO: Remove loading of `file.reflections` when backwards compatibility is no longer needed.
-            (file as SaveFile).data ?? (file as SaveFile).reflections,
-        ),
-    )
+    reflections.set(importUniqueEntries(get(reflections), (file as SaveFile).data))
     return true
 }
 

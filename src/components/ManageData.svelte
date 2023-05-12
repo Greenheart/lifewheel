@@ -150,7 +150,6 @@
                     class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
                     on:click={() => ($isDataMenuOpen = false)}><Close /></Button
                 >
-                <!-- TODO: support opening multiple files, and automatically combine into single state. Also if one of the files fail to load, handle that error so other files can still be loaded -->
                 <Button
                     variant="outline"
                     on:click={() =>
