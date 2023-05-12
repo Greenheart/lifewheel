@@ -12,7 +12,7 @@
 
 <h2
     class={cx(
-        'flex items-center justify-center gap-2 text-center text-lg font-normal normal-case 2xs:text-2xl xs:text-3xl',
+        'flex items-center justify-center gap-2 text-lg font-normal normal-case xs:text-2xl sm:text-3xl',
         isLifewheelStep($reflectionStep) ? $reflectionStep.colors.text : 'text-emerald-400',
     )}
 >
