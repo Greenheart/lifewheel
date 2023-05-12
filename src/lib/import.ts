@@ -104,7 +104,9 @@ export const importUniqueEntries = (
             ? decodeReflectionEntries(newReflectionsData)
             : reviveTimestamps(newReflectionsData)
 
-    const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries])
+    const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries]).sort(
+        (a, b) => a.time.getTime() - b.time.getTime(),
+    )
 
     console.log(
         `Imported ${Math.abs(
