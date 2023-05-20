@@ -72,16 +72,9 @@
                             </p>
 
                             <p>
-                                Reflect on your life balance. Visualise your progress over time
-                                (using Svelte's
-                                <a
-                                    href="https://svelte.dev/docs#run-time-svelte-motion-tweened"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-emerald-400 underline hover:text-emerald-500"
-                                    >tweened</a
-                                > stores), and reconnect to what matters in your life. Make reflection
-                                a habit and gain new insights for your well-being.
+                                Reflect on your life balance. Visualise your progress over time and
+                                reconnect to what matters in your life. Make reflection a habit and
+                                gain new insights for your well-being.
                             </p>
 
                             <p>
