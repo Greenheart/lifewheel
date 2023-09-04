@@ -4,7 +4,7 @@
 
     import {
         colors,
-        // icons,
+        icons,
         INITIAL_LIFEWHEEL_STATE,
         lifewheelSteps,
         MAX_LEVEL,
@@ -114,7 +114,7 @@
             {/each}
         </svg>
 
-        <!-- <div class="icons" style={`--n: ${icons.length}`}>
+        <div class="icons" style={`--n: ${icons.length}`}>
             {#each icons as d, i}
                 <div class="item" style={`--i: ${i}`}>
                     <svg
@@ -126,11 +126,11 @@
                     >
                 </div>
             {/each}
-        </div> -->
+        </div>
     {/if}
 </div>
 
-<!-- <style>
+<style>
     .icons {
         transform: rotate(-65deg) translate(9em, -4em);
     }
@@ -140,15 +140,15 @@
         top: 50%;
         left: 50%;
         margin: -1em;
-        width: 2em;
-        height: 2em;
+        width: 1.7em;
+        height: 1.7em;
         border-radius: 50%;
         --az: calc(var(--i) * 1turn / var(--n));
         transform: rotate(var(--az)) translate(4em) rotate(calc(-1 * var(--az))) rotate(65deg);
-        font-size: 2.5em;
+        font-size: 2.7em;
         text-align: center;
         counter-reset: i var(--i);
         display: grid;
         place-items: center;
     }
-</style> -->
+</style>
