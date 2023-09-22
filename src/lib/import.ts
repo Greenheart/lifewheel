@@ -1,5 +1,5 @@
 import { fileOpen } from 'browser-fs-access'
-import { deflate } from 'pako'
+import { inflate } from 'pako'
 
 import type { BaseSaveFile, EncryptedSaveFile, ProtocolVersion, ReflectionEntry, SaveFile } from './types'
 import { decodeInt32 } from './utils'
@@ -23,9 +23,10 @@ export function decodeReflectionEntries(data: Uint8Array, version: ProtocolVersi
     // Compression was added in protocol version 2.
     if (version >= 2) {
         try {
-            data = deflate(data)
+            data = inflate(data)
         } catch (error) {
             console.error(error)
+            return []
         }
     }
 

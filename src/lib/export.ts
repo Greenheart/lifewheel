@@ -18,10 +18,7 @@ function encodeEntry(entry: ReflectionEntry) {
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     const encodedEntries = reflections.map(encodeEntry)
     const data = mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
-    const compressed = deflate(data)
-
-    console.log(`${data.length} -> ${compressed.length} (- ${(100 - (compressed.length / data.length) * 100).toFixed(1)} %)`)
-    return compressed
+    return deflate(data, { level: 9 })
 }
 
 /**
