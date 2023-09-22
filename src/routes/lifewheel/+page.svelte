@@ -8,7 +8,7 @@
     import FileImport from '$components/FileImport.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
-    import { REPO_URL } from '$lib/constants'
+    import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE, REPO_URL } from '$lib/constants'
 </script>
 
 <script lang="ts">
@@ -27,10 +27,10 @@
             <h1
                 class="bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
             >
-                Life Wheel
+                {APP_NAME}
             </h1>
 
-            <p class="pt-4 text-xl text-white xs:text-2xl">Reflect on Your Life Balance</p>
+            <p class="pt-4 text-xl text-white xs:text-2xl">{APP_TAGLINE}</p>
         </div>
 
         {#if $loading}
@@ -68,9 +68,7 @@
                             </p>
 
                             <p>
-                                Reflect on your life balance. Visualise your progress over time and
-                                reconnect to what matters in your life. Make reflection a habit and
-                                gain new insights for your wellbeing.
+                                {APP_DESCRIPTION}
                             </p>
 
                             <p>

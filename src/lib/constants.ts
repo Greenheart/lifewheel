@@ -1,5 +1,10 @@
 import type { LifewheelState, LifewheelStep, ProtocolVersion, ReflectionStep, TextStep } from './types'
 
+export const APP_NAME = 'Life Wheel'
+export const APP_TAGLINE = 'Reflect on Your Life Balance'
+
+export const APP_DESCRIPTION = 'Reflect on your life balance. Visualise your progress over time and reconnect to what matters in your life. Make reflection a habit and gain new insights for your wellbeing.'
+
 export const lifewheelSteps: Partial<LifewheelStep>[] = [
     {
         title: 'Love and Relationships',
