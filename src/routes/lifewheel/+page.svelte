@@ -67,14 +67,13 @@
                     {#if !$reflections.length}
                         <div class="grid gap-6 pt-8 text-lg">
                             <p class="font-bold">
-                                Offline-first, privacy-friendly web app for your personal
-                                well-being.
+                                Offline-first, privacy-friendly web app for your personal wellbeing.
                             </p>
 
                             <p>
                                 Reflect on your life balance. Visualise your progress over time and
                                 reconnect to what matters in your life. Make reflection a habit and
-                                gain new insights for your well-being.
+                                gain new insights for your wellbeing.
                             </p>
 
                             <p>
@@ -106,8 +105,7 @@
                                 your life.
                             </li>
                             <li>
-                                📊 Make reflection a habit and gain new insights for your
-                                well-being.
+                                📊 Make reflection a habit and gain new insights for your wellbeing.
                             </li>
                         </ul>
                     {/if}
@@ -133,8 +131,7 @@
                                 your life.
                             </li>
                             <li>
-                                📊 Make reflection a habit and gain new insights for your
-                                well-being.
+                                📊 Make reflection a habit and gain new insights for your wellbeing.
                             </li>
                             <li>👌 Keep 100% control of your private data.</li>
                             <li>😇 No signup or account needed. Designed to be used offline.</li>

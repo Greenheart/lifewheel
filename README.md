@@ -1,10 +1,10 @@
 # Life Wheel
 
-> Offline-first, privacy-friendly web app for your personal well-being.
+> Offline-first, privacy-friendly web app for your personal wellbeing.
 
 <img src="screenshot.png" width="214" height="463" alt="Screenshot of the Lifewheel app. Overview of previous reflections, showing colored circle segments representing eight dimensions of your life.">
 
-Reflect on your life balance. Visualise your progress over time and reconnect to what matters in your life. Make reflection a habit and gain new insights for your well-being.
+Reflect on your life balance. Visualise your progress over time and reconnect to what matters in your life. Make reflection a habit and gain new insights for your wellbeing.
 
 Seamlessly sync your data across devices with a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) = never sent to the server), QR code, or file. For more security and privacy, let the app generate a passphrase and encrypt your data using the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API). Experience how smooth the modern web can be!
 
@@ -14,7 +14,7 @@ Seamlessly sync your data across devices with a private link (using the [URI fra
 
 -   🧘 Reflect on your life balance.
 -   🌱 Follow your progress over time and reconnect to what matters in your life.
--   📊 Make reflection a habit and gain new insights for your well-being.
+-   📊 Make reflection a habit and gain new insights for your wellbeing.
 -   👌 Keep 100% control of your private data.
 -   😇 No signup or account needed. Designed to be used offline.
 <!-- -   📲 Install the Progressive Web App to reflect on the go. -->
