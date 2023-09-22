@@ -4,7 +4,7 @@ import { deflate } from 'pako'
 import type { ReflectionEntry, SaveFile, EncryptedSaveFile } from './types'
 import { encodeEntryData, encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
 import { fileSave } from 'browser-fs-access'
-import { CURRENT_PROTOCOL_VERSION } from './constants'
+import { CURRENT_PROTOCOL_VERSION } from './protocols'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000

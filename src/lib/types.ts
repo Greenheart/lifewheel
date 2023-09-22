@@ -1,4 +1,6 @@
-import type { colors, PROTOCOL_VERSIONS } from './constants'
+import type { colors } from './constants'
+import type { ProtocolVersion } from './protocols'
+export { ProtocolVersion }
 
 type BasicStep = {
     title: string
@@ -33,8 +35,6 @@ export type ReflectionEntry = {
     data: LifewheelState
     time: Date
 }
-
-export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
 
 export type ParsedLink = {
     encrypted: boolean

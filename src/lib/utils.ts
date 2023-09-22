@@ -69,11 +69,11 @@ export function encodeInt16(n: number) {
 
 /**
  * Encode two numbers into a single byte to save some data.
- * 
+ *
  * For example the two numbers [7, 3] are first encoded into ['0100', '0011']
  * and then combined into a single byte, represented as '01000011'.
  * This slightly reduces the output size for encoded data.
- * 
+ *
  * This could be achieved with bitwise operators.
  * However, I used strings to make the code more readable.
  */

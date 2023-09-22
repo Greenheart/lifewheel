@@ -5,7 +5,7 @@ import type { BaseSaveFile, EncryptedSaveFile, ProtocolVersion, ReflectionEntry,
 import { decodeEntryData, decodeInt32 } from './utils'
 import { encryptedFile, loading, reflections } from './stores'
 import { get } from 'svelte/store'
-import { PROTOCOL_VERSIONS } from './constants'
+import { PROTOCOL_VERSIONS } from './protocols'
 
 function decodeTime(data: Uint8Array) {
     const timestamp = decodeInt32(data)
