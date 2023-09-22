@@ -67,6 +67,38 @@ export function encodeInt16(n: number) {
     return res
 }
 
+/**
+ * Encode two numbers into a single byte to save some data.
+ * 
+ * For example the two numbers [7, 3] are first encoded into ['0100', '0011']
+ * and then combined into a single byte, represented as '01000011'.
+ * This slightly reduces the output size for encoded data.
+ * 
+ * This could be achieved with bitwise operators.
+ * However, I used strings to make the code more readable.
+ */
+export function encodeEntryData(data: ReflectionEntry['data']) {
+    const bin = data.map(number => number.toString(2).padStart(4, '0'))
+                
+    return [
+        bin[0] + bin[1],
+        bin[2] + bin[3],
+        bin[4] + bin[5],
+        bin[6] + bin[7],
+    ].map(n => parseInt(n, 2))
+}
+
+/**
+ * Decode entry data back into the original numbers
+ */
+export function decodeEntryData(data: number[]) {
+    const bin = data.flatMap(number => {
+        const n = number.toString(2).padStart(8, '0')
+        return [n.slice(0, 4), n.slice(4)]
+    })
+    return bin.map(n => parseInt(n, 2))
+}
+
 export function decodeInt32(data: Uint8Array) {
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
 }

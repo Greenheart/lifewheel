@@ -2,7 +2,7 @@ import { base64url } from 'rfc4648'
 import { deflate } from 'pako'
 
 import type { ReflectionEntry, SaveFile, EncryptedSaveFile } from './types'
-import { encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
+import { encodeEntryData, encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
 import { fileSave } from 'browser-fs-access'
 import { CURRENT_PROTOCOL_VERSION } from './constants'
 
@@ -12,7 +12,7 @@ function encodeTime(date: Date) {
 }
 
 function encodeEntry(entry: ReflectionEntry) {
-    return mergeTypedArrays(encodeTime(entry.time), new Uint8Array(entry.data))
+    return mergeTypedArrays(encodeTime(entry.time), new Uint8Array(encodeEntryData(entry.data)))
 }
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {

@@ -2,7 +2,7 @@ import { fileOpen } from 'browser-fs-access'
 import { inflate } from 'pako'
 
 import type { BaseSaveFile, EncryptedSaveFile, ProtocolVersion, ReflectionEntry, SaveFile } from './types'
-import { decodeInt32 } from './utils'
+import { decodeEntryData, decodeInt32 } from './utils'
 import { encryptedFile, loading, reflections } from './stores'
 import { get } from 'svelte/store'
 import { PROTOCOL_VERSIONS } from './constants'
@@ -15,7 +15,7 @@ function decodeTime(data: Uint8Array) {
 function decodeEntry(entryData: Uint8Array) {
     return {
         time: decodeTime(entryData.subarray(0, 4)),
-        data: Array.from(entryData.subarray(4)),
+        data: decodeEntryData(Array.from(entryData.subarray(4))),
     } as ReflectionEntry
 }
 
@@ -31,9 +31,11 @@ export function decodeReflectionEntries(data: Uint8Array, version: ProtocolVersi
     }
 
     const length = decodeInt32(data.subarray(0, 4))
+    // Starting with version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
+    const entryDataLength = version >= 2 ? 8 : 12
     return Array.from({ length }, (_, index) => {
-        const offset = 4 + index * 12
-        const entryData = data.subarray(offset, offset + 12)
+        const offset = 4 + index * entryDataLength
+        const entryData = data.subarray(offset, offset + entryDataLength)
         return decodeEntry(entryData)
     })
 }
