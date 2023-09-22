@@ -111,6 +111,10 @@ export const importUniqueEntries = (
     newReflectionsData: Uint8Array | ReflectionEntry[],
     version: ProtocolVersion
 ) => {
+    if (PROTOCOL_VERSIONS[version] === undefined) {
+        throw new Error(`Unsupported protocol version: ${version}.`)
+    }
+
     const newEntries =
         newReflectionsData instanceof Uint8Array
             ? decodeReflectionEntries(newReflectionsData, version)

@@ -28,6 +28,7 @@
                 }
             } catch (error) {
                 console.error('Invalid link: ', error)
+                closeLinkImport()
             }
         } else {
             $loading = false
