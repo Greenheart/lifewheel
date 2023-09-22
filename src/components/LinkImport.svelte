@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import { parseLink } from '$lib/utils'
-    import { decodeReflectionEntries, importUniqueEntries } from '$lib/import'
+    import { importUniqueEntries } from '$lib/import'
     import { getDecryptedPayload } from '$lib/crypto'
     import type { ParsedLink } from '$lib/types'
 
@@ -19,7 +19,11 @@
                 payload = parseLink(window.location.hash.slice(1))
 
                 if (!payload.encrypted && payload.data) {
-                    $reflections = importUniqueEntries($reflections, payload.data)
+                    $reflections = importUniqueEntries(
+                        $reflections,
+                        payload.data,
+                        payload.protocolVersion,
+                    )
                     closeLinkImport()
                 }
             } catch (error) {
@@ -38,7 +42,7 @@
     const submitPassphrase = async (password: string, persistKey = false) => {
         try {
             const decrypted = await getDecryptedPayload(payload.data, password, persistKey)
-            $reflections = importUniqueEntries($reflections, decrypted)
+            $reflections = importUniqueEntries($reflections, decrypted, payload.protocolVersion)
         } catch (error) {
             console.error(error)
         }

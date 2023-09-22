@@ -1,4 +1,4 @@
-import type { LifewheelState, LifewheelStep, ReflectionStep, TextStep } from './types'
+import type { LifewheelState, LifewheelStep, ProtocolVersion, ReflectionStep, TextStep } from './types'
 
 export const lifewheelSteps: Partial<LifewheelStep>[] = [
     {
@@ -164,6 +164,9 @@ export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
  */
 export const PROTOCOL_VERSIONS = {
     1: {},
+    2: {}
 }
+
+export const CURRENT_PROTOCOL_VERSION: ProtocolVersion = 2
 
 export const REPO_URL = 'https://github.com/Greenheart/lifewheel'

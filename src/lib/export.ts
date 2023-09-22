@@ -1,8 +1,10 @@
 import { base64url } from 'rfc4648'
+import { deflate } from 'pako'
 
-import type { ReflectionEntry, ProtocolVersion, SaveFile, EncryptedSaveFile } from './types'
+import type { ReflectionEntry, SaveFile, EncryptedSaveFile } from './types'
 import { encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
 import { fileSave } from 'browser-fs-access'
+import { CURRENT_PROTOCOL_VERSION } from './constants'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000
@@ -15,24 +17,26 @@ function encodeEntry(entry: ReflectionEntry) {
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     const encodedEntries = reflections.map(encodeEntry)
-    return mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
+    const data = mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
+    const compressed = deflate(data)
+
+    console.log(`${data.length} -> ${compressed.length} (- ${(100 - (compressed.length / data.length) * 100).toFixed(1)} %)`)
+    return compressed
 }
 
 /**
  * Generate a URI fragment (hash) representing user data.
  * Also adds a header to make it possible to know how to parse different links.
- * For example the header "0e1p" means "0e" = no encryption and "1p" = protocol version 1.
- * Similarly "1e" means the data is encrypted
+ * For example the header "0e2p" means "0e" = no encryption, and "2p" = protocol version 2.
+ * Similarly "1e2p" means "1e" = the data is encrypted, and "2p" = protocol version 2.
  */
 export const formatLink = ({
     data,
     encrypted = false,
-    protocolVersion = 1,
 }: {
     data: Uint8Array
     encrypted?: boolean
-    protocolVersion?: ProtocolVersion
-}) => formatHeader({ encrypted, protocolVersion }) + base64url.stringify(data)
+}) => formatHeader({ encrypted, protocolVersion: CURRENT_PROTOCOL_VERSION }) + base64url.stringify(data)
 
 export function getFileName() {
     const date = new Date().toLocaleString('sv-SE', {
@@ -46,7 +50,7 @@ export function getFileName() {
 export async function saveFile(reflections: ReflectionEntry[]) {
     const file: SaveFile = {
         type: 'lifewheel',
-        version: 1,
+        version: CURRENT_PROTOCOL_VERSION,
         url: window.location.href,
         data: reflections,
         encrypted: false,
@@ -70,7 +74,7 @@ export async function saveEncryptedFile(encryptedData: Uint8Array) {
     const file: EncryptedSaveFile = {
         type: 'lifewheel',
         url: window.location.href,
-        version: 1,
+        version: CURRENT_PROTOCOL_VERSION,
         data: base64url.stringify(encryptedData),
         encrypted: true,
     }

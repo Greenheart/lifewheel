@@ -18,6 +18,7 @@
         "browser-fs-access": "^0.35.0",
         "d3-shape": "^3.2.0",
         "idb-keyval": "^6.2.1",
+        "pako": "^2.1.0",
         "qrcode": "^1.5.3",
         "rfc4648": "^1.5.2",
         "svelte-local-storage-store": "^0.6.0"
@@ -26,6 +27,7 @@
         "@sveltejs/adapter-static": "^2.0.3",
         "@sveltejs/kit": "^1.25.0",
         "@types/d3-shape": "^3.1.2",
+        "@types/pako": "^2.0.0",
         "@types/qrcode": "^1.5.2",
         "@vitejs/plugin-basic-ssl": "^1.0.1",
         "autoprefixer": "^10.4.16",

@@ -1,9 +1,11 @@
 import { fileOpen } from 'browser-fs-access'
+import { deflate } from 'pako'
 
-import type { BaseSaveFile, EncryptedSaveFile, ReflectionEntry, SaveFile } from './types'
+import type { BaseSaveFile, EncryptedSaveFile, ProtocolVersion, ReflectionEntry, SaveFile } from './types'
 import { decodeInt32 } from './utils'
 import { encryptedFile, loading, reflections } from './stores'
 import { get } from 'svelte/store'
+import { PROTOCOL_VERSIONS } from './constants'
 
 function decodeTime(data: Uint8Array) {
     const timestamp = decodeInt32(data)
@@ -17,7 +19,16 @@ function decodeEntry(entryData: Uint8Array) {
     } as ReflectionEntry
 }
 
-export function decodeReflectionEntries(data: Uint8Array) {
+export function decodeReflectionEntries(data: Uint8Array, version: ProtocolVersion) {
+    // Compression was added in protocol version 2.
+    if (version >= 2) {
+        try {
+            data = deflate(data)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const length = decodeInt32(data.subarray(0, 4))
     return Array.from({ length }, (_, index) => {
         const offset = 4 + index * 12
@@ -68,7 +79,7 @@ export async function openFile(): Promise<boolean> {
     }
 
     // Finish loading unencrypted file
-    reflections.set(importUniqueEntries(get(reflections), (file as SaveFile).data))
+    reflections.set(importUniqueEntries(get(reflections), (file as SaveFile).data, file.version))
     return true
 }
 
@@ -98,10 +109,11 @@ export const getUniqueEntries = (items: ReflectionEntry[]) =>
 export const importUniqueEntries = (
     currentEntries: ReflectionEntry[],
     newReflectionsData: Uint8Array | ReflectionEntry[],
+    version: ProtocolVersion
 ) => {
     const newEntries =
         newReflectionsData instanceof Uint8Array
-            ? decodeReflectionEntries(newReflectionsData)
+            ? decodeReflectionEntries(newReflectionsData, version)
             : reviveTimestamps(newReflectionsData)
 
     const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries]).sort(

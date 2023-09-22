@@ -22,7 +22,7 @@
                 password,
                 persistKey,
             )
-            $reflections = importUniqueEntries($reflections, decrypted)
+            $reflections = importUniqueEntries($reflections, decrypted, $encryptedFile.version)
         } catch (error) {
             console.error(error)
         }
