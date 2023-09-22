@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-    import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
 
     import LinkButton from '$components/LinkButton.svelte'
@@ -14,8 +13,6 @@
 
 <script lang="ts">
     import { loading, reflections, encryptedFile } from '$lib/stores'
-
-    const isDataMenuOpen = writable(false)
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
@@ -54,7 +51,7 @@
                     >
                 </div>
 
-                <ManageData {isDataMenuOpen} />
+                <ManageData />
 
                 {#if $reflections.length}
                     <PreviousReflections />

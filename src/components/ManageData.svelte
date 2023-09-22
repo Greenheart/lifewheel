@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import QRCode from 'qrcode'
     import { Tab, TabGroup, TabList, TabPanels, TabPanel } from '@rgossiaux/svelte-headlessui'
-    import { derived, writable, type Writable } from 'svelte/store'
+    import { derived, writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Switch from './Switch.svelte'
@@ -26,7 +26,7 @@
     import { browser } from '$app/environment'
     import PlusCircle from '$icons/PlusCircle.svelte'
 
-    export let isDataMenuOpen: Writable<boolean>
+    const isDataMenuOpen = writable(false)
     const encryptionEnabled = writable(true)
     const isGeneratingKey = writable(false)
 
