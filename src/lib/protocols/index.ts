@@ -16,7 +16,7 @@ export const PROTOCOL_VERSIONS = {
 }
 
 export type Protocol = {
-    exportFile(data: ReflectionEntry[]): SaveFile
+    exportFile(data: ReflectionEntry[]): Blob
     exportEncryptedFile(data: ReflectionEntry[]): EncryptedSaveFile
     exportLink(data: ReflectionEntry[]): string
     exportEncryptedLink(data: ReflectionEntry[]): string
@@ -29,3 +29,5 @@ export type Protocol = {
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
 
 export const CURRENT_PROTOCOL_VERSION: ProtocolVersion = 2
+
+export const CURRENT_PROTOCOL = PROTOCOL_VERSIONS[CURRENT_PROTOCOL_VERSION] satisfies Protocol

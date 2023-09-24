@@ -1,16 +1,10 @@
 import { base64url } from 'rfc4648'
 import { deflate } from 'pako'
 
-import type { ReflectionEntry, SaveFile, EncryptedSaveFile } from './types'
-import {
-    encodeEntryData,
-    encodeInt32,
-    formatHeader,
-    mergeTypedArrays,
-    minifyJSONArrays,
-} from './utils'
+import type { ReflectionEntry, EncryptedSaveFile } from './types'
+import { encodeEntryData, encodeInt32, formatHeader, mergeTypedArrays } from './utils'
 import { fileSave } from 'browser-fs-access'
-import { CURRENT_PROTOCOL_VERSION } from './protocols'
+import { CURRENT_PROTOCOL, CURRENT_PROTOCOL_VERSION } from './protocols'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000
@@ -53,21 +47,7 @@ export function getFileName() {
     return `${date}-lifewheel.json`
 }
 
-// saveFile and saveEncryptedFile could reuse the fileSave() call and creation of the blob.
-// they only need separate data.
-export async function saveFile(reflections: ReflectionEntry[]) {
-    const file: SaveFile = {
-        type: 'lifewheel',
-        version: CURRENT_PROTOCOL_VERSION,
-        url: window.location.href,
-        data: reflections,
-        encrypted: false,
-    }
-
-    const blob = new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
-        type: 'application/json',
-    })
-
+async function downloadFile(blob: Blob) {
     await fileSave(blob, {
         fileName: getFileName(),
         mimeTypes: ['application/json'],
@@ -76,6 +56,11 @@ export async function saveFile(reflections: ReflectionEntry[]) {
         startIn: 'documents',
         description: 'Lifewheel save files',
     })
+}
+
+export async function saveFile(reflections: ReflectionEntry[]) {
+    const blob = CURRENT_PROTOCOL.exportFile(reflections)
+    await downloadFile(blob)
 }
 
 export async function saveEncryptedFile(encryptedData: Uint8Array) {
@@ -89,12 +74,5 @@ export async function saveEncryptedFile(encryptedData: Uint8Array) {
 
     const blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' })
 
-    await fileSave(blob, {
-        fileName: getFileName(),
-        mimeTypes: ['application/json'],
-        extensions: ['.json'],
-        id: 'documents',
-        startIn: 'documents',
-        description: 'Lifewheel save files',
-    })
+    await downloadFile(blob)
 }

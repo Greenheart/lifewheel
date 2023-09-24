@@ -1,7 +1,13 @@
 import { fileOpen } from 'browser-fs-access'
 import { inflate } from 'pako'
 
-import type { BaseSaveFile, EncryptedSaveFile, ProtocolVersion, ReflectionEntry, SaveFile } from './types'
+import type {
+    BaseSaveFile,
+    EncryptedSaveFile,
+    ProtocolVersion,
+    ReflectionEntry,
+    SaveFile,
+} from './types'
 import { decodeEntryData, decodeInt32 } from './utils'
 import { encryptedFile, loading, reflections } from './stores'
 import { get } from 'svelte/store'
@@ -112,7 +118,7 @@ export const getUniqueEntries = (items: ReflectionEntry[]) =>
 export const importUniqueEntries = (
     currentEntries: ReflectionEntry[],
     newReflectionsData: Uint8Array | ReflectionEntry[],
-    version: ProtocolVersion
+    version: ProtocolVersion,
 ) => {
     if (PROTOCOL_VERSIONS[version] === undefined) {
         throw new Error(`Unsupported protocol version: ${version}.`)
