@@ -2,7 +2,13 @@ import { base64url } from 'rfc4648'
 import { deflate } from 'pako'
 
 import type { ReflectionEntry, SaveFile, EncryptedSaveFile } from './types'
-import { encodeEntryData, encodeInt32, formatHeader, mergeTypedArrays, minifyJSONArrays } from './utils'
+import {
+    encodeEntryData,
+    encodeInt32,
+    formatHeader,
+    mergeTypedArrays,
+    minifyJSONArrays,
+} from './utils'
 import { fileSave } from 'browser-fs-access'
 import { CURRENT_PROTOCOL_VERSION } from './protocols'
 
@@ -21,6 +27,7 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     return deflate(data, { level: 9 })
 }
 
+// By adding the link format as part of the protocol, the rest of the application doesn't need to think about the protocol version
 /**
  * Generate a URI fragment (hash) representing user data.
  * Also adds a header to make it possible to know how to parse different links.
@@ -33,7 +40,9 @@ export const formatLink = ({
 }: {
     data: Uint8Array
     encrypted?: boolean
-}) => formatHeader({ encrypted, protocolVersion: CURRENT_PROTOCOL_VERSION }) + base64url.stringify(data)
+}) =>
+    formatHeader({ encrypted, protocolVersion: CURRENT_PROTOCOL_VERSION }) +
+    base64url.stringify(data)
 
 export function getFileName() {
     const date = new Date().toLocaleString('sv-SE', {
@@ -44,6 +53,8 @@ export function getFileName() {
     return `${date}-lifewheel.json`
 }
 
+// saveFile and saveEncryptedFile could reuse the fileSave() call and creation of the blob.
+// they only need separate data.
 export async function saveFile(reflections: ReflectionEntry[]) {
     const file: SaveFile = {
         type: 'lifewheel',
