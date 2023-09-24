@@ -29,6 +29,16 @@ Designed with inspiration from the [Humane Tech](https://www.humanetech.com/) pr
 
 **Now check out the [live demo](https://reconnect.earth/lifewheel)!**
 
+---
+
+## Development
+
+### Maintaining backwards compatibility
+
+Since this app only works with local data, backwards compatibility is a key feature. By implementing all export/import logic in versioned protocols, we can let people import their data from old formats, and re-export in the newest format. The goal is to let people just use the app and give an experience that "just works".
+
+When a new protocol version is added, we only need to keep the import logic from the older versions, since all data will be exported in the new format. If we need the old export-logic for some reason, it's always possible to find it in the git history.
+
 ## License
 
 AGPL-3.0
