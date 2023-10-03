@@ -124,6 +124,7 @@ export const importUniqueEntries = (
         throw new Error(`Unsupported protocol version: ${version}.`)
     }
 
+    // TODO: split this into separate load functions, one for each data format
     const newEntries =
         newReflectionsData instanceof Uint8Array
             ? decodeReflectionEntries(newReflectionsData, version)

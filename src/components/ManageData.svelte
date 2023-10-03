@@ -25,6 +25,7 @@
     import { reflections, loading, encryptionKey } from '$lib/stores'
     import { browser } from '$app/environment'
     import PlusCircle from '$icons/PlusCircle.svelte'
+    import { CURRENT_PROTOCOL } from '$lib/protocols'
 
     const isDataMenuOpen = writable(false)
     const encryptionEnabled = writable(true)
@@ -36,10 +37,8 @@
             (async () => {
                 if (!browser) return null
 
-                const data = encodeReflectionEntries(entries)
-
                 const url = new URL(window.location.href)
-                url.hash = formatLink({ data })
+                url.hash = CURRENT_PROTOCOL.exportLink(entries)
 
                 return url.toString()
             })(),
@@ -71,7 +70,9 @@
             if (!browser || !data) return null
 
             const url = new URL(window.location.href)
-            url.hash = formatLink({ data, encrypted: true })
+            // TODO: Implement shared crypto logic in the protocol.
+            // Then re-use the same encrypted data for multiple export formats
+            // url.hash = CURRENT_PROTOCOL.exportEncryptedLink(encryptedData)
 
             return url.toString()
         })(),
