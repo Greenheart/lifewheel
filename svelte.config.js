@@ -12,6 +12,9 @@ const config = {
             $components: resolve('./src/components'),
             $icons: resolve('./src/icons'),
         },
+        paths: {
+            base: '/lifewheel',
+        },
     },
 }
 
