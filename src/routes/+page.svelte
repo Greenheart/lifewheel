@@ -14,6 +14,7 @@
 
 <script lang="ts">
     import { loading, reflections, encryptedFile } from '$lib/stores'
+    import { base } from '$app/paths'
 
     const isDataMenuOpen = writable(false)
 </script>
@@ -45,9 +46,7 @@
         {:else}
             <div in:fade={{ duration: 300 }}>
                 <div class="mx-auto w-52 pt-12">
-                    <LinkButton
-                        href="/lifewheel/reflection"
-                        class="flex items-center justify-center"
+                    <LinkButton href="{base}/reflection" class="flex items-center justify-center"
                         ><span class="flex max-w-max items-center gap-1"
                             ><PlusCircle />New reflection</span
                         ></LinkButton
@@ -115,7 +114,7 @@
                     {#if !$reflections.length}
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
-                                href="/lifewheel/reflection"
+                                href="{base}/reflection"
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
                                     ><PlusCircle />Get started</span
@@ -205,7 +204,7 @@
 
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
-                                href="/lifewheel/reflection"
+                                href="{base}/reflection"
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
                                     ><PlusCircle />New reflection</span
