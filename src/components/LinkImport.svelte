@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-    import { parseLink } from '$lib/utils'
     import { importUniqueEntries } from '$lib/import'
     import { getDecryptedPayload } from '$lib/crypto'
     import type { ParsedLink } from '$lib/types'
@@ -16,8 +15,10 @@
     onMount(() => {
         if (window.location.hash) {
             try {
+                // TODO: replace with link parsing from protocol
                 payload = parseLink(window.location.hash.slice(1))
 
+                // TODO: Then either import Link (and keep unique entries) or show password form
                 if (!payload.encrypted && payload.data) {
                     $reflections = importUniqueEntries(
                         $reflections,

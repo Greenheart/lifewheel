@@ -1,4 +1,4 @@
-import type { EncryptedSaveFile, ReflectionEntry, SaveFile } from '$lib/types'
+import type { EncryptedSaveFile, ParsedLink, ReflectionEntry, SaveFile, UserKey } from '$lib/types'
 
 import v1 from './v1'
 import v2 from './v2'
@@ -15,15 +15,18 @@ export const PROTOCOL_VERSIONS = {
     2: v2,
 }
 
+// IDEA: Maybe limit the amound of methods. But it might also be clean to have the crypto logic and more specific types.
 export type Protocol = {
+    // IDEA: Should exportFile return just the SaveFile?
     exportFile(data: ReflectionEntry[]): Blob
     exportEncryptedFile(data: ReflectionEntry[]): EncryptedSaveFile
     exportLink(data: ReflectionEntry[]): string
     exportEncryptedLink(data: ReflectionEntry[]): string
     importFile(file: SaveFile): ReflectionEntry[]
     importEncryptedFile(file: EncryptedSaveFile): ReflectionEntry[]
-    importLink(link: string): ReflectionEntry[]
-    importEncryptedLink(link: string): ReflectionEntry[]
+    parseLink(link: string): ParsedLink
+    importLink(link: ParsedLink): ReflectionEntry[]
+    importEncryptedLink(link: ParsedLink, key: UserKey): ReflectionEntry[]
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS

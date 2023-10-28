@@ -14,7 +14,7 @@
     import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
-    import { encodeReflectionEntries, formatLink, saveEncryptedFile, saveFile } from '$lib/export'
+    import { encodeReflectionEntries, saveEncryptedFile, saveFile } from '$lib/export'
     import { clearPersistedKey, getEncryptedPayload } from '$lib/crypto'
     import { cx } from '$lib/utils'
 

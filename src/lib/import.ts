@@ -96,7 +96,7 @@ export async function openFile(): Promise<boolean> {
  * Turn timestamps back into dates during runtime
  */
 export function reviveTimestamps(reflections: ReflectionEntry[]) {
-    return reflections.map((entry) => ({
+    return reflections.map<ReflectionEntry>((entry) => ({
         time: new Date(entry.time),
         data: entry.data,
     }))
