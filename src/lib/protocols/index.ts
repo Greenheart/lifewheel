@@ -1,7 +1,7 @@
 import type { EncryptedSaveFile, ParsedLink, ReflectionEntry, SaveFile, UserKey } from '$lib/types'
 
-import v1 from './v1'
-import v2 from './v2'
+import v1 from './v1/protocol'
+// import v2 from './v2'
 
 /**
  * If the need arises, we could abstract away implementation details with a common public API surface
@@ -12,25 +12,42 @@ import v2 from './v2'
  */
 export const PROTOCOL_VERSIONS = {
     1: v1,
-    2: v2,
+    // 2: v2,
 }
 
-// IDEA: Maybe limit the amound of methods. But it might also be clean to have the crypto logic and more specific types.
+/**
+ * The protocol implements all data import & export logic.
+ *
+ * The goal is to make the data format backwards-compatible to allow loading old saves and re-export them with the newest format.
+ *
+ * When implementing the protocols, it's important to add all operations related to import, export and crypto, since these might change in the future.
+ * Then the previous protocol versions can be re-used for future protocol versions, while still giving the flexibility to rewrite logic when needed.
+ *
+ * When a new protocol version is added, the older protocols only need to keep their import logic,
+ * since data is always exported with the latest protocol version.
+ */
 export type Protocol = {
-    // IDEA: Should exportFile return just the SaveFile?
+    // IDEA: Should exportFile() return just the SaveFile?
     exportFile(data: ReflectionEntry[]): Blob
-    exportEncryptedFile(data: ReflectionEntry[]): EncryptedSaveFile
+    exportEncryptedFile(data: ReflectionEntry[]): Promise<EncryptedSaveFile>
     exportLink(data: ReflectionEntry[]): string
-    exportEncryptedLink(data: ReflectionEntry[]): string
+    exportEncryptedLink(data: ReflectionEntry[]): Promise<string>
     importFile(file: SaveFile): ReflectionEntry[]
-    importEncryptedFile(file: EncryptedSaveFile): ReflectionEntry[]
+    importEncryptedFile(file: EncryptedSaveFile): Promise<ReflectionEntry[]>
     parseLink(link: string): ParsedLink
     importLink(link: ParsedLink): ReflectionEntry[]
-    importEncryptedLink(link: ParsedLink, key: UserKey): ReflectionEntry[]
+    importEncryptedLink(link: ParsedLink, key: UserKey): Promise<ReflectionEntry[]>
+    deriveKey(
+        salt: Uint8Array,
+        password: string,
+        iterations: number,
+        keyUsages: Iterable<KeyUsage>,
+    ): Promise<UserKey>
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
 
-export const CURRENT_PROTOCOL_VERSION: ProtocolVersion = 2
+// TODO: switch to V2 when ready with V1
+export const CURRENT_PROTOCOL_VERSION: ProtocolVersion = 1
 
 export const CURRENT_PROTOCOL = PROTOCOL_VERSIONS[CURRENT_PROTOCOL_VERSION] satisfies Protocol

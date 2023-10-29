@@ -6,9 +6,9 @@ import { decodeInt32, encodeInt32 } from '$lib/utils'
 export async function deriveKey(
     salt: Uint8Array,
     password: string,
-    iterations: number,
-    keyUsages: Iterable<KeyUsage>,
-): Promise<CryptoKey> {
+    iterations: number = 2e6,
+    keyUsages: Iterable<KeyUsage> = ['encrypt', 'decrypt'],
+): Promise<UserKey> {
     const encoder = new TextEncoder()
     const baseKey = await crypto.subtle.importKey(
         'raw',
@@ -17,13 +17,27 @@ export async function deriveKey(
         false,
         ['deriveKey'],
     )
-    return await crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
-        baseKey,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        keyUsages,
-    )
+    return {
+        key: await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
+            baseKey,
+            { name: 'AES-GCM', length: 256 },
+            false,
+            keyUsages,
+        ),
+        salt,
+    }
+}
+
+export async function deriveKeyFromData(
+    bytes: Uint8Array,
+    password: string,
+    keyUsages: Iterable<KeyUsage> = ['encrypt', 'decrypt'],
+) {
+    const salt = bytes.slice(0, 32)
+    const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
+
+    return deriveKey(salt, password, decodeInt32(iterations), keyUsages)
 }
 
 /**
@@ -63,12 +77,11 @@ export async function getDecryptedPayload(bytes: Uint8Array, password: string, p
     const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
     const ciphertext = bytes.slice(32 + 16 + 4)
 
-    const key = await deriveKey(salt, password, decodeInt32(iterations), ['encrypt', 'decrypt'])
+    const userKey = await deriveKey(salt, password, decodeInt32(iterations), ['encrypt', 'decrypt'])
     const content = new Uint8Array(
-        await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext),
+        await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, userKey.key, ciphertext),
     )
     if (!content) throw new Error('Malformed content')
-    const userKey = { key, salt }
 
     if (persistKey) {
         console.log('persistKey enc', userKey)
