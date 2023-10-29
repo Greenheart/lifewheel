@@ -30,12 +30,12 @@ export async function deriveKey(
 }
 
 export async function deriveKeyFromData(
-    bytes: Uint8Array,
+    data: Uint8Array,
     password: string,
     keyUsages: Iterable<KeyUsage> = ['encrypt', 'decrypt'],
 ) {
-    const salt = bytes.slice(0, 32)
-    const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
+    const salt = data.slice(0, 32)
+    const iterations = data.slice(32 + 16, 32 + 16 + 4)
 
     return deriveKey(salt, password, decodeInt32(iterations), keyUsages)
 }
@@ -69,28 +69,25 @@ export async function getEncryptedPayload(content: Uint8Array, key: UserKey, ite
  * Decrypt a payload and return the contents.
  *
  * @param bytes The payload to decrypt.
- * @param password The password used for decryption.
+ * @param key The key used for decryption.
  */
-export async function getDecryptedPayload(bytes: Uint8Array, password: string, persistKey = false) {
-    const salt = bytes.slice(0, 32)
+export async function getDecryptedPayload(bytes: Uint8Array, key: UserKey, persistKey = false) {
     const iv = bytes.slice(32, 32 + 16)
-    const iterations = bytes.slice(32 + 16, 32 + 16 + 4)
     const ciphertext = bytes.slice(32 + 16 + 4)
 
-    const userKey = await deriveKey(salt, password, decodeInt32(iterations), ['encrypt', 'decrypt'])
     const content = new Uint8Array(
-        await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, userKey.key, ciphertext),
+        await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key.key, ciphertext),
     )
     if (!content) throw new Error('Malformed content')
 
     if (persistKey) {
-        console.log('persistKey enc', userKey)
-        await setPersistedKey('enc', userKey)
+        console.log('persistKey enc', key)
+        await setPersistedKey('enc', key)
     }
 
     // TODO: Separate key persist from the actual decryption.
     // Do this somewhere else instead so the crypto library doesn't need to know about the svelte stores.
-    encryptionKey.set(userKey)
+    encryptionKey.set(key)
 
     return content
 }

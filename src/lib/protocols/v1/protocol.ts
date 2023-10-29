@@ -5,7 +5,7 @@ import { minifyJSONArrays } from '$lib/utils'
 import { CURRENT_PROTOCOL_VERSION } from '..'
 import { encodeReflectionEntries, formatLink } from './export'
 import { decodeReflectionEntries, reviveTimestamps } from './import'
-import { deriveKey, getDecryptedPayload } from './crypto'
+import { deriveKey, deriveKeyFromData, getDecryptedPayload } from './crypto'
 
 const PROTOCOL_VERSION = 1
 
@@ -60,4 +60,5 @@ export default {
         return decodeReflectionEntries(decrypted, link.protocolVersion)
     },
     deriveKey,
+    deriveKeyFromData,
 } // TODO: Re-enable satisfies Protocol

@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
     import { importUniqueEntries } from '$lib/import'
-    import { getDecryptedPayload } from '$lib/crypto'
     import type { ParsedLink } from '$lib/types'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 
@@ -53,7 +52,7 @@
 
     const submitPassphrase = async (password: string, persistKey = false) => {
         try {
-            const key = await CURRENT_PROTOCOL.deriveKey(payload.data.slice(0, 32), password)
+            const key = await CURRENT_PROTOCOL.deriveKeyFromData(payload.data, password)
             const importedEntries = await CURRENT_PROTOCOL.importEncryptedLink(payload, key)
 
             $reflections = importUniqueEntries($reflections, decrypted, payload.protocolVersion)

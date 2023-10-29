@@ -43,6 +43,11 @@ export type Protocol = {
         iterations: number,
         keyUsages: Iterable<KeyUsage>,
     ): Promise<UserKey>
+    deriveKeyFromData(
+        data: Uint8Array,
+        password: string,
+        keyUsages: Iterable<KeyUsage>,
+    ): Promise<UserKey>
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
