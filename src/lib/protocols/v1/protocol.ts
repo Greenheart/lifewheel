@@ -2,9 +2,8 @@ import { base64url } from 'rfc4648'
 
 import type { SaveFile, ReflectionEntry, ParsedLink, ProtocolVersion, UserKey } from '$lib/types'
 import { minifyJSONArrays } from '$lib/utils'
-import { CURRENT_PROTOCOL_VERSION } from '..'
 import { encodeReflectionEntries, formatLink } from './export'
-import { decodeReflectionEntries, reviveTimestamps } from './import'
+import { decodeReflectionEntries, getUniqueEntries, reviveTimestamps } from './import'
 import { deriveKey, deriveKeyFromData, getDecryptedPayload } from './crypto'
 
 const PROTOCOL_VERSION = 1
@@ -13,12 +12,13 @@ export default {
     exportFile(data: ReflectionEntry[]) {
         const file: SaveFile = {
             type: 'lifewheel',
-            version: CURRENT_PROTOCOL_VERSION,
+            version: PROTOCOL_VERSION,
             url: window.location.href,
             data,
             encrypted: false,
         }
 
+        // TODO: Maybe return a SaveFile instead, and let the app deal with saving the actual file.
         return new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
             type: 'application/json',
         })
@@ -52,7 +52,6 @@ export default {
     },
     importLink(link: ParsedLink) {
         if (link.encrypted) throw new Error('Link is encrypted')
-
         return decodeReflectionEntries(link.data, link.protocolVersion)
     },
     async importEncryptedLink(link: ParsedLink, key: UserKey) {
@@ -61,4 +60,18 @@ export default {
     },
     deriveKey,
     deriveKeyFromData,
+    getUniqueEntries(currentEntries: ReflectionEntry[], newEntries: ReflectionEntry[]) {
+        const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries]).sort(
+            (a, b) => a.time.getTime() - b.time.getTime(),
+        )
+
+        console.log(
+            `Imported ${Math.abs(
+                updatedEntries.length - currentEntries.length,
+            )} - filtered out ${Math.abs(newEntries.length - updatedEntries.length)}`,
+            updatedEntries.map((e) => e.time.getTime()),
+        )
+
+        return updatedEntries
+    },
 } // TODO: Re-enable satisfies Protocol

@@ -48,6 +48,10 @@ export type Protocol = {
         password: string,
         keyUsages: Iterable<KeyUsage>,
     ): Promise<UserKey>
+    getUniqueEntries(
+        currentEntries: ReflectionEntry[],
+        newEntries: ReflectionEntry[],
+    ): ReflectionEntry[]
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS

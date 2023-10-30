@@ -58,3 +58,16 @@ export function reviveTimestamps(reflections: ReflectionEntry[]) {
         data: entry.data,
     }))
 }
+
+/**
+ * Remove duplicate entries to keep both the UI and exported data clean.
+ */
+export const getUniqueEntries = (items: ReflectionEntry[]) =>
+    items.filter(
+        (item, index, array) =>
+            array.findIndex(
+                (otherItem) =>
+                    item.time.getTime() === otherItem.time.getTime() &&
+                    item.data.join('') === otherItem.data.join(''),
+            ) === index,
+    )
