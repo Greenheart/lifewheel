@@ -27,8 +27,7 @@ export const PROTOCOL_VERSIONS = {
  * since data is always exported with the latest protocol version.
  */
 export type Protocol = {
-    // IDEA: Should exportFile() return just the SaveFile?
-    exportFile(data: ReflectionEntry[]): Blob
+    exportFile(data: ReflectionEntry[]): SaveFile
     exportEncryptedFile(data: ReflectionEntry[]): Promise<EncryptedSaveFile>
     exportLink(data: ReflectionEntry[]): string
     exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey): Promise<string>

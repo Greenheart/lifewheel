@@ -2,7 +2,7 @@ import { base64url } from 'rfc4648'
 import { deflate } from 'pako'
 
 import type { ReflectionEntry, EncryptedSaveFile } from './types'
-import { encodeEntryData, encodeInt32, mergeTypedArrays } from './utils'
+import { encodeEntryData, encodeInt32, mergeTypedArrays, minifyJSONArrays } from './utils'
 import { fileSave } from 'browser-fs-access'
 import { CURRENT_PROTOCOL, CURRENT_PROTOCOL_VERSION } from './protocols'
 
@@ -42,7 +42,12 @@ async function downloadFile(blob: Blob) {
 }
 
 export async function saveFile(reflections: ReflectionEntry[]) {
-    const blob = CURRENT_PROTOCOL.exportFile(reflections)
+    const file = CURRENT_PROTOCOL.exportFile(reflections)
+
+    const blob = new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
+        type: 'application/json',
+    })
+
     await downloadFile(blob)
 }
 

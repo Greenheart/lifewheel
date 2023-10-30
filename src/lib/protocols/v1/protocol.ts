@@ -1,7 +1,6 @@
 import { base64url } from 'rfc4648'
 
 import type { SaveFile, ReflectionEntry, ParsedLink, ProtocolVersion, UserKey } from '$lib/types'
-import { minifyJSONArrays } from '$lib/utils'
 import { encodeReflectionEntries, formatLink } from './export'
 import { decodeReflectionEntries, getUniqueEntries, reviveTimestamps } from './import'
 import {
@@ -16,18 +15,13 @@ export const PROTOCOL_VERSION = 1
 
 export default {
     exportFile(data: ReflectionEntry[]) {
-        const file: SaveFile = {
+        return {
             type: 'lifewheel',
             version: PROTOCOL_VERSION,
             url: window.location.href,
             data,
             encrypted: false,
-        }
-
-        // TODO: Maybe return a SaveFile instead, and let the app deal with saving the actual file.
-        return new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
-            type: 'application/json',
-        })
+        } as SaveFile
     },
     // exportEncryptedFile(data: ReflectionEntry[]): EncryptedSaveFile
     exportLink(data: ReflectionEntry[]) {
