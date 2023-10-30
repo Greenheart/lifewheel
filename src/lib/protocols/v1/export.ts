@@ -3,7 +3,7 @@ import { base64url } from 'rfc4648'
 
 import type { ProtocolVersion, ReflectionEntry } from '$lib/types'
 import { encodeInt32, mergeTypedArrays } from '$lib/utils'
-import { CURRENT_PROTOCOL_VERSION } from '..'
+import { PROTOCOL_VERSION } from './protocol'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000
@@ -60,6 +60,4 @@ export const formatLink = ({
 }: {
     data: Uint8Array
     encrypted?: boolean
-}) =>
-    formatHeader({ encrypted, protocolVersion: CURRENT_PROTOCOL_VERSION }) +
-    base64url.stringify(data)
+}) => formatHeader({ encrypted, protocolVersion: PROTOCOL_VERSION }) + base64url.stringify(data)

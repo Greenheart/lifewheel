@@ -4,9 +4,15 @@ import type { SaveFile, ReflectionEntry, ParsedLink, ProtocolVersion, UserKey } 
 import { minifyJSONArrays } from '$lib/utils'
 import { encodeReflectionEntries, formatLink } from './export'
 import { decodeReflectionEntries, getUniqueEntries, reviveTimestamps } from './import'
-import { deriveKey, deriveKeyFromData, getDecryptedPayload } from './crypto'
+import {
+    deriveKey,
+    deriveKeyFromData,
+    getDecryptedPayload,
+    getEncryptedPayload,
+    ITERATIONS,
+} from './crypto'
 
-const PROTOCOL_VERSION = 1
+export const PROTOCOL_VERSION = 1
 
 export default {
     exportFile(data: ReflectionEntry[]) {
@@ -27,7 +33,19 @@ export default {
     exportLink(data: ReflectionEntry[]) {
         return formatLink({ data: encodeReflectionEntries(data), encrypted: false })
     },
-    // exportEncryptedLink(data: ReflectionEntry[]): string
+    async exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey) {
+        if (data instanceof Array && typeof key === 'undefined') throw new Error('Missing key')
+        const encryptedData =
+            data instanceof Array
+                ? await getEncryptedPayload(
+                      encodeReflectionEntries(data),
+                      key as UserKey,
+                      ITERATIONS,
+                  )
+                : data
+
+        return formatLink({ data: encryptedData, encrypted: true })
+    },
     importFile(file: SaveFile) {
         // TODO: add support for importing files from earlier protocol versions
         return reviveTimestamps(file.data)
@@ -74,4 +92,7 @@ export default {
 
         return updatedEntries
     },
+
+    PROTOCOL_VERSION,
+    ITERATIONS,
 } // TODO: Re-enable satisfies Protocol

@@ -31,7 +31,7 @@ export type Protocol = {
     exportFile(data: ReflectionEntry[]): Blob
     exportEncryptedFile(data: ReflectionEntry[]): Promise<EncryptedSaveFile>
     exportLink(data: ReflectionEntry[]): string
-    exportEncryptedLink(data: ReflectionEntry[]): Promise<string>
+    exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey): Promise<string>
     importFile(file: SaveFile): ReflectionEntry[]
     importEncryptedFile(file: EncryptedSaveFile): Promise<ReflectionEntry[]>
     parseLink(link: string): ParsedLink
@@ -52,6 +52,9 @@ export type Protocol = {
         currentEntries: ReflectionEntry[],
         newEntries: ReflectionEntry[],
     ): ReflectionEntry[]
+
+    PROTOCOL_VERSION: number
+    ITERATIONS: number
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS

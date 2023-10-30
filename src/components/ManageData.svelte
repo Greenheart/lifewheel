@@ -11,21 +11,21 @@
     import Close from '$icons/Close.svelte'
     import LockClosed from '$icons/LockClosed.svelte'
     import LockOpen from '$icons/LockOpen.svelte'
+    import PlusCircle from '$icons/PlusCircle.svelte'
     import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
     import { encodeReflectionEntries, saveEncryptedFile, saveFile } from '$lib/export'
     import { clearPersistedKey, getEncryptedPayload } from '$lib/crypto'
     import { cx } from '$lib/utils'
+    import { CURRENT_PROTOCOL } from '$lib/protocols'
 
     const tabClasses = cx(defaultClasses, variants.ghost, 'inline-flex items-center gap-2')
 </script>
 
 <script lang="ts">
-    import { reflections, loading, encryptionKey } from '$lib/stores'
     import { browser } from '$app/environment'
-    import PlusCircle from '$icons/PlusCircle.svelte'
-    import { CURRENT_PROTOCOL } from '$lib/protocols'
+    import { reflections, loading, encryptionKey } from '$lib/stores'
 
     const isDataMenuOpen = writable(false)
     const encryptionEnabled = writable(true)
@@ -67,12 +67,10 @@
     const encryptedLink = derived([encryptedData], ([dataPromise]) =>
         (async () => {
             const data = await dataPromise
-            if (!browser || !data) return null
+            if (!browser || data === null) return null
 
             const url = new URL(window.location.href)
-            // TODO: Implement shared crypto logic in the protocol.
-            // Then re-use the same encrypted data for multiple export formats
-            // url.hash = CURRENT_PROTOCOL.exportEncryptedLink(encryptedData)
+            url.hash = await CURRENT_PROTOCOL.exportEncryptedLink(data)
 
             return url.toString()
         })(),

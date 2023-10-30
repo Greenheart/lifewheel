@@ -3,10 +3,12 @@ import { encryptionKey } from '$lib/stores'
 import type { UserKey } from '$lib/types'
 import { decodeInt32, encodeInt32 } from '$lib/utils'
 
+export const ITERATIONS = 2e6
+
 export async function deriveKey(
     salt: Uint8Array,
     password: string,
-    iterations: number = 2e6,
+    iterations: number = ITERATIONS,
     keyUsages: Iterable<KeyUsage> = ['encrypt', 'decrypt'],
 ): Promise<UserKey> {
     const encoder = new TextEncoder()
