@@ -52,13 +52,7 @@ export async function saveFile(reflections: ReflectionEntry[]) {
 }
 
 export async function saveEncryptedFile(encryptedData: Uint8Array) {
-    const file: EncryptedSaveFile = {
-        type: 'lifewheel',
-        url: window.location.href,
-        version: CURRENT_PROTOCOL_VERSION,
-        data: base64url.stringify(encryptedData),
-        encrypted: true,
-    }
+    const file = CURRENT_PROTOCOL.exportEncryptedFile(encryptedData)
 
     const blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' })
 

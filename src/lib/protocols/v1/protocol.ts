@@ -1,6 +1,13 @@
 import { base64url } from 'rfc4648'
 
-import type { SaveFile, ReflectionEntry, ParsedLink, ProtocolVersion, UserKey } from '$lib/types'
+import type {
+    SaveFile,
+    ReflectionEntry,
+    ParsedLink,
+    ProtocolVersion,
+    UserKey,
+    EncryptedSaveFile,
+} from '$lib/types'
 import { encodeReflectionEntries, formatLink } from './export'
 import { decodeReflectionEntries, getUniqueEntries, reviveTimestamps } from './import'
 import {
@@ -19,11 +26,29 @@ export default {
             type: 'lifewheel',
             version: PROTOCOL_VERSION,
             url: window.location.href,
-            data,
             encrypted: false,
+            data,
         } as SaveFile
     },
-    // exportEncryptedFile(data: ReflectionEntry[]): EncryptedSaveFile
+    async exportEncryptedFile(data: ReflectionEntry[] | Uint8Array, key?: UserKey) {
+        if (data instanceof Array && typeof key === 'undefined') throw new Error('Missing key')
+        const encryptedData =
+            data instanceof Array
+                ? await getEncryptedPayload(
+                      encodeReflectionEntries(data),
+                      key as UserKey,
+                      ITERATIONS,
+                  )
+                : data
+
+        return {
+            type: 'lifewheel',
+            version: PROTOCOL_VERSION,
+            url: window.location.href,
+            encrypted: true,
+            data: base64url.stringify(encryptedData),
+        } as EncryptedSaveFile
+    },
     exportLink(data: ReflectionEntry[]) {
         return formatLink({ data: encodeReflectionEntries(data), encrypted: false })
     },

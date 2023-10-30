@@ -28,7 +28,10 @@ export const PROTOCOL_VERSIONS = {
  */
 export type Protocol = {
     exportFile(data: ReflectionEntry[]): SaveFile
-    exportEncryptedFile(data: ReflectionEntry[]): Promise<EncryptedSaveFile>
+    exportEncryptedFile(
+        data: ReflectionEntry[] | Uint8Array,
+        key?: UserKey,
+    ): Promise<EncryptedSaveFile>
     exportLink(data: ReflectionEntry[]): string
     exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey): Promise<string>
     importFile(file: SaveFile): ReflectionEntry[]
