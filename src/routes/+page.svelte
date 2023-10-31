@@ -9,6 +9,7 @@
     import FileImport from '$components/FileImport.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
+
     import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE, REPO_URL } from '$lib/constants'
 </script>
 
@@ -66,9 +67,7 @@
                                 Offline-first, privacy-friendly web app for your personal wellbeing.
                             </p>
 
-                            <p>
-                                {APP_DESCRIPTION}
-                            </p>
+                            <p>{APP_DESCRIPTION}</p>
 
                             <p>
                                 Seamlessly sync your data across devices with a private link (using
