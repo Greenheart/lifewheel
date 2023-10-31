@@ -67,45 +67,23 @@ type BackwardsCompatibleProtocol = Pick<
     | 'PROTOCOL_VERSION'
     | 'ITERATIONS'
 > & {
-    importFile({
-        file,
-        protocolVersion,
-    }: {
-        file: SaveFile
-        protocolVersion?: ProtocolVersion
-    }): ReturnType<Protocol['importFile']>
+    importFile({ file }: { file: SaveFile }): ReturnType<Protocol['importFile']>
     importEncryptedFile({
         file,
         key,
-        protocolVersion,
     }: {
         file: EncryptedSaveFile
         key: UserKey
-        protocolVersion?: ProtocolVersion
     }): ReturnType<Protocol['importEncryptedFile']>
 
-    parseLink({
-        link,
-        protocolVersion,
-    }: {
-        link: string
-        protocolVersion?: ProtocolVersion
-    }): ReturnType<Protocol['parseLink']>
-    importLink({
-        link,
-        protocolVersion,
-    }: {
-        link: ParsedLink
-        protocolVersion?: ProtocolVersion
-    }): ReturnType<Protocol['importLink']>
+    parseLink({ link }: { link: string }): ReturnType<Protocol['parseLink']>
+    importLink({ link }: { link: ParsedLink }): ReturnType<Protocol['importLink']>
     importEncryptedLink({
         link,
         key,
-        protocolVersion,
     }: {
         link: ParsedLink
         key: UserKey
-        protocolVersion?: ProtocolVersion
     }): ReturnType<Protocol['importEncryptedLink']>
     deriveKey({
         salt,
@@ -118,7 +96,7 @@ type BackwardsCompatibleProtocol = Pick<
         password: string
         iterations?: number
         keyUsages?: Iterable<KeyUsage>
-        protocolVersion?: ProtocolVersion
+        protocolVersion: ProtocolVersion
     }): ReturnType<Protocol['deriveKey']>
     deriveKeyFromData({
         data,
@@ -129,7 +107,7 @@ type BackwardsCompatibleProtocol = Pick<
         data: Uint8Array
         password: string
         keyUsages?: Iterable<KeyUsage>
-        protocolVersion?: ProtocolVersion
+        protocolVersion: ProtocolVersion
     }): ReturnType<Protocol['deriveKeyFromData']>
     getUniqueEntries({
         currentEntries,
@@ -138,7 +116,7 @@ type BackwardsCompatibleProtocol = Pick<
     }: {
         currentEntries: ReflectionEntry[]
         newEntries: ReflectionEntry[]
-        protocolVersion?: ProtocolVersion
+        protocolVersion: ProtocolVersion
     }): ReflectionEntry[]
 }
 
@@ -163,34 +141,40 @@ export const CURRENT_PROTOCOL: BackwardsCompatibleProtocol = {
     exportLink: PROTOCOL.exportLink,
     exportEncryptedLink: PROTOCOL.exportEncryptedLink,
 
-    importFile({ file, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
-        return PROTOCOL_VERSIONS[protocolVersion].importFile(file)
+    importFile({ file }) {
+        return PROTOCOL_VERSIONS[file.version].importFile(file)
     },
-    importEncryptedFile({ file, key, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
-        return PROTOCOL_VERSIONS[protocolVersion].importEncryptedFile(file, key)
+    importEncryptedFile({ file, key }) {
+        return PROTOCOL_VERSIONS[file.version].importEncryptedFile(file, key)
     },
-    parseLink({ link, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
-        return PROTOCOL_VERSIONS[protocolVersion].parseLink(link)
+    parseLink({ link }) {
+        // To allow parsing links from old protocol versions, start with the latest parsing implementation
+        // and keep trying older parsing functions until a successful result is found.
+        // This allows us to parse links without requiring to know beforehand which protocolVersion to use.
+        for (const parseFn of Object.values(PROTOCOL_VERSIONS)
+            .map(({ parseLink }) => parseLink)
+            .reverse()) {
+            try {
+                const parsedLink = parseFn(link)
+                if (parsedLink.protocolVersion) return parsedLink
+            } catch (e) {}
+        }
+
+        throw new Error('Unable to parse link and determine protocolVersion: ' + link)
     },
-    importLink({ link, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
-        return PROTOCOL_VERSIONS[protocolVersion].importLink(link)
+    importLink({ link }) {
+        return PROTOCOL_VERSIONS[link.protocolVersion].importLink(link)
     },
-    importEncryptedLink({ link, key, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
-        return PROTOCOL_VERSIONS[protocolVersion].importEncryptedLink(link, key)
+    importEncryptedLink({ link, key }) {
+        return PROTOCOL_VERSIONS[link.protocolVersion].importEncryptedLink(link, key)
     },
-    deriveKey({
-        salt,
-        password,
-        iterations,
-        keyUsages,
-        protocolVersion = PROTOCOL.PROTOCOL_VERSION,
-    }) {
+    deriveKey({ salt, password, iterations, keyUsages, protocolVersion }) {
         return PROTOCOL_VERSIONS[protocolVersion].deriveKey(salt, password, iterations, keyUsages)
     },
-    deriveKeyFromData({ data, password, keyUsages, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
+    deriveKeyFromData({ data, password, keyUsages, protocolVersion }) {
         return PROTOCOL_VERSIONS[protocolVersion].deriveKeyFromData(data, password, keyUsages)
     },
-    getUniqueEntries({ currentEntries, newEntries, protocolVersion = PROTOCOL.PROTOCOL_VERSION }) {
+    getUniqueEntries({ currentEntries, newEntries, protocolVersion }) {
         // Allow backwards compatibility if a future protocol version will use a new way to determine unique entries.
         return PROTOCOL_VERSIONS[protocolVersion].getUniqueEntries(currentEntries, newEntries)
     },

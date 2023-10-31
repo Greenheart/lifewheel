@@ -15,11 +15,17 @@
     onMount(async () => {
         if (window.location.hash) {
             try {
-                payload = CURRENT_PROTOCOL.parseLink(window.location.hash.slice(1))
+                payload = CURRENT_PROTOCOL.parseLink({ link: window.location.hash.slice(1) })
 
                 if (!payload.encrypted && payload.data) {
-                    const importedEntries = CURRENT_PROTOCOL.importLink(payload)
-                    $reflections = CURRENT_PROTOCOL.getUniqueEntries($reflections, importedEntries)
+                    const importedEntries = CURRENT_PROTOCOL.importLink({
+                        link: payload,
+                    })
+                    $reflections = CURRENT_PROTOCOL.getUniqueEntries({
+                        currentEntries: $reflections,
+                        newEntries: importedEntries,
+                        protocolVersion: payload.protocolVersion,
+                    })
 
                     closeLinkImport()
                 }
@@ -41,10 +47,21 @@
 
     const submitPassphrase = async (password: string, persistKey = false) => {
         try {
-            const key = await CURRENT_PROTOCOL.deriveKeyFromData(payload.data, password)
-            const importedEntries = await CURRENT_PROTOCOL.importEncryptedLink(payload, key)
+            const key = await CURRENT_PROTOCOL.deriveKeyFromData({
+                data: payload.data,
+                password,
+                protocolVersion: payload.protocolVersion,
+            })
+            const importedEntries = await CURRENT_PROTOCOL.importEncryptedLink({
+                link: payload,
+                key,
+            })
 
-            $reflections = CURRENT_PROTOCOL.getUniqueEntries($reflections, importedEntries)
+            $reflections = CURRENT_PROTOCOL.getUniqueEntries({
+                currentEntries: $reflections,
+                newEntries: importedEntries,
+                protocolVersion: payload.protocolVersion,
+            })
 
             // TODO: Edge case: If you have data in the app, and a key stored: What should happen if you import another encrypted link
             // (or file for that matter)?
@@ -60,6 +77,13 @@
             // Maybe save all known decryption keys, if you import multiple files from different devices.
             // Then we could automatically import from all known import keys. And always use the export key set in your "account" settings
             // in the top right of the screen. A good icon could perhaps be the Lock (for encryption enabled) and unlocked (for unencrypted)
+
+            // NOTE: Important consideration if we should automatically try to import with cached local keys is that in that case,
+            // we need to store the protocolVersion in the UserKey type.
+            // The UserKey['protocolVersion'] would help us filter out stored local keys for trying to decrypt the imported link (or file).
+            // This could be solved though, and could reduce the need to prompt for the same passphrase repeatedly, when the key is already present.
+
+            // Together with this feature of storing multiple decryption keys, it would be nice to also separate decryption keys from encryption keys (used when exporting from your current app)
             $encryptionKey = key
 
             if (persistKey) {

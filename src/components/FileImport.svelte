@@ -17,11 +17,15 @@
     const submitPassphrase = async (password: string, persistKey = false) => {
         try {
             if (!$encryptedFile) return
-            const key = await CURRENT_PROTOCOL.deriveKeyFromData(
-                base64url.parse($encryptedFile.data),
+            const key = await CURRENT_PROTOCOL.deriveKeyFromData({
+                data: base64url.parse($encryptedFile.data),
                 password,
-            )
-            const newEntries = await CURRENT_PROTOCOL.importEncryptedFile($encryptedFile, key)
+                protocolVersion: $encryptedFile.version,
+            })
+            const newEntries = await CURRENT_PROTOCOL.importEncryptedFile({
+                file: $encryptedFile,
+                key,
+            })
 
             if (persistKey) {
                 console.log('persistKey enc', key)
@@ -30,7 +34,11 @@
 
             $encryptionKey = key
 
-            $reflections = CURRENT_PROTOCOL.getUniqueEntries($reflections, newEntries)
+            $reflections = CURRENT_PROTOCOL.getUniqueEntries({
+                currentEntries: $reflections,
+                newEntries,
+                protocolVersion: $encryptedFile.version,
+            })
         } catch (error) {
             console.error(error)
         }

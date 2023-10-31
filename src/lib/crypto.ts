@@ -69,10 +69,11 @@ export async function generatePassphrase({
 
 export async function generateUserKey(password: string, persistKey = false): Promise<UserKey> {
     const salt = crypto.getRandomValues(new Uint8Array(32))
-    const userKey = await CURRENT_PROTOCOL.deriveKey(salt, password, CURRENT_PROTOCOL.ITERATIONS, [
-        'encrypt',
-        'decrypt',
-    ])
+    const userKey = await CURRENT_PROTOCOL.deriveKey({
+        salt,
+        password,
+        protocolVersion: CURRENT_PROTOCOL.PROTOCOL_VERSION,
+    })
 
     if (persistKey) {
         await setPersistedKey('enc', userKey)

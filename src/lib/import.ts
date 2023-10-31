@@ -54,6 +54,12 @@ export async function openFile(): Promise<boolean> {
     }
 
     // Finish loading unencrypted file
-    reflections.set(CURRENT_PROTOCOL.getUniqueEntries(get(reflections), (file as SaveFile).data))
+    reflections.set(
+        CURRENT_PROTOCOL.getUniqueEntries({
+            currentEntries: get(reflections),
+            newEntries: (file as SaveFile).data,
+            protocolVersion: file.version,
+        }),
+    )
     return true
 }
