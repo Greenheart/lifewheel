@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
     import QRCode from 'qrcode'
     import { Tab, TabGroup, TabList, TabPanels, TabPanel } from '@rgossiaux/svelte-headlessui'
-    import { derived, writable, type Writable } from 'svelte/store'
+    import { derived, writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Switch from './Switch.svelte'
@@ -11,22 +11,24 @@
     import Close from '$icons/Close.svelte'
     import LockClosed from '$icons/LockClosed.svelte'
     import LockOpen from '$icons/LockOpen.svelte'
+    import PlusCircle from '$icons/PlusCircle.svelte'
     import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
-    import { encodeReflectionEntries, formatLink, saveEncryptedFile, saveFile } from '$lib/export'
-    import { clearPersistedKey, getEncryptedPayload } from '$lib/crypto'
+    import { saveEncryptedFile, saveFile } from '$lib/export'
+    import { clearPersistedKey } from '$lib/crypto'
     import { cx } from '$lib/utils'
+    import { CURRENT_PROTOCOL } from '$lib/protocols'
 
     const tabClasses = cx(defaultClasses, variants.ghost, 'inline-flex items-center gap-2')
 </script>
 
 <script lang="ts">
-    import { reflections, loading, encryptionKey } from '$lib/stores'
     import { browser } from '$app/environment'
-    import PlusCircle from '$icons/PlusCircle.svelte'
+    import { reflections, loading, encryptionKey } from '$lib/stores'
+    import { tick } from 'svelte'
 
-    export let isDataMenuOpen: Writable<boolean>
+    const isDataMenuOpen = writable(false)
     const encryptionEnabled = writable(true)
     const isGeneratingKey = writable(false)
 
@@ -36,10 +38,8 @@
             (async () => {
                 if (!browser) return null
 
-                const data = encodeReflectionEntries(entries)
-
                 const url = new URL(window.location.href)
-                url.hash = formatLink({ data })
+                url.hash = CURRENT_PROTOCOL.exportLink(entries)
 
                 return url.toString()
             })(),
@@ -53,10 +53,7 @@
         (async () => {
             if (!browser || !key) return null
 
-            const encoded = encodeReflectionEntries(entries)
-            const data = await getEncryptedPayload(encoded, key, 2e6)
-
-            return data
+            return CURRENT_PROTOCOL.getEncryptedData(entries, key)
         })(),
     )
 
@@ -68,10 +65,10 @@
     const encryptedLink = derived([encryptedData], ([dataPromise]) =>
         (async () => {
             const data = await dataPromise
-            if (!browser || !data) return null
+            if (!browser || data === null) return null
 
             const url = new URL(window.location.href)
-            url.hash = formatLink({ data, encrypted: true })
+            url.hash = await CURRENT_PROTOCOL.exportEncryptedLink(data)
 
             return url.toString()
         })(),
@@ -152,10 +149,13 @@
                 >
                 <Button
                     variant="outline"
-                    on:click={() =>
-                        openFile().then((success) => {
-                            if (success) $isDataMenuOpen = false
-                        })}
+                    on:click={async () => {
+                        const success = await openFile()
+                        if (success) {
+                            await tick()
+                            $isDataMenuOpen = false
+                        }
+                    }}
                     class="flex w-36 items-center gap-2"><FolderOpen />Open file</Button
                 >
 

@@ -1,4 +1,6 @@
-import type { colors, PROTOCOL_VERSIONS } from './constants'
+import type { colors } from './constants'
+import type { ProtocolVersion } from './protocols'
+export { ProtocolVersion }
 
 type BasicStep = {
     title: string
@@ -34,8 +36,6 @@ export type ReflectionEntry = {
     time: Date
 }
 
-export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
-
 export type ParsedLink = {
     encrypted: boolean
     protocolVersion: ProtocolVersion
@@ -59,6 +59,7 @@ export type SaveFile = BaseSaveFile & {
     encrypted: false
 }
 
+// NOTE: Maybe we need to store the protocolVersion for each key, to know which version it is compatible with.
 export type UserKey = {
     key: CryptoKey
     salt: Uint8Array

@@ -1,5 +1,10 @@
 import type { LifewheelState, LifewheelStep, ReflectionStep, TextStep } from './types'
 
+export const APP_NAME = 'Life Wheel'
+export const APP_TAGLINE = 'Reflect on Your Life Balance'
+
+export const APP_DESCRIPTION = 'Reflect on your life balance. Visualise your progress over time and reconnect to what matters in your life. Make reflection a habit and gain new insights for your wellbeing.'
+
 export const lifewheelSteps: Partial<LifewheelStep>[] = [
     {
         title: 'Love and Relationships',
@@ -158,12 +163,5 @@ export const MAX_LEVEL = 10
  * This is key in enabling the tweened motion.
  */
 export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
-
-/**
- * If the need arises, we could abstract away implementation details with a common public API surface
- */
-export const PROTOCOL_VERSIONS = {
-    1: {},
-}
 
 export const REPO_URL = 'https://github.com/Greenheart/lifewheel'

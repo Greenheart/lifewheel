@@ -2,12 +2,12 @@
     import { base64url } from 'rfc4648'
 
     import PasswordForm from './PasswordForm.svelte'
-    import { importUniqueEntries } from '$lib/import'
-    import { getDecryptedPayload } from '$lib/crypto'
+    import { setPersistedKey } from '$lib/crypto'
 </script>
 
 <script lang="ts">
-    import { loading, reflections, encryptedFile } from '$lib/stores'
+    import { loading, reflections, encryptedFile, encryptionKey } from '$lib/stores'
+    import { CURRENT_PROTOCOL } from '$lib/protocols'
 
     const closeFileImport = () => {
         $loading = false
@@ -17,12 +17,28 @@
     const submitPassphrase = async (password: string, persistKey = false) => {
         try {
             if (!$encryptedFile) return
-            const decrypted = await getDecryptedPayload(
-                base64url.parse($encryptedFile.data),
+            const key = await CURRENT_PROTOCOL.deriveKeyFromData({
+                data: base64url.parse($encryptedFile.data),
                 password,
-                persistKey,
-            )
-            $reflections = importUniqueEntries($reflections, decrypted)
+                protocolVersion: $encryptedFile.version,
+            })
+            const newEntries = await CURRENT_PROTOCOL.importEncryptedFile({
+                file: $encryptedFile,
+                key,
+            })
+
+            if (persistKey) {
+                console.log('persistKey enc', key)
+                await setPersistedKey('enc', key)
+            }
+
+            $encryptionKey = key
+
+            $reflections = CURRENT_PROTOCOL.getUniqueEntries({
+                currentEntries: $reflections,
+                newEntries,
+                protocolVersion: $encryptedFile.version,
+            })
         } catch (error) {
             console.error(error)
         }

@@ -1,9 +1,6 @@
-import { base64url } from 'rfc4648'
 import type {
     LifewheelState,
     LifewheelStep,
-    ParsedLink,
-    ProtocolVersion,
     ReflectionEntry,
     ReflectionStep,
     TextStep,
@@ -71,44 +68,11 @@ export function decodeInt32(data: Uint8Array) {
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
 }
 
-export function decodeInt16(data: Uint8Array) {
-    return (data[0] << 8) | data[1]
-}
-
-export const formatHeader = ({
-    encrypted,
-    protocolVersion,
-}: {
-    encrypted: boolean
-    protocolVersion: ProtocolVersion
-}) => `${encrypted ? '1' : '0'}e${protocolVersion}p`
-
-export const parseLink = (link: string): ParsedLink => {
-    /**
-     * Link header example: "1e1p" means encryption enabled, and protocol version 1
-     */
-    const match = link.match(/^([10])e(\d+)p/)
-    if (!match) throw new Error(`Invalid header: ${link}`)
-
-    // Remove the header to get the data.
-    const rawData = link.replace(match[0], '')
-    if (!rawData) throw new Error(`Empty data: ${link}`)
-
-    return {
-        encrypted: match[1] === '1',
-        protocolVersion: parseInt(match[2], 10) as ProtocolVersion,
-        data: base64url.parse(rawData),
-    }
-}
-
 /**
- * Remove excess whitespace in pretty-printed JSON arrays. Useful to compress number arrays.
+ * Remove excess whitespace in pretty-printed JSON arrays.
+ * Useful to compress number arrays while keeping all values on the same line.
  */
 export const minifyJSONArrays = (jsonString: string) => {
-    const getAllDataRegEx = /\"data\": \[([^\]]*)\]/g
-
-    const updated = jsonString.replace(getAllDataRegEx, (match: string) =>
-        match.replace(/\s+/g, ''),
-    )
-    return updated
+    const getAllDataRegEx = /\"data\": \[([^\]\{]*)\]/g
+    return jsonString.replace(getAllDataRegEx, (match) => match.replace(/\s+/g, ''))
 }

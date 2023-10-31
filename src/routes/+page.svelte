@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-    import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
+    import { base } from '$app/paths'
 
     import LinkButton from '$components/LinkButton.svelte'
     import LinkImport from '$components/LinkImport.svelte'
@@ -9,14 +9,12 @@
     import FileImport from '$components/FileImport.svelte'
     import PlusCircle from '$icons/PlusCircle.svelte'
     import GitHub from '$icons/GitHub.svelte'
-    import { REPO_URL } from '$lib/constants'
+
+    import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE, REPO_URL } from '$lib/constants'
 </script>
 
 <script lang="ts">
     import { loading, reflections, encryptedFile } from '$lib/stores'
-    import { base } from '$app/paths'
-
-    const isDataMenuOpen = writable(false)
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
@@ -31,10 +29,10 @@
             <h1
                 class="bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
             >
-                Life Wheel
+                {APP_NAME}
             </h1>
 
-            <p class="pt-4 text-xl text-white xs:text-2xl">Reflect on Your Life Balance</p>
+            <p class="pt-4 text-xl text-white xs:text-2xl">{APP_TAGLINE}</p>
         </div>
 
         {#if $loading}
@@ -53,7 +51,7 @@
                     >
                 </div>
 
-                <ManageData {isDataMenuOpen} />
+                <ManageData />
 
                 {#if $reflections.length}
                     <PreviousReflections />
@@ -66,15 +64,10 @@
                     {#if !$reflections.length}
                         <div class="grid gap-6 pt-8 text-lg">
                             <p class="font-bold">
-                                Offline-first, privacy-friendly web app for your personal
-                                well-being.
+                                Offline-first, privacy-friendly web app for your personal wellbeing.
                             </p>
 
-                            <p>
-                                Reflect on your life balance. Visualise your progress over time and
-                                reconnect to what matters in your life. Make reflection a habit and
-                                gain new insights for your well-being.
-                            </p>
+                            <p>{APP_DESCRIPTION}</p>
 
                             <p>
                                 Seamlessly sync your data across devices with a private link (using
@@ -105,8 +98,7 @@
                                 your life.
                             </li>
                             <li>
-                                📊 Make reflection a habit and gain new insights for your
-                                well-being.
+                                📊 Make reflection a habit and gain new insights for your wellbeing.
                             </li>
                         </ul>
                     {/if}
@@ -132,8 +124,7 @@
                                 your life.
                             </li>
                             <li>
-                                📊 Make reflection a habit and gain new insights for your
-                                well-being.
+                                📊 Make reflection a habit and gain new insights for your wellbeing.
                             </li>
                             <li>👌 Keep 100% control of your private data.</li>
                             <li>😇 No signup or account needed. Designed to be used offline.</li>

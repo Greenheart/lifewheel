@@ -1,30 +1,16 @@
+/**
+ * This module contains import logic that is closer to the app implementation, e.g. how to open files.
+ * The idea is that this code can be reused for all prototols.
+ *
+ * Anything that might change with future protocol versions should be implemented by the protocols instead.
+ */
+
 import { fileOpen } from 'browser-fs-access'
 
-import type { BaseSaveFile, EncryptedSaveFile, ReflectionEntry, SaveFile } from './types'
-import { decodeInt32 } from './utils'
+import type { BaseSaveFile, EncryptedSaveFile, SaveFile } from './types'
 import { encryptedFile, loading, reflections } from './stores'
 import { get } from 'svelte/store'
-
-function decodeTime(data: Uint8Array) {
-    const timestamp = decodeInt32(data)
-    return new Date(timestamp * 1000)
-}
-
-function decodeEntry(entryData: Uint8Array) {
-    return {
-        time: decodeTime(entryData.subarray(0, 4)),
-        data: Array.from(entryData.subarray(4)),
-    } as ReflectionEntry
-}
-
-export function decodeReflectionEntries(data: Uint8Array) {
-    const length = decodeInt32(data.subarray(0, 4))
-    return Array.from({ length }, (_, index) => {
-        const offset = 4 + index * 12
-        const entryData = data.subarray(offset, offset + 12)
-        return decodeEntry(entryData)
-    })
-}
+import { CURRENT_PROTOCOL } from './protocols'
 
 function isEncryptedSaveFile(file: BaseSaveFile): file is EncryptedSaveFile {
     return file.encrypted
@@ -67,53 +53,15 @@ export async function openFile(): Promise<boolean> {
         return true
     }
 
+    const newEntries = CURRENT_PROTOCOL.importFile({ file: file as SaveFile })
+
     // Finish loading unencrypted file
-    reflections.set(importUniqueEntries(get(reflections), (file as SaveFile).data))
+    reflections.set(
+        CURRENT_PROTOCOL.getUniqueEntries({
+            currentEntries: get(reflections),
+            newEntries,
+            protocolVersion: file.version,
+        }),
+    )
     return true
-}
-
-/**
- * Turn timestamps back into dates during runtime
- */
-export function reviveTimestamps(reflections: ReflectionEntry[]) {
-    return reflections.map((entry) => ({
-        time: new Date(entry.time),
-        data: entry.data,
-    }))
-}
-
-/**
- * Remove duplicate entries to keep both the UI and exported data clean.
- */
-export const getUniqueEntries = (items: ReflectionEntry[]) =>
-    items.filter(
-        (item, index, array) =>
-            array.findIndex(
-                (otherItem) =>
-                    item.time.getTime() === otherItem.time.getTime() &&
-                    item.data.join('') === otherItem.data.join(''),
-            ) === index,
-    )
-
-export const importUniqueEntries = (
-    currentEntries: ReflectionEntry[],
-    newReflectionsData: Uint8Array | ReflectionEntry[],
-) => {
-    const newEntries =
-        newReflectionsData instanceof Uint8Array
-            ? decodeReflectionEntries(newReflectionsData)
-            : reviveTimestamps(newReflectionsData)
-
-    const updatedEntries = getUniqueEntries([...currentEntries, ...newEntries]).sort(
-        (a, b) => a.time.getTime() - b.time.getTime(),
-    )
-
-    console.log(
-        `Imported ${Math.abs(
-            updatedEntries.length - currentEntries.length,
-        )} - filtered out ${Math.abs(newEntries.length - updatedEntries.length)}`,
-        updatedEntries.map((e) => e.time.getTime()),
-    )
-
-    return updatedEntries
 }
