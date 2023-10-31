@@ -53,11 +53,13 @@ export async function openFile(): Promise<boolean> {
         return true
     }
 
+    const newEntries = CURRENT_PROTOCOL.importFile({ file: file as SaveFile })
+
     // Finish loading unencrypted file
     reflections.set(
         CURRENT_PROTOCOL.getUniqueEntries({
             currentEntries: get(reflections),
-            newEntries: (file as SaveFile).data,
+            newEntries,
             protocolVersion: file.version,
         }),
     )

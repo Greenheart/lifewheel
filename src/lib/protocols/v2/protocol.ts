@@ -67,11 +67,9 @@ const PROTOCOL: Protocol = {
         return formatLink({ data: encryptedData, encrypted: true })
     },
     importFile(file: SaveFile) {
-        // TODO: in protocol V2: add support for importing files from earlier protocol versions
         return reviveTimestamps(file.data)
     },
     async importEncryptedFile(file: EncryptedSaveFile, key: UserKey) {
-        // TODO: in protocol V2: add support for importing files from earlier protocol versions
         const decrypted = await getDecryptedPayload(base64url.parse(file.data), key)
         return decodeReflectionEntries(decrypted)
     },
@@ -93,12 +91,10 @@ const PROTOCOL: Protocol = {
         } as ParsedLink
     },
     importLink(link: ParsedLink) {
-        // TODO: in protocol V2: add support for importing links from earlier protocol versions
         if (link.encrypted) throw new Error('Link is encrypted')
         return decodeReflectionEntries(link.data)
     },
     async importEncryptedLink(link: ParsedLink, key: UserKey) {
-        // TODO: in protocol V2: add support for importing links from earlier protocol versions
         const decrypted = await getDecryptedPayload(link.data, key)
         return decodeReflectionEntries(decrypted)
     },
