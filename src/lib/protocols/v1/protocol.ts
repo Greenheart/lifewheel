@@ -17,10 +17,11 @@ import {
     getEncryptedPayload,
     ITERATIONS,
 } from './crypto'
+import type { Protocol } from '..'
 
 export const PROTOCOL_VERSION = 1
 
-export default {
+const PROTOCOL_V1: Protocol = {
     exportFile(data: ReflectionEntry[]) {
         return {
             type: 'lifewheel',
@@ -125,4 +126,6 @@ export default {
 
     PROTOCOL_VERSION,
     ITERATIONS,
-} // TODO: Re-enable satisfies Protocol
+}
+
+export default PROTOCOL_V1

@@ -45,7 +45,7 @@ export type Protocol = {
     deriveKeyFromData(
         data: Uint8Array,
         password: string,
-        keyUsages: Iterable<KeyUsage>,
+        keyUsages?: Iterable<KeyUsage>,
     ): Promise<UserKey>
     getUniqueEntries(
         currentEntries: ReflectionEntry[],

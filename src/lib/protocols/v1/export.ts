@@ -14,6 +14,7 @@ function encodeEntry(entry: ReflectionEntry) {
     return mergeTypedArrays(encodeTime(entry.time), new Uint8Array(encodeEntryData(entry.data)))
 }
 
+// TODO: deflate should only be added in protocol v2
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     const encodedEntries = reflections.map(encodeEntry)
     const data = mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
