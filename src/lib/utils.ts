@@ -67,15 +67,3 @@ export function encodeInt16(n: number) {
 export function decodeInt32(data: Uint8Array) {
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
 }
-
-/**
- * Remove excess whitespace in pretty-printed JSON arrays. Useful to compress number arrays.
- */
-export const minifyJSONArrays = (jsonString: string) => {
-    const getAllDataRegEx = /\"data\": \[([^\]]*)\]/g
-
-    const updated = jsonString.replace(getAllDataRegEx, (match: string) =>
-        match.replace(/\s+/g, ''),
-    )
-    return updated
-}

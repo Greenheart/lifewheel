@@ -8,7 +8,6 @@
 import { fileSave } from 'browser-fs-access'
 
 import type { ReflectionEntry } from './types'
-import { minifyJSONArrays } from './utils'
 import { CURRENT_PROTOCOL } from './protocols'
 
 export function getFileName() {
@@ -34,7 +33,7 @@ async function downloadFile(blob: Blob) {
 export async function saveFile(reflections: ReflectionEntry[]) {
     const file = CURRENT_PROTOCOL.exportFile(reflections)
 
-    const blob = new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
+    const blob = new Blob([JSON.stringify(file, null, 2)], {
         type: 'application/json',
     })
 
