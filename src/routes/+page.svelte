@@ -107,7 +107,7 @@
                     {#if !$reflections.length}
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
-                                href="/{base}/reflection"
+                                href="{base}/reflection"
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
                                     ><PlusCircle />Get started</span
@@ -196,7 +196,7 @@
 
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
-                                href="/{base}/reflection"
+                                href="{base}/reflection"
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
                                     ><PlusCircle />New reflection</span
