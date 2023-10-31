@@ -5,6 +5,7 @@ import { resolve } from 'path'
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     preprocess: vitePreprocess(),
+
     kit: {
         adapter: adapter(),
         alias: {
@@ -12,6 +13,10 @@ const config = {
             $components: resolve('./src/components'),
             $icons: resolve('./src/icons'),
         },
+        paths: {
+            base: '/lifewheel',
+        },
+        embedded: true,
     },
 }
 

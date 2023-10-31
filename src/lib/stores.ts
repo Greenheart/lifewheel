@@ -4,6 +4,7 @@ import { persisted } from 'svelte-local-storage-store'
 import type { EncryptedSaveFile, ReflectionEntry, UserKey } from './types'
 import { getPersistedKey } from './crypto'
 import { browser } from '$app/environment'
+import { base } from '$app/paths'
 
 /**
  * Delay rendering until the app has loaded.
@@ -41,7 +42,7 @@ export const wordList = writable<{ [id: string]: string } | null>(null)
 
 async function getWordList() {
     const rawWords =
-        (await fetch('/words.txt')
+        (await fetch(`${base}/words.txt`)
             .then((res) => res.text())
             .catch((err) => {
                 console.error(err)
