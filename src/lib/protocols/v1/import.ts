@@ -1,6 +1,4 @@
-import { inflate } from 'pako'
-
-import type { ProtocolVersion, ReflectionEntry } from '$lib/types'
+import type { ReflectionEntry } from '$lib/types'
 import { decodeInt32 } from '$lib/utils'
 
 function decodeTime(data: Uint8Array) {
@@ -26,22 +24,9 @@ function decodeEntry(entryData: Uint8Array) {
     } as ReflectionEntry
 }
 
-// TODO: when v1 is implemented and works correctly, copy it to the v2 implementation
-// Then remove the v2 specific details from here in v1 and only keep them in v2.
-export function decodeReflectionEntries(data: Uint8Array, version: ProtocolVersion) {
-    // Compression was added in protocol version 2.
-    if (version >= 2) {
-        try {
-            data = inflate(data)
-        } catch (error) {
-            console.error(error)
-            return []
-        }
-    }
-
+export function decodeReflectionEntries(data: Uint8Array) {
     const length = decodeInt32(data.subarray(0, 4))
-    // Starting with version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
-    const entryDataLength = version >= 2 ? 8 : 12
+    const entryDataLength = 12
     return Array.from({ length }, (_, index) => {
         const offset = 4 + index * entryDataLength
         const entryData = data.subarray(offset, offset + entryDataLength)
