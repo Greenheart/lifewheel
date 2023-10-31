@@ -26,6 +26,7 @@
 <script lang="ts">
     import { browser } from '$app/environment'
     import { reflections, loading, encryptionKey } from '$lib/stores'
+    import { tick } from 'svelte'
 
     const isDataMenuOpen = writable(false)
     const encryptionEnabled = writable(true)
@@ -148,10 +149,13 @@
                 >
                 <Button
                     variant="outline"
-                    on:click={() =>
-                        openFile().then((success) => {
-                            if (success) $isDataMenuOpen = false
-                        })}
+                    on:click={async () => {
+                        const success = await openFile()
+                        if (success) {
+                            await tick()
+                            $isDataMenuOpen = false
+                        }
+                    }}
                     class="flex w-36 items-center gap-2"><FolderOpen />Open file</Button
                 >
 

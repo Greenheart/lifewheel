@@ -9,6 +9,7 @@ import { fileSave } from 'browser-fs-access'
 
 import type { ReflectionEntry } from './types'
 import { CURRENT_PROTOCOL } from './protocols'
+import { minifyJSONArrays } from './utils'
 
 export function getFileName() {
     const date = new Date().toLocaleString('sv-SE', {
@@ -33,7 +34,7 @@ async function downloadFile(blob: Blob) {
 export async function saveFile(reflections: ReflectionEntry[]) {
     const file = CURRENT_PROTOCOL.exportFile(reflections)
 
-    const blob = new Blob([JSON.stringify(file, null, 2)], {
+    const blob = new Blob([minifyJSONArrays(JSON.stringify(file, null, 2))], {
         type: 'application/json',
     })
 
@@ -43,7 +44,9 @@ export async function saveFile(reflections: ReflectionEntry[]) {
 export async function saveEncryptedFile(encryptedData: Uint8Array) {
     const file = await CURRENT_PROTOCOL.exportEncryptedFile(encryptedData)
 
-    const blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' })
+    const blob = new Blob([JSON.stringify(file, null, 2)], {
+        type: 'application/json',
+    })
 
     await downloadFile(blob)
 }
