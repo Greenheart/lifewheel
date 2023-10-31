@@ -15,8 +15,8 @@
     import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
-    import { encodeReflectionEntries, saveEncryptedFile, saveFile } from '$lib/export'
-    import { clearPersistedKey, getEncryptedPayload } from '$lib/crypto'
+    import { saveEncryptedFile, saveFile } from '$lib/export'
+    import { clearPersistedKey } from '$lib/crypto'
     import { cx } from '$lib/utils'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 
@@ -52,10 +52,7 @@
         (async () => {
             if (!browser || !key) return null
 
-            const encoded = encodeReflectionEntries(entries)
-            const data = await getEncryptedPayload(encoded, key, 2e6)
-
-            return data
+            return CURRENT_PROTOCOL.getEncryptedData(entries, key)
         })(),
     )
 

@@ -1,10 +1,16 @@
-import { base64url } from 'rfc4648'
-import { deflate } from 'pako'
+/**
+ * This module contains export logic that is closer to the app implementation, e.g. how to download files.
+ * The idea is that this code can be reused for all prototols.
+ *
+ * Anything that might change with future protocol versions should be implemented by the protocols instead.
+ */
 
-import type { ReflectionEntry, EncryptedSaveFile } from './types'
-import { encodeEntryData, encodeInt32, mergeTypedArrays, minifyJSONArrays } from './utils'
+import { deflate } from 'pako'
 import { fileSave } from 'browser-fs-access'
-import { CURRENT_PROTOCOL, CURRENT_PROTOCOL_VERSION } from './protocols'
+
+import type { ReflectionEntry } from './types'
+import { encodeEntryData, encodeInt32, mergeTypedArrays, minifyJSONArrays } from './utils'
+import { CURRENT_PROTOCOL } from './protocols'
 
 function encodeTime(date: Date) {
     const timestamp = date.getTime() / 1000
@@ -52,7 +58,7 @@ export async function saveFile(reflections: ReflectionEntry[]) {
 }
 
 export async function saveEncryptedFile(encryptedData: Uint8Array) {
-    const file = CURRENT_PROTOCOL.exportEncryptedFile(encryptedData)
+    const file = await CURRENT_PROTOCOL.exportEncryptedFile(encryptedData)
 
     const blob = new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' })
 

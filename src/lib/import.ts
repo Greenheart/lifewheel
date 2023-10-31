@@ -1,3 +1,10 @@
+/**
+ * This module contains import logic that is closer to the app implementation, e.g. how to open files.
+ * The idea is that this code can be reused for all prototols.
+ *
+ * Anything that might change with future protocol versions should be implemented by the protocols instead.
+ */
+
 import { fileOpen } from 'browser-fs-access'
 import { inflate } from 'pako'
 

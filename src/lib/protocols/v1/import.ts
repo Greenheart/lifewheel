@@ -53,9 +53,9 @@ export function decodeReflectionEntries(data: Uint8Array, version: ProtocolVersi
  * Turn timestamps back into dates during runtime
  */
 export function reviveTimestamps(reflections: ReflectionEntry[]) {
-    return reflections.map<ReflectionEntry>((entry) => ({
-        time: new Date(entry.time),
-        data: entry.data,
+    return reflections.map<ReflectionEntry>(({ time, data }) => ({
+        time: new Date(time),
+        data,
     }))
 }
 

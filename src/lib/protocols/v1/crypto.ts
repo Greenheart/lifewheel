@@ -49,7 +49,11 @@ export async function deriveKeyFromData(
  * @param key The key used to encrypt the content.
  * @param iterations The number of iterations to derive the key from the password.
  */
-export async function getEncryptedPayload(content: Uint8Array, key: UserKey, iterations: number) {
+export async function getEncryptedPayload(
+    content: Uint8Array,
+    key: UserKey,
+    iterations: number = ITERATIONS,
+) {
     const salt = key.salt
     const iv = crypto.getRandomValues(new Uint8Array(16))
     const iterationsBytes = encodeInt32(iterations)

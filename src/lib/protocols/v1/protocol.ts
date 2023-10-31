@@ -119,6 +119,9 @@ export default {
 
         return updatedEntries
     },
+    getEncryptedData(reflections: ReflectionEntry[], key: UserKey) {
+        return getEncryptedPayload(encodeReflectionEntries(reflections), key)
+    },
 
     PROTOCOL_VERSION,
     ITERATIONS,

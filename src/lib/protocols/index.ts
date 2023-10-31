@@ -1,14 +1,11 @@
 import type { EncryptedSaveFile, ParsedLink, ReflectionEntry, SaveFile, UserKey } from '$lib/types'
 
 import v1 from './v1/protocol'
-// import v2 from './v2'
+// import v2 from './v2/protocol'
 
 /**
- * If the need arises, we could abstract away implementation details with a common public API surface
- *
- * TODO: Yes, we need backwards compatibility now with v2, so we better implement the protocols
- * This is because v2 encodes the reflection data into 4 bytes instead of 8
- * The compression is backwards compatible, since it doesn't try to compress uncompressed data.
+ * The purpose of protocols are to have a common public API surface even though
+ * implementation details might change with future protocol versions.
  */
 export const PROTOCOL_VERSIONS = {
     1: v1,
@@ -35,15 +32,15 @@ export type Protocol = {
     exportLink(data: ReflectionEntry[]): string
     exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey): Promise<string>
     importFile(file: SaveFile): ReflectionEntry[]
-    importEncryptedFile(file: EncryptedSaveFile): Promise<ReflectionEntry[]>
+    importEncryptedFile(file: EncryptedSaveFile, key: UserKey): Promise<ReflectionEntry[]>
     parseLink(link: string): ParsedLink
     importLink(link: ParsedLink): ReflectionEntry[]
     importEncryptedLink(link: ParsedLink, key: UserKey): Promise<ReflectionEntry[]>
     deriveKey(
         salt: Uint8Array,
         password: string,
-        iterations: number,
-        keyUsages: Iterable<KeyUsage>,
+        iterations?: number,
+        keyUsages?: Iterable<KeyUsage>,
     ): Promise<UserKey>
     deriveKeyFromData(
         data: Uint8Array,
@@ -54,6 +51,7 @@ export type Protocol = {
         currentEntries: ReflectionEntry[],
         newEntries: ReflectionEntry[],
     ): ReflectionEntry[]
+    getEncryptedData(reflections: ReflectionEntry[], key: UserKey): Promise<Uint8Array>
 
     PROTOCOL_VERSION: number
     ITERATIONS: number
@@ -61,7 +59,4 @@ export type Protocol = {
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
 
-// TODO: switch to V2 when ready with V1
-export const CURRENT_PROTOCOL_VERSION: ProtocolVersion = 1
-
-export const CURRENT_PROTOCOL = PROTOCOL_VERSIONS[CURRENT_PROTOCOL_VERSION] satisfies Protocol
+export const CURRENT_PROTOCOL = PROTOCOL_VERSIONS[1] satisfies Protocol
