@@ -5,27 +5,11 @@
  * Anything that might change with future protocol versions should be implemented by the protocols instead.
  */
 
-import { deflate } from 'pako'
 import { fileSave } from 'browser-fs-access'
 
 import type { ReflectionEntry } from './types'
-import { encodeEntryData, encodeInt32, mergeTypedArrays, minifyJSONArrays } from './utils'
+import { minifyJSONArrays } from './utils'
 import { CURRENT_PROTOCOL } from './protocols'
-
-function encodeTime(date: Date) {
-    const timestamp = date.getTime() / 1000
-    return encodeInt32(timestamp)
-}
-
-function encodeEntry(entry: ReflectionEntry) {
-    return mergeTypedArrays(encodeTime(entry.time), new Uint8Array(encodeEntryData(entry.data)))
-}
-
-export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
-    const encodedEntries = reflections.map(encodeEntry)
-    const data = mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
-    return deflate(data, { level: 9 })
-}
 
 export function getFileName() {
     const date = new Date().toLocaleString('sv-SE', {
