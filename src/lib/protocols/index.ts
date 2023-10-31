@@ -3,6 +3,9 @@ import type { EncryptedSaveFile, ParsedLink, ReflectionEntry, SaveFile, UserKey 
 import v1 from './v1/protocol'
 import v2 from './v2/protocol'
 
+// IDEA: In the future, we could lazy load old protocol versions only when they are needed.
+// Or if we package Lifewheel as a PWA, it doesn't matter since all modules would be offline anyway.
+
 /**
  * The protocol implements all data import & export logic.
  *
