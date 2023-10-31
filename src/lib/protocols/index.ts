@@ -1,16 +1,7 @@
 import type { EncryptedSaveFile, ParsedLink, ReflectionEntry, SaveFile, UserKey } from '$lib/types'
 
 import v1 from './v1/protocol'
-// import v2 from './v2/protocol'
-
-/**
- * The purpose of protocols are to have a common public API surface even though
- * implementation details might change with future protocol versions.
- */
-export const PROTOCOL_VERSIONS = {
-    1: v1,
-    // 2: v2,
-}
+import v2 from './v2/protocol'
 
 /**
  * The protocol implements all data import & export logic.
@@ -57,6 +48,18 @@ export type Protocol = {
     ITERATIONS: number
 }
 
+/**
+ * The purpose of protocols are to have a common public API surface even though
+ * implementation details might change with future protocol versions.
+ */
+export const PROTOCOL_VERSIONS = {
+    1: v1,
+    2: v2,
+}
+
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
 
-export const CURRENT_PROTOCOL = PROTOCOL_VERSIONS[1] satisfies Protocol
+// IDEA: Perhaps CURRENT_PROTOCOL should be a proxy that imports using the specified protocol version of the data iteself, and always uses the latest protocol for export
+// This proxy would need to be able to parse the protocol version, which is quite simple.
+
+export const CURRENT_PROTOCOL = PROTOCOL_VERSIONS[2] satisfies Protocol
