@@ -1,5 +1,3 @@
-import { setPersistedKey } from '$lib/crypto'
-import { encryptionKey } from '$lib/stores'
 import type { UserKey } from '$lib/types'
 import { decodeInt32, encodeInt32 } from '$lib/utils'
 
