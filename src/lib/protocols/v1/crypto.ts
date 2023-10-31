@@ -73,7 +73,7 @@ export async function getEncryptedPayload(content: Uint8Array, key: UserKey, ite
  * @param bytes The payload to decrypt.
  * @param key The key used for decryption.
  */
-export async function getDecryptedPayload(bytes: Uint8Array, key: UserKey, persistKey = false) {
+export async function getDecryptedPayload(bytes: Uint8Array, key: UserKey) {
     const iv = bytes.slice(32, 32 + 16)
     const ciphertext = bytes.slice(32 + 16 + 4)
 
@@ -81,15 +81,6 @@ export async function getDecryptedPayload(bytes: Uint8Array, key: UserKey, persi
         await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key.key, ciphertext),
     )
     if (!content) throw new Error('Malformed content')
-
-    if (persistKey) {
-        console.log('persistKey enc', key)
-        await setPersistedKey('enc', key)
-    }
-
-    // TODO: Separate key persist from the actual decryption.
-    // Do this somewhere else instead so the crypto library doesn't need to know about the svelte stores.
-    encryptionKey.set(key)
 
     return content
 }

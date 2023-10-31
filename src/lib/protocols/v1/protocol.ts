@@ -66,10 +66,16 @@ export default {
         return formatLink({ data: encryptedData, encrypted: true })
     },
     importFile(file: SaveFile) {
-        // TODO: add support for importing files from earlier protocol versions
+        // TODO: in protocol V2: add support for importing files from earlier protocol versions
         return reviveTimestamps(file.data)
     },
-    // importEncryptedFile(file: EncryptedSaveFile): ReflectionEntry[]
+    async importEncryptedFile(file: EncryptedSaveFile, key: UserKey) {
+        // TODO: in protocol V2: add support for importing files from earlier protocol versions
+        // TODO: continue here by updating getDecryptedPayload()
+        // TODO: Let the file import component handle key persisting similar to how LinkImport does it.
+        const decrypted = await getDecryptedPayload(base64url.parse(file.data), key)
+        return decodeReflectionEntries(decrypted, PROTOCOL_VERSION)
+    },
     parseLink(link: string) {
         /**
          * Link header example: "1e1p" means encryption enabled, and protocol version 1
@@ -88,10 +94,12 @@ export default {
         } as ParsedLink
     },
     importLink(link: ParsedLink) {
+        // TODO: in protocol V2: add support for importing links from earlier protocol versions
         if (link.encrypted) throw new Error('Link is encrypted')
         return decodeReflectionEntries(link.data, link.protocolVersion)
     },
     async importEncryptedLink(link: ParsedLink, key: UserKey) {
+        // TODO: in protocol V2: add support for importing links from earlier protocol versions
         const decrypted = await getDecryptedPayload(link.data, key)
         return decodeReflectionEntries(decrypted, link.protocolVersion)
     },
