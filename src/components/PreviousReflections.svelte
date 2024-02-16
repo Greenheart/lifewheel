@@ -126,7 +126,7 @@
                         aria-label="Open menu for this reflection"
                         class={menuButtonClasses}><Ellipsis /></PopoverButton
                     >
-                    <PopoverPanel class="absolute -bottom-28 right-0">
+                    <PopoverPanel class="absolute -bottom-28 right-0 z-10">
                         <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
                             <Button
                                 aria-label="Remove reflection"
