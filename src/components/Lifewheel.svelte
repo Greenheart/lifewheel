@@ -2,15 +2,29 @@
     import { arc } from 'd3-shape'
     import type { Tweened } from 'svelte/motion'
 
-    import {
-        colors,
-        // icons,
-        INITIAL_LIFEWHEEL_STATE,
-        lifewheelSteps,
-        MAX_LEVEL,
-    } from '$lib/constants'
+    import { colors, INITIAL_LIFEWHEEL_STATE, lifewheelSteps, MAX_LEVEL } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
     import { cx } from '../lib/utils'
+
+    import MdiHeart from '~icons/mdi/heart'
+    import MaterialSymbolsDirectionsBikeRounded from '~icons/material-symbols/directions-bike-rounded'
+    import MaterialSymbolsWork from '~icons/material-symbols/work'
+    import MdiPuzzle from '~icons/mdi/puzzle'
+    import MaterialSymbolsGroupsRounded from '~icons/material-symbols/groups-rounded'
+    import MdiConversation from '~icons/mdi/conversation'
+    import MdiUmbrellaBeach from '~icons/mdi/umbrella-beach'
+    import MdiDollar from '~icons/mdi/dollar'
+
+    const ICONS = [
+        MdiHeart,
+        MaterialSymbolsDirectionsBikeRounded,
+        MaterialSymbolsWork,
+        MdiPuzzle,
+        MaterialSymbolsGroupsRounded,
+        MdiConversation,
+        MdiUmbrellaBeach,
+        MdiDollar,
+    ]
 
     const oneEigthRadians = (Math.PI * 2) / 8
     const levelWidth = 20
@@ -114,23 +128,17 @@
             {/each}
         </svg>
 
-        <!-- <div class="icons" style={`--n: ${icons.length}`}>
-            {#each icons as d, i}
+        <div class="icons" style={`--n: ${ICONS.length}`}>
+            {#each ICONS as Icon, i}
                 <div class="item" style={`--i: ${i}`}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class={colors[i].text}
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"><path fill="currentColor" {d} /></svg
-                    >
+                    <Icon class="size-6 {colors[i].text}" />
                 </div>
             {/each}
-        </div> -->
+        </div>
     {/if}
 </div>
 
-<!-- <style>
+<style>
     .icons {
         transform: rotate(-65deg) translate(9em, -4em);
     }
@@ -151,4 +159,4 @@
         display: grid;
         place-items: center;
     }
-</style> -->
+</style>
