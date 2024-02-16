@@ -44,9 +44,6 @@
         values.map((value, i) => generateArcPath(value, i)())
 
     const backgrounds = getArcPaths(lifewheelSteps.map(() => levels))
-
-    // TODO: Check out if this can be applied to position icons
-    // https://www.visualcinnamon.com/2015/09/placing-text-on-arcs/
 </script>
 
 <script lang="ts">
@@ -55,6 +52,7 @@
 
     export let data: LifewheelState
     export let tweenedLifewheel: Tweened<LifewheelState>
+    export let maxWidth: string
 
     let className = ''
     export { className as class }
@@ -79,7 +77,13 @@
     }
 </script>
 
-<div class={cx('pointer-events-none aspect-square w-full select-none', className)}>
+<div
+    class={cx(
+        'pointer-events-none aspect-square w-full select-none grid place-content-center',
+        className,
+    )}
+    style="--maxWidth: {maxWidth}; max-width: {maxWidth}"
+>
     {#if visible}
         <!-- Render lifewheel background -->
         <svg
@@ -87,13 +91,10 @@
             height="100%"
             viewBox="0 0 500 500"
             in:scale={{ duration: 600, start: 0.5 }}
+            class="center-children"
         >
             {#each backgrounds as path, i}
-                <path
-                    d={path}
-                    class={cx(colors[i].fill, 'opacity-20')}
-                    style="transform: translate3d(50%, 50%, 0)"
-                />
+                <path d={path} class={cx(colors[i].fill, 'opacity-20')} />
             {/each}
 
             <!-- Render lifewheel selected values for each dimension -->
@@ -109,11 +110,7 @@
             <!-- Only render actual lifewheel when first data is available -->
             {#if data[0] !== 0}
                 {#each dimensions as path, i}
-                    <path
-                        d={path}
-                        style="transform: translate3d(50%, 50%, 0)"
-                        fill={`url(#gradient-${i})`}
-                    />
+                    <path d={path} fill={`url(#gradient-${i})`} />
                 {/each}
             {/if}
 
@@ -128,9 +125,10 @@
             {/each}
         </svg>
 
+        <!-- IDEA: fade in icons as they appear -->
         <div class="icons" style={`--n: ${ICONS.length}`}>
             {#each ICONS as Icon, i}
-                <div class="item" style={`--i: ${i}`}>
+                <div class="item" style={`--degrees: calc(${i} * (360deg / var(--n)));`}>
                     <Icon class="size-6 {colors[i].text}" />
                 </div>
             {/each}
@@ -139,12 +137,42 @@
 </div>
 
 <style>
+    .center-children > path {
+        transform: translate3d(50%, 50%, 0);
+    }
+
+    :root {
+        --size: 24px;
+    }
+
     .icons {
-        transform: rotate(-65deg) translate(9em, -4em);
+        justify-self: center;
+        width: calc(var(--size) * 2);
+        top: calc(var(--maxWidth) * -0.5);
+        aspect-ratio: 1;
+        position: relative;
+        transform: rotate(-68deg);
+        z-index: 1;
     }
 
     .item {
+        --offset: calc(var(--maxWidth) / 2.2);
+        width: var(--size);
+        aspect-ratio: 1;
         position: absolute;
+        left: calc(var(--size) / 2);
+        top: calc(var(--size) / 2);
+        transform: translate3d(
+                calc(cos(var(--degrees)) * var(--offset)),
+                calc(sin(var(--degrees)) * var(--offset)),
+                0
+            )
+            rotate(68deg);
+
+        /* display: grid;
+        place-items: center; */
+
+        /* position: absolute;
         top: 50%;
         left: 50%;
         margin: -1em;
@@ -157,6 +185,6 @@
         text-align: center;
         counter-reset: i var(--i);
         display: grid;
-        place-items: center;
+        place-items: center; */
     }
 </style>

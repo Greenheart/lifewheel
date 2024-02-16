@@ -156,7 +156,7 @@
                 </Popover>
             </div>
 
-            <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-xs" />
+            <Lifewheel data={$currentEntry.data} {tweenedLifewheel} maxWidth="320px" />
 
             {#if $reflections.length > 2}
                 <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
