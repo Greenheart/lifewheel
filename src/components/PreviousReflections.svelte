@@ -75,7 +75,7 @@
 
 {#if $currentEntry}
     <section>
-        <h2 class="pt-12 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
+        <h2 class="pt-8 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
             IDEA: On both mobile and desktop, keep the same UI layout

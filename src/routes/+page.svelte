@@ -20,12 +20,12 @@
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
     <div>
         <div class="flex justify-end">
-            <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="-mr-4 p-4"
+            <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="-mr-4 p-3"
                 ><MdiGithub class="size-6" /></a
             >
         </div>
 
-        <div class="pt-8 text-center">
+        <div class="pt-4 text-center">
             <h1
                 class="bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
             >
@@ -43,7 +43,7 @@
             {/if}
         {:else}
             <div in:fade={{ duration: 300 }}>
-                <div class="mx-auto w-52 pt-12">
+                <div class="mx-auto w-52 pt-10">
                     <LinkButton href="{base}/reflection" class="flex items-center justify-center"
                         ><span class="flex max-w-max items-center gap-1"
                             ><HeroiconsPlusCircle class="size-6" />New reflection</span
