@@ -28,6 +28,32 @@ export const createReflectionEntry = (data: LifewheelState): ReflectionEntry => 
     }
 }
 
+export function throttle(callback: Function, delay = 1000) {
+    let shouldWait = false
+    let waitingArgs: any[] | null = null
+
+    function afterTimeout() {
+        if (waitingArgs === null) {
+            shouldWait = false
+        } else {
+            callback(...waitingArgs)
+            waitingArgs = null
+            setTimeout(afterTimeout, delay)
+        }
+    }
+
+    return (...args: any[]) => {
+        if (shouldWait) {
+            waitingArgs = args
+            return
+        }
+
+        callback(...args)
+        shouldWait = true
+        setTimeout(afterTimeout, delay)
+    }
+}
+
 export function mergeTypedArrays(...arrays: Uint8Array[]) {
     const size = arrays.reduce((totalLength, array) => totalLength + array.length, 0)
     const merged = new Uint8Array(size)

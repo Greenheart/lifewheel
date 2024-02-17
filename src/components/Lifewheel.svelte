@@ -4,7 +4,7 @@
 
     import { colors, INITIAL_LIFEWHEEL_STATE, lifewheelSteps, MAX_LEVEL } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
-    import { cx } from '../lib/utils'
+    import { cx, throttle } from '../lib/utils'
 
     import MdiHeart from '~icons/mdi/heart'
     import MaterialSymbolsDirectionsBikeRounded from '~icons/material-symbols/directions-bike-rounded'
@@ -58,18 +58,39 @@
 
     let dimensions: string[] = []
     let visible = false
-    let width: number
+    let width = 0
     let innerWidth: number
+    let container: HTMLDivElement
+
+    let resizeObserver: ResizeObserver
+    let svg: SVGElement
 
     onMount(() => {
         visible = true
         tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
+
+        resizeObserver = new ResizeObserver(
+            throttle((entries: ResizeObserverEntry[]) => {
+                // width = entries[0].contentRect.width
+                width = svg.clientWidth
+            }, 250),
+        )
+
+        resizeObserver.observe(container)
     })
+
+    // $: {
+    //     if (visible && svg) {
+    //         width = svg.clientWidth
+    //         console.log(width)
+    //     }
+    // }
 
     onDestroy(() => {
         // Reset tweened state to make sure it shows smooth transitions if the lifewheel is opened when partially filled.
         tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
+        resizeObserver?.disconnect()
     })
 
     $: {
@@ -85,17 +106,16 @@
 
 <svelte:window bind:innerWidth />
 
+<!-- TODO: add back pointer-events-none -->
 <div
-    class={cx(
-        'pointer-events-none aspect-square w-full select-none grid place-content-center',
-        className,
-    )}
-    bind:clientWidth={width}
+    class={cx('aspect-square w-full select-none grid place-content-center relative', className)}
+    bind:this={container}
     style="--width: {width}px; --size: {getIconSize(innerWidth)}px;"
 >
     {#if visible}
         <!-- Render lifewheel background -->
         <svg
+            bind:this={svg}
             width="100%"
             height="100%"
             viewBox="0 0 500 500"
@@ -151,10 +171,12 @@
     .icons {
         justify-self: center;
         width: calc(var(--size) * 2);
-        top: calc(var(--width) * -0.5);
+        top: calc(var(--width) * -0.5 - var(--size) / 2);
+        /* top: calc(50% - var(--width) * 0.5); */
         aspect-ratio: 1;
         position: relative;
         transform: rotate(-68deg);
+        /* margin: calc(var(--width) * -0.5) auto 0; */
     }
 
     .item {
