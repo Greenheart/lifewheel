@@ -52,13 +52,14 @@
 
     export let data: LifewheelState
     export let tweenedLifewheel: Tweened<LifewheelState>
-    export let maxWidth: string
 
     let className = ''
     export { className as class }
 
     let dimensions: string[] = []
     let visible = false
+    let width: number
+    let innerWidth: number
 
     onMount(() => {
         visible = true
@@ -75,14 +76,22 @@
         tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
     }
+
+    function getIconSize(width: number) {
+        if (width < 375) return 20
+        return 24
+    }
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div
     class={cx(
         'pointer-events-none aspect-square w-full select-none grid place-content-center',
         className,
     )}
-    style="--maxWidth: {maxWidth}; max-width: {maxWidth}"
+    bind:clientWidth={width}
+    style="--width: {width}px; --size: {getIconSize(innerWidth)}px;"
 >
     {#if visible}
         <!-- Render lifewheel background -->
@@ -91,7 +100,7 @@
             height="100%"
             viewBox="0 0 500 500"
             in:scale={{ duration: 600, start: 0.5 }}
-            class="center-children"
+            class="lifewheel"
         >
             {#each backgrounds as path, i}
                 <path d={path} class={cx(colors[i].fill, 'opacity-20')} />
@@ -116,47 +125,41 @@
 
             <!-- Render outlined circles to show levels -->
             {#each LEVELS as _, i}
-                <circle
-                    cx={250}
-                    cy={250}
-                    r={(i + 2) * levelWidth}
-                    class="fill-none stroke-stone-900 stroke-1"
-                />
+                <circle cx={250} cy={250} r={(i + 2) * levelWidth} />
             {/each}
         </svg>
 
-        <!-- IDEA: fade in icons as they appear -->
         <div class="icons" style={`--n: ${ICONS.length}`}>
             {#each ICONS as Icon, i}
-                <div class="item" style={`--degrees: calc(${i} * (360deg / var(--n)));`}>
-                    <Icon class="size-6 {colors[i].text}" />
+                <div class="item" style={`--i: ${i}`}>
+                    <Icon class={colors[i].text} width="var(--size)" height="var(--size)" />
                 </div>
             {/each}
         </div>
     {/if}
 </div>
 
-<style>
-    .center-children > path {
+<style lang="postcss">
+    .lifewheel > path {
         transform: translate3d(50%, 50%, 0);
     }
 
-    :root {
-        --size: 24px;
+    .lifewheel > circle {
+        @apply fill-none stroke-stone-900 stroke-1;
     }
 
     .icons {
         justify-self: center;
         width: calc(var(--size) * 2);
-        top: calc(var(--maxWidth) * -0.5);
+        top: calc(var(--width) * -0.5);
         aspect-ratio: 1;
         position: relative;
         transform: rotate(-68deg);
-        z-index: 1;
     }
 
     .item {
-        --offset: calc(var(--maxWidth) / 2.2);
+        --degrees: calc(var(--i) * (360deg / var(--n)));
+        --offset: calc(var(--width) * 0.45);
         width: var(--size);
         aspect-ratio: 1;
         position: absolute;
@@ -168,23 +171,5 @@
                 0
             )
             rotate(68deg);
-
-        /* display: grid;
-        place-items: center; */
-
-        /* position: absolute;
-        top: 50%;
-        left: 50%;
-        margin: -1em;
-        width: 2em;
-        height: 2em;
-        border-radius: 50%;
-        --az: calc(var(--i) * 1turn / var(--n));
-        transform: rotate(var(--az)) translate(4em) rotate(calc(-1 * var(--az))) rotate(65deg);
-        font-size: 2.5em;
-        text-align: center;
-        counter-reset: i var(--i);
-        display: grid;
-        place-items: center; */
     }
 </style>
