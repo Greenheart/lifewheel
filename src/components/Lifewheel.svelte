@@ -2,29 +2,15 @@
     import { arc } from 'd3-shape'
     import type { Tweened } from 'svelte/motion'
 
-    import { colors, INITIAL_LIFEWHEEL_STATE, lifewheelSteps, MAX_LEVEL } from '$lib/constants'
+    import {
+        colors,
+        INITIAL_LIFEWHEEL_STATE,
+        lifewheelSteps,
+        MAX_LEVEL,
+        LIFEWHEEL_ICONS,
+    } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
     import { cx, throttle } from '../lib/utils'
-
-    import MdiHeart from '~icons/mdi/heart'
-    import MaterialSymbolsDirectionsBikeRounded from '~icons/material-symbols/directions-bike-rounded'
-    import MaterialSymbolsWork from '~icons/material-symbols/work'
-    import MdiPuzzle from '~icons/mdi/puzzle'
-    import MaterialSymbolsGroupsRounded from '~icons/material-symbols/groups-rounded'
-    import MdiConversation from '~icons/mdi/conversation'
-    import MdiUmbrellaBeach from '~icons/mdi/umbrella-beach'
-    import MdiDollar from '~icons/mdi/dollar'
-
-    const ICONS = [
-        MdiHeart,
-        MaterialSymbolsDirectionsBikeRounded,
-        MaterialSymbolsWork,
-        MdiPuzzle,
-        MaterialSymbolsGroupsRounded,
-        MdiConversation,
-        MdiUmbrellaBeach,
-        MdiDollar,
-    ]
 
     const oneEigthRadians = (Math.PI * 2) / 8
     const levelWidth = 20
@@ -60,47 +46,29 @@
     let visible = false
     let width: number
     let innerWidth: number
-    let container: HTMLDivElement
 
-    let resizeObserver: ResizeObserver
     let svg: SVGElement
 
     onMount(() => {
         visible = true
         tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
-
-        resizeObserver = new ResizeObserver(
-            throttle((entries: ResizeObserverEntry[]) => {
-                // width = entries[0].contentRect.width
-                width = svg.clientWidth
-            }, 250),
-        )
-
-        resizeObserver.observe(container)
     })
 
-    // $: {
-    //     if (visible && svg) {
-    //         width = svg.clientWidth
-    //         console.log(width)
-    //     }
-    // }
+    $: {
+        if (visible && svg && innerWidth) {
+            width = svg.clientWidth
+        }
+    }
 
     onDestroy(() => {
         // Reset tweened state to make sure it shows smooth transitions if the lifewheel is opened when partially filled.
         tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
-        resizeObserver?.disconnect()
     })
 
     $: {
         tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
-    }
-
-    function getIconSize(width: number) {
-        if (width < 375) return 20
-        return 24
     }
 </script>
 
@@ -109,8 +77,7 @@
 <!-- TODO: add back pointer-events-none -->
 <div
     class={cx('aspect-square w-full select-none grid place-content-center', className)}
-    bind:this={container}
-    style="--width: {width}px; --size: {getIconSize(innerWidth)}px;"
+    style="--width: {width}px; --size: {innerWidth < 375 ? 20 : 24}px;"
 >
     {#if visible}
         <!-- Render lifewheel background -->
@@ -149,8 +116,8 @@
             {/each}
         </svg>
 
-        <div class="icons" style={`--n: ${ICONS.length}`}>
-            {#each ICONS as Icon, i}
+        <div class="icons" style={`--n: ${LIFEWHEEL_ICONS.length}`}>
+            {#each LIFEWHEEL_ICONS as Icon, i}
                 <div class="item" style={`--i: ${i}`}>
                     <Icon class={colors[i].text} width="var(--size)" height="var(--size)" />
                 </div>
