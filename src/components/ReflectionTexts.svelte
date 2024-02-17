@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { colors, icons } from '$lib/constants'
+    import { colors, LIFEWHEEL_ICONS } from '$lib/constants'
 
     export let reflectionStep: Readable<ReflectionStep>
 </script>
@@ -16,15 +16,12 @@
         isLifewheelStep($reflectionStep) ? $reflectionStep.colors.text : 'text-emerald-400',
     )}
 >
-    {#if isLifewheelStep($reflectionStep)}
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class={cx(colors[$reflectionStep.i].text, '-mb-0.5')}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"><path fill="currentColor" d={icons[$reflectionStep.i]} /></svg
-        >
-    {/if}
+    {#key $reflectionStep}
+        {#if isLifewheelStep($reflectionStep)}
+            {@const Icon = LIFEWHEEL_ICONS[$reflectionStep.i]}
+            <Icon class="size-6 -mb-0.5 {colors[$reflectionStep.i].text}" />
+        {/if}
+    {/key}
     {$reflectionStep.title}
 </h2>
 <p class="whitespace-pre-wrap pt-2 text-sm 2xs:text-base xs:text-lg">

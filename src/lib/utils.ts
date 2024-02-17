@@ -6,7 +6,7 @@ import type {
     TextStep,
 } from './types'
 
-export const cx = (...classes: (string | undefined | null)[]) =>
+export const cx = (...classes: (string | undefined | null | false)[]) =>
     classes.filter(Boolean).join(' ').trim()
 
 export function isLifewheelStep(step: ReflectionStep): step is LifewheelStep {
