@@ -10,7 +10,7 @@
         LIFEWHEEL_ICONS,
     } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
-    import { cx, throttle } from '../lib/utils'
+    import { cx } from '../lib/utils'
 
     const oneEigthRadians = (Math.PI * 2) / 8
     const levelWidth = 20
@@ -44,10 +44,8 @@
 
     let dimensions: string[] = []
     let visible = false
-    let width: number
+    let clientWidth: number
     let innerWidth: number
-
-    let svg: SVGElement
 
     onMount(() => {
         visible = true
@@ -55,11 +53,7 @@
         dimensions = getArcPaths($tweenedLifewheel)
     })
 
-    $: {
-        if (visible && svg && innerWidth) {
-            width = svg.clientWidth
-        }
-    }
+    $: width = Math.round(clientWidth * (innerWidth < 640 ? 0.6 : 0.75))
 
     onDestroy(() => {
         // Reset tweened state to make sure it shows smooth transitions if the lifewheel is opened when partially filled.
@@ -74,15 +68,14 @@
 
 <svelte:window bind:innerWidth />
 
-<!-- TODO: add back pointer-events-none -->
 <div
-    class={cx('aspect-square w-full select-none grid place-content-center', className)}
+    bind:clientWidth
+    class={cx('pointer-events-none w-full select-none grid place-content-center pt-8', className)}
     style="--width: {width}px; --size: {innerWidth < 375 ? 20 : 24}px;"
 >
     {#if visible}
         <!-- Render lifewheel background -->
         <svg
-            bind:this={svg}
             width="100%"
             height={width}
             viewBox="0 0 500 500"
@@ -138,20 +131,15 @@
     .icons {
         justify-self: center;
         width: calc(var(--size) * 2);
-        /* top: calc(var(--width) * -0.5); */
         top: calc(var(--width) * -0.5 - var(--size));
-        /* top: calc(50% - var(--width) * 0.5); */
         aspect-ratio: 1;
         position: relative;
         transform: rotate(-68deg);
-        /* margin: calc(var(--width) * -0.5) auto 0; */
-        /* border-radius: 50%;
-        background-color: aliceblue; */
     }
 
     .item {
         --degrees: calc(var(--i) * (360deg / var(--n)));
-        --offset: calc(var(--width) * 0.52);
+        --offset: calc(var(--width) * 0.52 + 4px);
         width: var(--size);
         aspect-ratio: 1;
         position: absolute;
