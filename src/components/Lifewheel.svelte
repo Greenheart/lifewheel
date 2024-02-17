@@ -58,7 +58,7 @@
 
     let dimensions: string[] = []
     let visible = false
-    let width = 0
+    let width: number
     let innerWidth: number
     let container: HTMLDivElement
 
@@ -108,7 +108,7 @@
 
 <!-- TODO: add back pointer-events-none -->
 <div
-    class={cx('aspect-square w-full select-none grid place-content-center relative', className)}
+    class={cx('aspect-square w-full select-none grid place-content-center', className)}
     bind:this={container}
     style="--width: {width}px; --size: {getIconSize(innerWidth)}px;"
 >
@@ -117,10 +117,10 @@
         <svg
             bind:this={svg}
             width="100%"
-            height="100%"
+            height={width}
             viewBox="0 0 500 500"
             in:scale={{ duration: 600, start: 0.5 }}
-            class="lifewheel"
+            class="lifewheel aspect-square"
         >
             {#each backgrounds as path, i}
                 <path d={path} class={cx(colors[i].fill, 'opacity-20')} />
@@ -171,17 +171,20 @@
     .icons {
         justify-self: center;
         width: calc(var(--size) * 2);
-        top: calc(var(--width) * -0.5 - var(--size) / 2);
+        /* top: calc(var(--width) * -0.5); */
+        top: calc(var(--width) * -0.5 - var(--size));
         /* top: calc(50% - var(--width) * 0.5); */
         aspect-ratio: 1;
         position: relative;
         transform: rotate(-68deg);
         /* margin: calc(var(--width) * -0.5) auto 0; */
+        /* border-radius: 50%;
+        background-color: aliceblue; */
     }
 
     .item {
         --degrees: calc(var(--i) * (360deg / var(--n)));
-        --offset: calc(var(--width) * 0.45);
+        --offset: calc(var(--width) * 0.52);
         width: var(--size);
         aspect-ratio: 1;
         position: absolute;
