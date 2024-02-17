@@ -11,7 +11,6 @@ const config = {
         alias: {
             $lib: resolve('./src/lib'),
             $components: resolve('./src/components'),
-            $icons: resolve('./src/icons'),
         },
         paths: {
             base: '/lifewheel',

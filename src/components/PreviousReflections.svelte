@@ -8,8 +8,9 @@
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Lifewheel from './Lifewheel.svelte'
     import DateRangeSlider from './DateRangeSlider.svelte'
-    import Delete from '$icons/Delete.svelte'
-    import Ellipsis from '$icons/Ellipsis.svelte'
+    import HeroiconsTrash from '~icons/heroicons/trash'
+    import HeroiconsEllipsisHorizontal from '~icons/heroicons/ellipsis-horizontal'
+    import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
 
     import type { LifewheelState } from '$lib/types'
     import { cx } from '$lib/utils'
@@ -23,7 +24,6 @@
 
 <script lang="ts">
     import { reflections } from '$lib/stores'
-    import MinusCircle from '$icons/MinusCircle.svelte'
 
     const index = writable(Math.max($reflections.length - 1, 0))
     const tweenedLifewheel = tweened<LifewheelState>($reflections[$index].data, {
@@ -124,7 +124,8 @@
                 <Popover class="relative" let:close>
                     <PopoverButton
                         aria-label="Open menu for this reflection"
-                        class={menuButtonClasses}><Ellipsis /></PopoverButton
+                        class={menuButtonClasses}
+                        ><HeroiconsEllipsisHorizontal class="size-6" /></PopoverButton
                     >
                     <PopoverPanel class="absolute -bottom-28 right-0 z-10">
                         <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
@@ -138,7 +139,7 @@
                                 }}
                                 variant="ghost"
                                 class="flex items-center gap-2"
-                                ><MinusCircle />Remove reflection</Button
+                                ><HeroiconsMinusCircle class="size-6" />Remove reflection</Button
                             >
                             <Button
                                 aria-label="Delete all"
@@ -149,7 +150,8 @@
                                     await deleteAll()
                                 }}
                                 variant="ghost"
-                                class="flex items-center gap-2"><Delete />Delete all</Button
+                                class="flex items-center gap-2"
+                                ><HeroiconsTrash class="size-6" />Delete all</Button
                             >
                         </div>
                     </PopoverPanel>

@@ -5,13 +5,13 @@
 
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Switch from './Switch.svelte'
-    import Download from '$icons/Download.svelte'
-    import FolderOpen from '$icons/FolderOpen.svelte'
-    import Link from '$icons/Link.svelte'
-    import Close from '$icons/Close.svelte'
-    import LockClosed from '$icons/LockClosed.svelte'
-    import LockOpen from '$icons/LockOpen.svelte'
-    import PlusCircle from '$icons/PlusCircle.svelte'
+    import HeroiconsArrowDownTray from '~icons/heroicons/arrow-down-tray'
+    import HeroiconsFolderOpen from '~icons/heroicons/folder-open'
+    import HeroiconsXMark from '~icons/heroicons/x-mark'
+    import HeroiconsLink from '~icons/heroicons/link'
+    import HeroiconsLockClosed from '~icons/heroicons/lock-closed'
+    import HeroiconsLockOpen from '~icons/heroicons/lock-open'
+    import HeroiconsPlusCircle from '~icons/heroicons/plus-circle'
     import CryptoKeyForm from './CryptoKeyForm.svelte'
 
     import { openFile } from '$lib/import'
@@ -125,13 +125,15 @@
             <Tab
                 class={({ selected }) =>
                     cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
-                on:click={() => ($isDataMenuOpen = true)}><FolderOpen />Open</Tab
+                on:click={() => ($isDataMenuOpen = true)}
+                ><HeroiconsFolderOpen class="size-6" />Open</Tab
             >
             {#if $reflections.length}
                 <Tab
                     class={({ selected }) =>
                         cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
-                    on:click={() => ($isDataMenuOpen = true)}><Download />Save</Tab
+                    on:click={() => ($isDataMenuOpen = true)}
+                    ><HeroiconsArrowDownTray class="size-6" />Save</Tab
                 >
             {/if}
         </TabList>
@@ -145,7 +147,8 @@
                 <Button
                     variant="roundGhost"
                     class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                    on:click={() => ($isDataMenuOpen = false)}><Close /></Button
+                    on:click={() => ($isDataMenuOpen = false)}
+                    ><HeroiconsXMark class="size-6" /></Button
                 >
                 <Button
                     variant="outline"
@@ -156,7 +159,8 @@
                             $isDataMenuOpen = false
                         }
                     }}
-                    class="flex w-36 items-center gap-2"><FolderOpen />Open file</Button
+                    class="flex w-36 items-center gap-2"
+                    ><HeroiconsFolderOpen class="size-6" />Open file</Button
                 >
 
                 <h2 class="pt-8 text-lg font-bold">Using the app on other devices?</h2>
@@ -170,7 +174,8 @@
                     <Button
                         variant="roundGhost"
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                        on:click={() => ($isDataMenuOpen = false)}><Close /></Button
+                        on:click={() => ($isDataMenuOpen = false)}
+                        ><HeroiconsXMark class="size-6" /></Button
                     >
 
                     <div class="flex flex-wrap gap-2 pr-16">
@@ -187,7 +192,7 @@
                             variant="outline"
                             class="flex w-36 items-center gap-2"
                             disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
-                            ><Download />Save file</Button
+                            ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                         >
 
                         <Button
@@ -195,7 +200,7 @@
                             variant="outline"
                             class="flex w-36 items-center gap-2"
                             disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
-                            ><Link />{copyText}</Button
+                            ><HeroiconsLink class="size-6" />{copyText}</Button
                         >
                     </div>
 
@@ -203,9 +208,9 @@
                         <div class="grid content-start gap-4 md:order-2">
                             <h2 class="pt-8 text-lg font-bold">Your data is your “account” 😇</h2>
                             <p>
-                                <PlusCircle class="inline stroke-yellow-400" /> To add more reflections
-                                in the future, save your file or copy your link and open it in any modern
-                                browser.
+                                <HeroiconsPlusCircle class="inline stroke-yellow-400" /> To add more
+                                reflections in the future, save your file or copy your link and open
+                                it in any modern browser.
                             </p>
                             <p>
                                 🔐 For better privacy, protect your data with a password. Save it in
@@ -222,9 +227,9 @@
                         <div class="md:order-1">
                             <div class="flex select-none items-center gap-3 pb-8 pt-8">
                                 {#if $encryptionEnabled}
-                                    <LockClosed class="flex-shrink-0" />
+                                    <HeroiconsLockClosed class="flex-shrink-0 size-6" />
                                 {:else}
-                                    <LockOpen class="flex-shrink-0 opacity-50" />
+                                    <HeroiconsLockOpen class="flex-shrink-0 opacity-50 size-6" />
                                 {/if}
                                 <Switch
                                     checked={encryptionEnabled}
@@ -265,7 +270,7 @@
                                                 class="flex w-32 items-center gap-1"
                                                 disabled={$isGeneratingKey ||
                                                     ($encryptionEnabled && !$encryptionKey)}
-                                                ><Download />Save file</Button
+                                                ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                                             >
 
                                             <Button
@@ -274,7 +279,7 @@
                                                 class="flex w-32 items-center gap-1"
                                                 disabled={$isGeneratingKey ||
                                                     ($encryptionEnabled && !$encryptionKey)}
-                                                ><Link />{copyText}</Button
+                                                ><HeroiconsLink class="size-6" />{copyText}</Button
                                             >
                                         </div>
                                         <h2 class="pb-4 text-lg font-bold">

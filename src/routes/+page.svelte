@@ -7,8 +7,8 @@
     import PreviousReflections from '$components/PreviousReflections.svelte'
     import ManageData from '$components/ManageData.svelte'
     import FileImport from '$components/FileImport.svelte'
-    import PlusCircle from '$icons/PlusCircle.svelte'
-    import GitHub from '$icons/GitHub.svelte'
+    import HeroiconsPlusCircle from '~icons/heroicons/plus-circle'
+    import MdiGithub from '~icons/mdi/github'
 
     import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE, REPO_URL } from '$lib/constants'
 </script>
@@ -21,7 +21,7 @@
     <div>
         <div class="flex justify-end">
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="-mr-4 p-4"
-                ><GitHub /></a
+                ><MdiGithub class="size-6" /></a
             >
         </div>
 
@@ -46,7 +46,7 @@
                 <div class="mx-auto w-52 pt-12">
                     <LinkButton href="{base}/reflection" class="flex items-center justify-center"
                         ><span class="flex max-w-max items-center gap-1"
-                            ><PlusCircle />New reflection</span
+                            ><HeroiconsPlusCircle class="size-6" />New reflection</span
                         ></LinkButton
                     >
                 </div>
@@ -109,7 +109,7 @@
                                 href="{base}/reflection"
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
-                                    ><PlusCircle />Get started</span
+                                    ><HeroiconsPlusCircle class="size-6" />Get started</span
                                 ></LinkButton
                             >
                         </div>
@@ -198,7 +198,7 @@
                                 href="{base}/reflection"
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
-                                    ><PlusCircle />New reflection</span
+                                    ><HeroiconsPlusCircle class="size-6" />New reflection</span
                                 ></LinkButton
                             >
                         </div>

@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import Button from './Button.svelte'
-    import LockClosed from '$icons/LockClosed.svelte'
+    import HeroiconsLockClosed from '~icons/heroicons/lock-closed'
 </script>
 
 <script lang="ts">
@@ -36,7 +36,7 @@
         <p>Decrypting your data...</p>
     </div>
     <header class="flex items-center gap-2" class:hidden={isDecrypting}>
-        <LockClosed />
+        <HeroiconsLockClosed class="size-6" />
         <p id="msg">This {importType} is password protected.</p>
     </header>
     <!-- svelte-ignore a11y-autofocus -->
