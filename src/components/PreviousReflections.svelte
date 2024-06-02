@@ -132,9 +132,7 @@
                             <Button
                                 aria-label="Remove reflection"
                                 on:click={async () => {
-                                    // @ts-expect-error Type bug in Popover close method
-                                    // the argument should be optional, according to the docs
-                                    close()
+                                    close(null)
                                     await removeReflection()
                                 }}
                                 variant="ghost"
@@ -144,9 +142,7 @@
                             <Button
                                 aria-label="Delete all"
                                 on:click={async () => {
-                                    // @ts-expect-error Type bug in Popover close method
-                                    // the argument should be optional, according to the docs
-                                    close()
+                                    close(null)
                                     await deleteAll()
                                 }}
                                 variant="ghost"
