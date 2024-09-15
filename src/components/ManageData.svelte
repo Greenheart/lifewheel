@@ -28,7 +28,6 @@
     import { reflections, loading, encryptionKey } from '$lib/stores'
     import { tick } from 'svelte'
 
-    const isDataMenuOpen = writable(false)
     const encryptionEnabled = writable(true)
     const isGeneratingKey = writable(false)
 
@@ -90,7 +89,7 @@
         })(),
     )
 
-    let copyText = 'Copy link'
+    let copyText = $state('Copy link')
 
     const copyLink = async () => {
         // It might be a promise since it might need to be encrypted
@@ -106,50 +105,51 @@
         }, 2000)
     }
 
+    let isOpen = $state(false)
+
+    function closeMenu() {
+        isOpen = false
+    }
+
+    function openMenu() {
+        isOpen = true
+    }
+
     const clearEncryptionKey = () => {
         $encryptionKey = null
         clearPersistedKey('enc')
     }
 
-    $: {
+    $effect(() => {
         // Close menu if all entries were removed and we no longer have something to export
         if ($reflections.length === 0) {
-            $isDataMenuOpen = false
+            closeMenu()
         }
-    }
+    })
 </script>
 
 <div class="mx-auto w-full max-w-4xl pt-2" class:invisible={$loading}>
-    <Tabs.Root value="open" class="manage-data">
-        <!-- NOTE: Maybe remove the $isDataMenuOpen state since it might not be as useful anymore -->
-        <Tabs.List class="flex justify-center gap-1" on:focusin={() => ($isDataMenuOpen = true)}>
+    <Tabs.Root class="manage-data">
+        <Tabs.List class="flex justify-center gap-1" on:focusin={openMenu}>
             <Tabs.Trigger
                 value="open"
-                class={cx(tabClasses, $isDataMenuOpen ? 'border-emerald-400/5' : null)}
-                on:click={() => ($isDataMenuOpen = true)}
-                ><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
+                class={cx(tabClasses, 'hover:border-emerald-400/5')}
+                on:click={openMenu}><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
             >
             {#if $reflections.length}
                 <Tabs.Trigger
                     value="save"
-                    class={cx(tabClasses, $isDataMenuOpen ? 'border-emerald-400/5' : null)}
-                    on:click={() => ($isDataMenuOpen = true)}
-                    ><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
+                    class={cx(tabClasses, 'hover:border-emerald-400/5')}
+                    on:click={openMenu}><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
                 >
             {/if}
         </Tabs.List>
-        <div
-            class={cx(
-                'relative mt-2 rounded-md bg-gray-800 p-4',
-                $isDataMenuOpen ? undefined : 'hidden',
-            )}
-        >
+        <div class={cx('relative mt-2 rounded-md bg-gray-800 p-4', isOpen ? undefined : 'hidden')}>
             <Tabs.Content value="open">
                 <Button
                     variant="roundGhost"
                     class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                    on:click={() => ($isDataMenuOpen = false)}
-                    ><HeroiconsXMark class="size-6" /></Button
+                    on:click={closeMenu}><HeroiconsXMark class="size-6" /></Button
                 >
                 <Button
                     variant="outline"
@@ -157,7 +157,7 @@
                         const success = await openFile()
                         if (success) {
                             await tick()
-                            $isDataMenuOpen = false
+                            closeMenu()
                         }
                     }}
                     class="flex w-36 items-center gap-2"
@@ -175,8 +175,7 @@
                     <Button
                         variant="roundGhost"
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                        on:click={() => ($isDataMenuOpen = false)}
-                        ><HeroiconsXMark class="size-6" /></Button
+                        on:click={closeMenu}><HeroiconsXMark class="size-6" /></Button
                     >
 
                     <div class="flex flex-wrap gap-2 pr-16">
