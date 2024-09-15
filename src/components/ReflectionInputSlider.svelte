@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { computePosition, flip, offset, arrow } from '@floating-ui/dom'
-    import type { Readable, Writable } from 'svelte/store'
+    import type { Writable } from 'svelte/store'
     import { onMount } from 'svelte'
 
     import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
@@ -13,12 +13,15 @@
 </script>
 
 <script lang="ts">
-    export let lifewheel: Writable<LifewheelState>
-    export let reflectionStep: Readable<ReflectionStep>
+    type Props = {
+        lifewheel: Writable<LifewheelState>
+        reflectionStep: ReflectionStep
+    }
+    let { lifewheel, reflectionStep }: Props = $props()
 
-    let input: HTMLInputElement
-    let tooltip: HTMLDivElement
-    let arrowElement: HTMLDivElement
+    let input = $state<HTMLInputElement>()
+    let tooltip = $state<HTMLDivElement>()
+    let arrowElement = $state<HTMLDivElement>()
 
     const getThumbPosition = (currentValue: number) => ((currentValue - min) * 100) / (max - min)
 
@@ -65,7 +68,7 @@
         if (tooltip) {
             tooltip.style.display = 'block'
         }
-        updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
+        updatePosition($lifewheel[(reflectionStep as LifewheelStep).i])
     }
 
     const hideTooltip = (delay = 400) => {
@@ -81,17 +84,15 @@
         hideTooltip()
     }
 
-    onMount(() => {
-        updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
+    $effect(() => {
+        updatePosition($lifewheel[(reflectionStep as LifewheelStep).i])
     })
-
-    $: updatePosition($lifewheel[($reflectionStep as LifewheelStep).i])
 </script>
 
 <div
     class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl"
 >
-    {#if isLifewheelStep($reflectionStep)}
+    {#if isLifewheelStep(reflectionStep)}
         <span>{min}</span>
         <div
             role="tooltip"
@@ -99,7 +100,7 @@
             class="absolute left-0 top-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm"
             bind:this={tooltip}
         >
-            {$lifewheel[$reflectionStep.i]}
+            {$lifewheel[reflectionStep.i]}
             <div class="arrow absolute h-2 w-2 rotate-45 bg-black" bind:this={arrowElement}></div>
         </div>
         <input
@@ -110,16 +111,16 @@
             {step}
             class={cx(
                 'input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
-                $reflectionStep.colors.from,
-                $reflectionStep.colors.to,
+                reflectionStep.colors.from,
+                reflectionStep.colors.to,
             )}
-            style={`background-size: ${getThumbPosition($lifewheel[$reflectionStep.i])}% 100%`}
+            style={`background-size: ${getThumbPosition($lifewheel[reflectionStep.i])}% 100%`}
             onkeydown={(event) => {
                 if (event.key.includes('Arrow')) flashTooltip()
             }}
             onpointerdown={showTooltip}
             onpointerup={() => hideTooltip()}
-            bind:value={$lifewheel[$reflectionStep.i]}
+            bind:value={$lifewheel[reflectionStep.i]}
             bind:this={input}
         />
         <span>{max}</span>
@@ -132,12 +133,12 @@
         const isFocused = document.activeElement?.className.includes('input')
         if (isFocused && event.key.includes('Arrow')) {
             flashTooltip()
-        } else if (!isFocused && isLifewheelStep($reflectionStep)) {
+        } else if (!isFocused && isLifewheelStep(reflectionStep)) {
             if (event.key === 'ArrowDown') {
-                $lifewheel[$reflectionStep.i] = Math.max(min, $lifewheel[$reflectionStep.i] - 1)
+                $lifewheel[reflectionStep.i] = Math.max(min, $lifewheel[reflectionStep.i] - 1)
                 flashTooltip()
             } else if (event.key === 'ArrowUp') {
-                $lifewheel[$reflectionStep.i] = Math.min(max, $lifewheel[$reflectionStep.i] + 1)
+                $lifewheel[reflectionStep.i] = Math.min(max, $lifewheel[reflectionStep.i] + 1)
                 flashTooltip()
             }
         }

@@ -25,7 +25,7 @@
     /**
      * The currently visible reflection step.
      */
-    export const reflectionStep = writable<ReflectionStep>(allReflectionSteps[0])
+    let reflectionStep = $state<ReflectionStep>(allReflectionSteps[0])
 
     /**
      * A tweened representation of the lifewheel state. This allows smooth tweened motions when values change.
@@ -36,17 +36,15 @@
     })
 
     const getCurrentIndex = () =>
-        allReflectionSteps.findIndex((step) => step.title === $reflectionStep.title)
+        allReflectionSteps.findIndex((step) => step.title === reflectionStep.title)
 
-    let currentIndex = getCurrentIndex()
-    let canGoBack = currentIndex >= 1
+    let currentIndex = $state(getCurrentIndex())
+
+    const canGoBack = () => currentIndex >= 1
 
     const onPrev = () => {
         currentIndex = getCurrentIndex()
-        if (currentIndex <= 1) {
-            canGoBack = false
-        }
-        $reflectionStep = allReflectionSteps[currentIndex - 1]
+        reflectionStep = allReflectionSteps[currentIndex - 1]
     }
 
     const onNext = async () => {
@@ -56,18 +54,17 @@
 
             await goto('/lifewheel')
         } else {
-            $reflectionStep = allReflectionSteps[currentIndex + 1]
+            reflectionStep = allReflectionSteps[currentIndex + 1]
 
-            if (isLifewheelStep($reflectionStep)) {
-                if ($lifewheel[$reflectionStep.i] === 0) {
+            if (isLifewheelStep(reflectionStep)) {
+                if ($lifewheel[reflectionStep.i] === 0) {
                     // Add default value the first time a new dimension is active.
                     $lifewheel = $lifewheel.map((value, i) =>
-                        i === ($reflectionStep as LifewheelStep).i ? INITIAL_LEVEL : value,
+                        i === (reflectionStep as LifewheelStep).i ? INITIAL_LEVEL : value,
                     ) as LifewheelState
                 }
             }
         }
-        canGoBack = true
     }
 </script>
 
@@ -85,7 +82,7 @@
     <ReflectionInputSlider {reflectionStep} {lifewheel} />
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
-        {#if canGoBack}
+        {#if canGoBack()}
             <Button variant="roundOutline" onclick={onPrev} aria-label="Show previous step"
                 >←</Button
             >
@@ -100,7 +97,7 @@
     onkeyup={(event) => {
         if (!document.activeElement?.className?.includes('input-slider')) {
             if (event.key === 'ArrowLeft') {
-                if (canGoBack) onPrev()
+                if (canGoBack()) onPrev()
             } else if (event.key === 'ArrowRight') {
                 onNext()
             }
