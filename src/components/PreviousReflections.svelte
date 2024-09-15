@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { tick } from 'svelte'
-    import { derived, writable } from 'svelte/store'
+    import { derived, toStore } from 'svelte/store'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
     import { Popover } from 'bits-ui'
@@ -25,12 +25,12 @@
 <script lang="ts">
     import { reflections } from '$lib/stores'
 
-    const index = writable(Math.max($reflections.length - 1, 0))
-    const tweenedLifewheel = tweened<LifewheelState>($reflections[$index].data, {
+    let index = $state(Math.max($reflections.length - 1, 0))
+    const tweenedLifewheel = tweened<LifewheelState>($reflections[index].data, {
         duration: 500,
         easing: cubicOut,
     })
-    const currentEntry = derived([index, reflections], ([currentIndex, entries]) => {
+    const currentEntry = derived([toStore(() => index), reflections], ([currentIndex, entries]) => {
         if ($reflections.length < 1) return null
         tweenedLifewheel.set(entries[currentIndex].data)
         return entries[currentIndex]
@@ -39,18 +39,18 @@
     let open = $state(false)
 
     const onPrev = () => {
-        $index = $index - 1
+        index -= 1
     }
 
     const onNext = () => {
-        $index = $index + 1
+        index += 1
     }
 
     const removeReflection = async () => {
         if (!confirm('Are you sure you want to delete this reflection?')) {
             return
         }
-        const newReflections = $reflections.filter((_, i) => i !== $index)
+        const newReflections = $reflections.filter((_, i) => i !== index)
 
         if (newReflections.length < 1) {
             $reflections = newReflections
@@ -58,8 +58,8 @@
             return
         }
 
-        if (!newReflections[$index] && newReflections.length > 0) {
-            $index = Math.max(newReflections.length - 1, 0)
+        if (!newReflections[index] && newReflections.length > 0) {
+            index = Math.max(newReflections.length - 1, 0)
         }
         $reflections = newReflections
     }
@@ -70,7 +70,7 @@
         }
 
         $reflections = []
-        $index = 0
+        index = 0
         await tick()
     }
 </script>
@@ -164,7 +164,7 @@
             <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-sm" />
 
             {#if $reflections.length > 2}
-                <DateRangeSlider min={0} max={$reflections.length - 1} value={index} />
+                <DateRangeSlider min={0} max={$reflections.length - 1} bind:value={index} />
             {/if}
 
             {#if $reflections.length > 1}
@@ -174,7 +174,7 @@
                     <Button
                         variant="roundOutline"
                         aria-label="Show previous reflection"
-                        class={$index < 1 ? 'invisible' : undefined}
+                        class={index < 1 ? 'invisible' : undefined}
                         onclick={onPrev}>←</Button
                     >
                     <!-- IDEA: Between the buttons here might be a good spot to display notes -->
@@ -182,7 +182,7 @@
                     <Button
                         variant="roundOutline"
                         aria-label="Show next reflection"
-                        class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
+                        class={index >= $reflections.length - 1 ? 'invisible' : undefined}
                         onclick={onNext}>→</Button
                     >
                 </div>
@@ -197,9 +197,9 @@
             !document.querySelector('.manage-data:focus-within') &&
             !document.activeElement?.className?.includes('input-slider')
         ) {
-            if (event.key === 'ArrowLeft' && $index > 0) {
+            if (event.key === 'ArrowLeft' && index > 0) {
                 onPrev()
-            } else if (event.key === 'ArrowRight' && $index < $reflections.length - 1) {
+            } else if (event.key === 'ArrowRight' && index < $reflections.length - 1) {
                 onNext()
             }
         }
