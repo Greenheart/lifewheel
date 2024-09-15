@@ -7,7 +7,7 @@
 
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { reflections } from '$lib/stores'
+    import { reflections } from '$lib/Reflections.svelte'
     import { appState } from '$lib/app-state.svelte'
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
@@ -22,11 +22,14 @@
                     const importedEntries = CURRENT_PROTOCOL.importLink({
                         link: payload,
                     })
-                    $reflections = CURRENT_PROTOCOL.getUniqueEntries({
-                        currentEntries: $reflections,
-                        newEntries: importedEntries,
-                        protocolVersion: payload.protocolVersion,
-                    })
+
+                    reflections.set(
+                        CURRENT_PROTOCOL.getUniqueEntries({
+                            currentEntries: reflections.entries,
+                            newEntries: importedEntries,
+                            protocolVersion: payload.protocolVersion,
+                        }),
+                    )
 
                     closeLinkImport()
                 }
@@ -58,11 +61,13 @@
                 key,
             })
 
-            $reflections = CURRENT_PROTOCOL.getUniqueEntries({
-                currentEntries: $reflections,
-                newEntries: importedEntries,
-                protocolVersion: payload.protocolVersion,
-            })
+            reflections.set(
+                CURRENT_PROTOCOL.getUniqueEntries({
+                    currentEntries: reflections.entries,
+                    newEntries: importedEntries,
+                    protocolVersion: payload.protocolVersion,
+                }),
+            )
 
             // TODO: Edge case: If you have data in the app, and a key stored: What should happen if you import another encrypted link
             // (or file for that matter)?

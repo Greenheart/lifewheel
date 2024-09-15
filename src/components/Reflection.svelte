@@ -14,8 +14,8 @@
 </script>
 
 <script lang="ts">
-    import { reflections } from '$lib/stores'
     import { goto } from '$app/navigation'
+    import { reflections } from '$lib/Reflections.svelte'
 
     /**
      * The actual lifewheel state.
@@ -52,7 +52,7 @@
     const onNext = async () => {
         currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
-            $reflections = [...$reflections, createReflectionEntry($lifewheel)]
+            reflections.add(createReflectionEntry($lifewheel))
 
             await goto('/lifewheel')
         } else {

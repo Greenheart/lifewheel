@@ -5,12 +5,15 @@
 </script>
 
 <script lang="ts">
-    export let importType: 'file' | 'link'
-    export let onSubmit: (password: string) => Promise<void>
-    export let onCancel: () => void
+    type Props = {
+        importType: 'file' | 'link'
+        onSubmit: (password: string) => Promise<void>
+        onCancel: () => void
+    }
+    let { importType, onSubmit, onCancel }: Props = $props()
 
-    let isDecrypting = false
-    let password = ''
+    let isDecrypting = $state(false)
+    let password = $state('')
 
     const submitPassphrase = async (event: SubmitEvent) => {
         event.preventDefault()
@@ -40,7 +43,7 @@
         <HeroiconsLockClosed class="size-6" />
         <p id="msg">This {importType} is password protected.</p>
     </header>
-    <!-- svelte-ignore a11y-autofocus -->
+    <!-- svelte-ignore a11y_autofocus -->
     <form onsubmit={submitPassphrase} class:hidden={isDecrypting} class="mt-3">
         <input
             type="password"

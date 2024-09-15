@@ -14,7 +14,8 @@
 </script>
 
 <script lang="ts">
-    import { reflections, encryptedFile } from '$lib/stores'
+    import { encryptedFile } from '$lib/stores'
+    import { reflections } from '$lib/Reflections.svelte'
     import { appState } from '$lib/app-state.svelte'
 </script>
 
@@ -54,15 +55,15 @@
 
                 <ManageData />
 
-                {#if $reflections.length}
+                {#if reflections.count}
                     <PreviousReflections />
                 {/if}
                 <div class="mx-auto max-w-prose">
                     <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">
-                        Welcome{$reflections.length > 1 ? ' back' : ''}!
+                        Welcome{reflections.count > 1 ? ' back' : ''}!
                     </h2>
 
-                    {#if !$reflections.length}
+                    {#if !reflections.count}
                         <div class="grid gap-6 pt-8 text-lg">
                             <p class="font-bold">
                                 Offline-first, privacy-friendly web app for your personal wellbeing.
@@ -104,7 +105,7 @@
                         </ul>
                     {/if}
 
-                    {#if !$reflections.length}
+                    {#if !reflections.count}
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
                                 href="{base}/reflection"

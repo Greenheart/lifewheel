@@ -8,8 +8,9 @@
 import { fileOpen } from 'browser-fs-access'
 
 import type { BaseSaveFile, EncryptedSaveFile, SaveFile } from './types'
-import { encryptedFile, reflections } from './stores'
-import { get } from 'svelte/store'
+import { encryptedFile } from './stores'
+import { reflections } from './Reflections.svelte'
+
 import { CURRENT_PROTOCOL } from './protocols'
 import { appState } from './app-state.svelte'
 
@@ -59,7 +60,7 @@ export async function openFile(): Promise<boolean> {
     // Finish loading unencrypted file
     reflections.set(
         CURRENT_PROTOCOL.getUniqueEntries({
-            currentEntries: get(reflections),
+            currentEntries: reflections.entries,
             newEntries,
             protocolVersion: file.version,
         }),

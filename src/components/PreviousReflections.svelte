@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { tick } from 'svelte'
-    import { derived, toStore } from 'svelte/store'
+    import { toStore } from 'svelte/store'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
     import { Popover } from 'bits-ui'
@@ -23,17 +23,22 @@
 </script>
 
 <script lang="ts">
-    import { reflections } from '$lib/stores'
+    import { reflections } from '$lib/Reflections.svelte'
 
-    let index = $state(Math.max($reflections.length - 1, 0))
-    const tweenedLifewheel = tweened<LifewheelState>($reflections[index].data, {
+    let index = $state(Math.max(reflections.count - 1, 0))
+
+    const currentReflectionAsStore = toStore(() => reflections.entries[index])
+
+    const tweenedLifewheel = tweened<LifewheelState>($currentReflectionAsStore.data, {
         duration: 500,
         easing: cubicOut,
     })
-    const currentEntry = derived([toStore(() => index), reflections], ([currentIndex, entries]) => {
-        if ($reflections.length < 1) return null
-        tweenedLifewheel.set(entries[currentIndex].data)
-        return entries[currentIndex]
+
+    const currentReflection = $derived.by(() => {
+        if (reflections.entries.length < 1) return null
+        const entry = reflections.entries[index]
+        tweenedLifewheel.set(entry.data)
+        return entry
     })
 
     let open = $state(false)
@@ -50,18 +55,12 @@
         if (!confirm('Are you sure you want to delete this reflection?')) {
             return
         }
-        const newReflections = $reflections.filter((_, i) => i !== index)
 
-        if (newReflections.length < 1) {
-            $reflections = newReflections
-            await tick()
-            return
+        reflections.remove(index)
+        await tick()
+        if (!reflections.entries[index] && reflections.count) {
+            index = Math.max(reflections.count - 1, 0)
         }
-
-        if (!newReflections[index] && newReflections.length > 0) {
-            index = Math.max(newReflections.length - 1, 0)
-        }
-        $reflections = newReflections
     }
 
     const deleteAll = async () => {
@@ -69,13 +68,13 @@
             return
         }
 
-        $reflections = []
+        reflections.clear()
         index = 0
         await tick()
     }
 </script>
 
-{#if $currentEntry}
+{#if currentReflection}
     <section>
         <h2 class="pt-8 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
@@ -118,9 +117,9 @@
         -->
             <div class="grid w-full max-w-lg grid-cols-[48px_1fr_48px] items-center gap-4">
                 <h3 class="col-start-2 select-none whitespace-pre-wrap text-center">
-                    {`${$currentEntry.time.toLocaleDateString('en-GB', {
+                    {`${currentReflection.time.toLocaleDateString('en-GB', {
                         dateStyle: 'long',
-                    })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
+                    })}\n${currentReflection.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
                 </h3>
 
                 <Popover.Root
@@ -161,13 +160,13 @@
                 </Popover.Root>
             </div>
 
-            <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-sm" />
+            <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
 
-            {#if $reflections.length > 2}
-                <DateRangeSlider min={0} max={$reflections.length - 1} bind:value={index} />
+            {#if reflections.entries.length > 2}
+                <DateRangeSlider min={0} max={reflections.entries.length - 1} bind:value={index} />
             {/if}
 
-            {#if $reflections.length > 1}
+            {#if reflections.entries.length > 1}
                 <div
                     class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-center gap-4 pt-4"
                 >
@@ -182,7 +181,7 @@
                     <Button
                         variant="roundOutline"
                         aria-label="Show next reflection"
-                        class={index >= $reflections.length - 1 ? 'invisible' : undefined}
+                        class={index >= reflections.entries.length - 1 ? 'invisible' : undefined}
                         onclick={onNext}>→</Button
                     >
                 </div>
@@ -199,7 +198,7 @@
         ) {
             if (event.key === 'ArrowLeft' && index > 0) {
                 onPrev()
-            } else if (event.key === 'ArrowRight' && index < $reflections.length - 1) {
+            } else if (event.key === 'ArrowRight' && index < reflections.entries.length - 1) {
                 onNext()
             }
         }

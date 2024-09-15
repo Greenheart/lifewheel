@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import QRCode from 'qrcode'
     import { Tabs } from 'bits-ui'
-    import { derived, toStore, writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Switch from './Switch.svelte'
@@ -24,79 +23,62 @@
 
 <script lang="ts">
     import { browser } from '$app/environment'
-    import { reflections } from '$lib/stores'
+    import { reflections } from '$lib/Reflections.svelte'
     import { tick } from 'svelte'
     import { appState } from '$lib/app-state.svelte'
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
     let shouldEncrypt = $state(false)
 
-    const link = derived(
-        [reflections],
-        ([entries]) =>
-            (async () => {
-                if (!browser) return null
+    const link = $derived.by(async () => {
+        if (!browser) return null
+        const url = new URL(window.location.href)
+        url.hash = CURRENT_PROTOCOL.exportLink(reflections.entries)
 
-                const url = new URL(window.location.href)
-                url.hash = CURRENT_PROTOCOL.exportLink(entries)
-
-                return url.toString()
-            })(),
-        null,
-    )
+        return url.toString()
+    })
 
     /**
      * Encrypted data can be reused and exported into multiple formats (link, QR, file)
-     * TODO: Migrate away from stores and use state instead
      */
-    const encryptedData = derived(
-        [reflections, toStore(() => encryptionKey.key)],
-        ([entries, key]) =>
-            (async () => {
-                if (!browser || !key) return null
+    const encryptedData = $derived.by(async () => {
+        if (!browser || !encryptionKey.key) return null
 
-                return CURRENT_PROTOCOL.getEncryptedData(entries, key)
-            })(),
-    )
+        return CURRENT_PROTOCOL.getEncryptedData(reflections.entries, encryptionKey.key)
+    })
 
     /**
      * The encrypted link (and its QR code) are stored separately since this
      * makes it possible to quickly toggle encryption on/off and see the corresponding QR code.
      * This ensures we only update the link and QR code when the underlying data has changed.
      */
-    const encryptedLink = derived([encryptedData], ([dataPromise]) =>
-        (async () => {
-            const data = await dataPromise
-            if (!browser || data === null) return null
+    const encryptedLink = $derived.by(async () => {
+        const data = await encryptedData
+        if (!browser || data === null) return null
 
-            const url = new URL(window.location.href)
-            url.hash = await CURRENT_PROTOCOL.exportEncryptedLink(data)
+        const url = new URL(window.location.href)
+        url.hash = await CURRENT_PROTOCOL.exportEncryptedLink(data)
 
-            return url.toString()
-        })(),
-    )
+        return url.toString()
+    })
 
-    const regularQRCode = derived(link, (linkPromise) =>
-        (async () => {
-            const fullURL = await linkPromise
-            if (!fullURL) return null
-            return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
-        })(),
-    )
+    const regularQRCode = $derived.by(async () => {
+        const fullURL = await link
+        if (!fullURL) return null
+        return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+    })
 
-    const encryptedQRCode = derived(encryptedLink, (linkPromise) =>
-        (async () => {
-            const fullURL = await linkPromise
-            if (!fullURL) return null
-            return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
-        })(),
-    )
+    const encryptedQRCode = $derived.by(async () => {
+        const fullURL = await encryptedLink
+        if (!fullURL) return null
+        return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+    })
 
     let copyText = $state('Copy link')
 
     const copyLink = async () => {
         // It might be a promise since it might need to be encrypted
-        const url = await (shouldEncrypt ? $encryptedLink : $link)
+        const url = await (shouldEncrypt ? encryptedLink : link)
         if (!url) return
         // Clipboard is only available in via HTTPS or localhost
         await navigator?.clipboard?.writeText(url)
@@ -120,7 +102,7 @@
 
     $effect(() => {
         // Close menu if all entries were removed and we no longer have something to export
-        if ($reflections.length === 0) {
+        if (reflections.count === 0) {
             closeMenu()
         }
     })
@@ -134,7 +116,7 @@
                 class={cx(tabClasses, 'hover:border-emerald-400/5')}
                 onclick={openMenu}><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
             >
-            {#if $reflections.length}
+            {#if reflections.count}
                 <Tabs.Trigger
                     value="save"
                     class={cx(tabClasses, 'hover:border-emerald-400/5')}
@@ -168,7 +150,7 @@
                     save them as one file or link.
                 </p>
             </Tabs.Content>
-            {#if $reflections.length}
+            {#if reflections.count}
                 <Tabs.Content value="save">
                     <Button
                         variant="roundGhost"
@@ -180,11 +162,11 @@
                         <Button
                             onclick={async () => {
                                 if (shouldEncrypt) {
-                                    const data = await $encryptedData
+                                    const data = await encryptedData
                                     if (!data) return
                                     await saveEncryptedFile(data)
                                 } else {
-                                    await saveFile($reflections)
+                                    await saveFile(reflections.entries)
                                 }
                             }}
                             variant="outline"
@@ -253,7 +235,7 @@
                             {:else if shouldEncrypt && encryptionKey.key === null}
                                 <CryptoKeyForm />
                             {:else}
-                                {#await shouldEncrypt ? $encryptedQRCode : $regularQRCode}
+                                {#await shouldEncrypt ? encryptedQRCode : regularQRCode}
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
@@ -261,11 +243,11 @@
                                             <Button
                                                 onclick={async () => {
                                                     if (shouldEncrypt) {
-                                                        const data = await $encryptedData
+                                                        const data = await encryptedData
                                                         if (!data) return
                                                         await saveEncryptedFile(data)
                                                     } else {
-                                                        await saveFile($reflections)
+                                                        await saveFile(reflections.entries)
                                                     }
                                                 }}
                                                 variant="outline"

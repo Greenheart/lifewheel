@@ -35,9 +35,6 @@ importers:
       rfc4648:
         specifier: ^1.5.3
         version: 1.5.3
-      svelte-local-storage-store:
-        specifier: ^0.6.4
-        version: 0.6.4(svelte@5.0.0-next.246)
     devDependencies:
       '@iconify-json/material-symbols':
         specifier: ^1.2.1
@@ -1151,12 +1148,6 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: '>=5.0.0'
 
-  svelte-local-storage-store@0.6.4:
-    resolution: {integrity: sha512-45WoY2vSGPQM1sIQJ9jTkPPj20hYeqm+af6mUGRFSPP5WglZf36YYoZqwmZZ8Dt/2SU8lem+BTA8/Z/8TkqNLg==}
-    engines: {node: '>=0.14'}
-    peerDependencies:
-      svelte: ^3.48.0 || >4.0.0
-
   svelte@5.0.0-next.246:
     resolution: {integrity: sha512-FRfq6W17mOHiSbY9nen6/skCV7AHQJdB9yaS9DA4x4mKXR/RIGMDLlxxU3jhQsMiLoqmUFHXJc6Rqe1o6HWlow==}
     engines: {node: '>=18'}
@@ -2204,10 +2195,6 @@ snapshots:
       typescript: 5.6.2
     transitivePeerDependencies:
       - picomatch
-
-  svelte-local-storage-store@0.6.4(svelte@5.0.0-next.246):
-    dependencies:
-      svelte: 5.0.0-next.246
 
   svelte@5.0.0-next.246:
     dependencies:

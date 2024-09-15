@@ -21,7 +21,6 @@
         "pako": "^2.1.0",
         "qrcode": "^1.5.4",
         "rfc4648": "^1.5.3",
-        "svelte-local-storage-store": "^0.6.4",
         "bits-ui": "^0.21.13"
     },
     "devDependencies": {

@@ -5,10 +5,11 @@
 </script>
 
 <script lang="ts">
-    import { reflections, encryptedFile } from '$lib/stores'
+    import { encryptedFile } from '$lib/stores'
     import { appState } from '$lib/app-state.svelte'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
+    import { reflections } from '$lib/Reflections.svelte'
 
     const closeFileImport = () => {
         appState.loading = false
@@ -30,11 +31,13 @@
 
             encryptionKey.key = key
 
-            $reflections = CURRENT_PROTOCOL.getUniqueEntries({
-                currentEntries: $reflections,
-                newEntries,
-                protocolVersion: $encryptedFile.version,
-            })
+            reflections.set(
+                CURRENT_PROTOCOL.getUniqueEntries({
+                    currentEntries: reflections.entries,
+                    newEntries,
+                    protocolVersion: $encryptedFile.version,
+                }),
+            )
         } catch (error) {
             console.error(error)
         }
