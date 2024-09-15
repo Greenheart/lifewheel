@@ -10,14 +10,6 @@ class Reflections {
             })
         },
     })
-    // #reflections = persisted<ReflectionEntry[]>(
-    //     'lifewheelReflections',
-    //     [],
-    //     new JSONSerializer((key, value) => {
-    //         if (key === 'time') return new Date(value)
-    //         return value
-    //     }),
-    // )
 
     set(items: ReflectionEntry[]) {
         this.#reflections.value = items

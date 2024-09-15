@@ -37,7 +37,9 @@
     const currentReflection = $derived.by(() => {
         if (reflections.entries.length < 1) return null
         const entry = reflections.entries[index]
-        tweenedLifewheel.set(entry.data)
+        if (entry) {
+            tweenedLifewheel.set(entry.data)
+        }
         return entry
     })
 
