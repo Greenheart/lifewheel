@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import { cx } from '$lib/utils'
     import type { Snippet } from 'svelte'
-    import type { Writable } from 'svelte/store'
 </script>
 
 <script lang="ts">
@@ -9,15 +8,22 @@
         id: string
         name: string
         disabled: boolean
-        checked: Writable<boolean>
+        checked: boolean
         class?: string
         label: Snippet
     }
-    let { id, name, disabled = false, checked, class: className = '', label }: Props = $props()
+    let {
+        id,
+        name,
+        disabled = false,
+        checked = $bindable(),
+        class: className = '',
+        label,
+    }: Props = $props()
 </script>
 
 <label class={cx('toggle', className)} for={name}>
-    <input type="checkbox" {name} {id} {disabled} bind:checked={$checked} />
+    <input type="checkbox" {name} {id} {disabled} bind:checked />
     <span class="toggle-track">
         <span class="toggle-indicator"></span>
     </span>

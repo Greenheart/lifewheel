@@ -29,7 +29,7 @@
     import { appState } from '$lib/app-state.svelte'
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
-    const encryptionEnabled = writable(true)
+    let shouldEncrypt = $state(false)
 
     const link = derived(
         [reflections],
@@ -96,7 +96,7 @@
 
     const copyLink = async () => {
         // It might be a promise since it might need to be encrypted
-        const url = await ($encryptionEnabled ? $encryptedLink : $link)
+        const url = await (shouldEncrypt ? $encryptedLink : $link)
         if (!url) return
         // Clipboard is only available in via HTTPS or localhost
         await navigator?.clipboard?.writeText(url)
@@ -179,7 +179,7 @@
                     <div class="flex flex-wrap gap-2 pr-16">
                         <Button
                             onclick={async () => {
-                                if ($encryptionEnabled) {
+                                if (shouldEncrypt) {
                                     const data = await $encryptedData
                                     if (!data) return
                                     await saveEncryptedFile(data)
@@ -190,7 +190,7 @@
                             variant="outline"
                             class="flex w-36 items-center gap-2"
                             disabled={encryptionKey.isGenerating ||
-                                ($encryptionEnabled && !encryptionKey.key)}
+                                (shouldEncrypt && !encryptionKey.key)}
                             ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                         >
 
@@ -199,7 +199,7 @@
                             variant="outline"
                             class="flex w-36 items-center gap-2"
                             disabled={encryptionKey.isGenerating ||
-                                ($encryptionEnabled && !encryptionKey.key)}
+                                (shouldEncrypt && !encryptionKey.key)}
                             ><HeroiconsLink class="size-6" />{copyText}</Button
                         >
                     </div>
@@ -226,13 +226,13 @@
 
                         <div class="md:order-1">
                             <div class="flex select-none items-center gap-3 pb-8 pt-8">
-                                {#if $encryptionEnabled}
+                                {#if shouldEncrypt}
                                     <HeroiconsLockClosed class="flex-shrink-0 size-6" />
                                 {:else}
                                     <HeroiconsLockOpen class="flex-shrink-0 opacity-50 size-6" />
                                 {/if}
                                 <Switch
-                                    checked={encryptionEnabled}
+                                    bind:checked={shouldEncrypt}
                                     id="encrypt"
                                     name="encrypt"
                                     disabled={encryptionKey.isGenerating}
@@ -250,17 +250,17 @@
                                     <div class="spinner h-7 w-7 pb-2"></div>
                                     <p>Encrypting your data...</p>
                                 </div>
-                            {:else if $encryptionEnabled && encryptionKey.key === null}
+                            {:else if shouldEncrypt && encryptionKey.key === null}
                                 <CryptoKeyForm />
                             {:else}
-                                {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
+                                {#await shouldEncrypt ? $encryptedQRCode : $regularQRCode}
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
                                         <div class="flex gap-1 pb-8 2xs:gap-2 xs:hidden">
                                             <Button
                                                 onclick={async () => {
-                                                    if ($encryptionEnabled) {
+                                                    if (shouldEncrypt) {
                                                         const data = await $encryptedData
                                                         if (!data) return
                                                         await saveEncryptedFile(data)
@@ -271,7 +271,7 @@
                                                 variant="outline"
                                                 class="flex w-32 items-center gap-1"
                                                 disabled={encryptionKey.isGenerating ||
-                                                    ($encryptionEnabled && !encryptionKey.key)}
+                                                    (shouldEncrypt && !encryptionKey.key)}
                                                 ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                                             >
 
@@ -280,16 +280,16 @@
                                                 variant="outline"
                                                 class="flex w-32 items-center gap-1"
                                                 disabled={encryptionKey.isGenerating ||
-                                                    ($encryptionEnabled && !encryptionKey.key)}
+                                                    (shouldEncrypt && !encryptionKey.key)}
                                                 ><HeroiconsLink class="size-6" />{copyText}</Button
                                             >
                                         </div>
                                         <h2 class="pb-4 text-lg font-bold">
-                                            QR code for your {$encryptionEnabled ? 'encrypted' : ''}
+                                            QR code for your {shouldEncrypt ? 'encrypted' : ''}
                                             link:
                                         </h2>
                                         <img src={imageURL} alt="QR code generated for your link" />
-                                        {#if $encryptionEnabled && encryptionKey.key}
+                                        {#if shouldEncrypt && encryptionKey.key}
                                             <Button
                                                 variant="ghost"
                                                 class="mt-4"
