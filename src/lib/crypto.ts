@@ -31,7 +31,7 @@ export async function clearPersistedKey(id: string) {
     }
 }
 
-function secureRandomInt(min: number, max: number) {
+export function secureRandomInt(min: number, max: number) {
     let randomNumber
     // Due to the repeating nature of results from the remainder
     // operator, we potentially need to regenerate the random number
@@ -44,27 +44,6 @@ function secureRandomInt(min: number, max: number) {
     } while (randomNumber >= 256 - (256 % max))
 
     return min + (randomNumber % max)
-}
-
-export async function generatePassphrase({
-    length = 4,
-    words,
-}: {
-    length?: number
-    words: { [id: string]: string }
-}) {
-    if (length < 4)
-        throw new Error('Passphrase length must be at least 4 to work with the word list')
-    const selected: string[] = []
-
-    while (selected.length < length) {
-        const id = Array.from({ length }, () => secureRandomInt(1, 6)).join('')
-        if (!selected.includes(words[id])) {
-            selected.push(words[id])
-        }
-    }
-
-    return selected.join('-')
 }
 
 export async function generateUserKey(password: string, persistKey = false): Promise<UserKey> {

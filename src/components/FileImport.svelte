@@ -7,7 +7,7 @@
 
 <script lang="ts">
     import { reflections, encryptedFile, encryptionKey } from '$lib/stores'
-    import { appState } from '$lib/app-state'
+    import { appState } from '$lib/app-state.svelte'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 
     const closeFileImport = () => {

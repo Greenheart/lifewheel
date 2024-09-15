@@ -15,7 +15,7 @@
 
 <script lang="ts">
     import { reflections, encryptedFile } from '$lib/stores'
-    import { appState } from '$lib/app-state'
+    import { appState } from '$lib/app-state.svelte'
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">

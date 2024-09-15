@@ -3,17 +3,17 @@
 
     import { browser } from '$app/environment'
     import Button from './Button.svelte'
-    import { generateUserKey, generatePassphrase } from '$lib/crypto'
+    import { generateUserKey } from '$lib/crypto'
+    import { passphraseGenerator } from '$lib/PassphraseGenerator'
 </script>
 
 <script lang="ts">
-    import { encryptionKey, wordList } from '$lib/stores'
+    import { encryptionKey } from '$lib/stores'
 
     export let isGeneratingKey: Writable<boolean>
     export let toggleForm: () => void
 
-    $: passphrase =
-        browser && $wordList ? generatePassphrase({ words: $wordList }) : Promise.resolve('')
+    $: passphrase = browser ? passphraseGenerator.generate(4) : Promise.resolve('')
     let persistKey = false
     let isSubmitting = false
     let copyText = 'Copy'
@@ -42,8 +42,7 @@
         <Button
             variant="outline"
             onclick={() => {
-                if (!$wordList) return
-                passphrase = generatePassphrase({ words: $wordList })
+                passphrase = passphraseGenerator.generate()
             }}
         >
             Regenerate

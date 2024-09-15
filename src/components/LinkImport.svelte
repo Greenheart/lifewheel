@@ -9,7 +9,7 @@
     import { onMount } from 'svelte'
     import { encryptionKey, reflections } from '$lib/stores'
     import { setPersistedKey } from '$lib/crypto'
-    import { appState } from '$lib/app-state'
+    import { appState } from '$lib/app-state.svelte'
 
     let payload: ParsedLink
 

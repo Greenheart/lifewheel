@@ -4,7 +4,6 @@ import { persisted } from 'svelte-local-storage-store'
 import type { EncryptedSaveFile, ReflectionEntry, UserKey } from './types'
 import { getPersistedKey } from './crypto'
 import { browser } from '$app/environment'
-import { base } from '$app/paths'
 
 /**
  * Temporary store used when loading encrypted files.
@@ -30,29 +29,6 @@ export const reflections = persisted<ReflectionEntry[]>('lifewheelReflections', 
  */
 export const encryptionKey = writable<UserKey | null>(null)
 
-/**
- * Used for passphrase generator
- */
-export const wordList = writable<{ [id: string]: string } | null>(null)
-
-async function getWordList() {
-    const rawWords =
-        (await fetch(`${base}/words.txt`)
-            .then((res) => res.text())
-            .catch((err) => {
-                console.error(err)
-            })) ?? ''
-
-    return rawWords
-        .trim()
-        .split('\n')
-        .reduce<{ [id: string]: string }>((result, row) => {
-            const [id, word] = row.split('\t')
-            result[id] = word
-            return result
-        }, {})
-}
-
 async function init() {
     if (browser) {
         encryptionKey.set(await getPersistedKey('enc'))
@@ -67,8 +43,6 @@ async function init() {
 
             window.addEventListener('storage', handleStorage)
         }
-
-        wordList.set(await getWordList())
     }
 }
 

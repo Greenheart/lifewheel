@@ -11,7 +11,7 @@ import type { BaseSaveFile, EncryptedSaveFile, SaveFile } from './types'
 import { encryptedFile, reflections } from './stores'
 import { get } from 'svelte/store'
 import { CURRENT_PROTOCOL } from './protocols'
-import { appState } from './app-state'
+import { appState } from './app-state.svelte'
 
 function isEncryptedSaveFile(file: BaseSaveFile): file is EncryptedSaveFile {
     return file.encrypted

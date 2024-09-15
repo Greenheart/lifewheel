@@ -27,7 +27,7 @@
     import { browser } from '$app/environment'
     import { reflections, encryptionKey } from '$lib/stores'
     import { tick } from 'svelte'
-    import { appState } from '$lib/app-state'
+    import { appState } from '$lib/app-state.svelte'
 
     const encryptionEnabled = writable(true)
     const isGeneratingKey = writable(false)
