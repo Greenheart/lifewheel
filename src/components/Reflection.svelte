@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { cubicOut } from 'svelte/easing'
     import { tweened } from 'svelte/motion'
     import { writable } from 'svelte/store'

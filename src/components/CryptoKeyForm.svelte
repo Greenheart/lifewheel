@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { writable, type Writable } from 'svelte/store'
 
     import SetPassphraseForm from './SetPassphraseForm.svelte'

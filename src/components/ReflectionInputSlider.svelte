@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { computePosition, flip, offset, arrow } from '@floating-ui/dom'
     import type { Readable, Writable } from 'svelte/store'
     import { onMount } from 'svelte'

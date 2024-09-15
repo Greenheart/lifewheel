@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import type { HTMLButtonAttributes } from 'svelte/elements'
     import { cx } from '$lib/utils'
 

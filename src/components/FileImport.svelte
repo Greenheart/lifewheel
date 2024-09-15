@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { base64url } from 'rfc4648'
 
     import PasswordForm from './PasswordForm.svelte'

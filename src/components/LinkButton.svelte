@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { cx } from '$lib/utils'
     import { defaultVariant, variants, defaultClasses } from './Button.svelte'
 </script>

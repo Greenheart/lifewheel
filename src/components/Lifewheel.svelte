@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
     import { arc } from 'd3-shape'
     import type { Tweened } from 'svelte/motion'
 

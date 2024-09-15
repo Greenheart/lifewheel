@@ -1,11 +1,11 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { fade } from 'svelte/transition'
     import { base } from '$app/paths'
 
     import LinkButton from '$components/LinkButton.svelte'
     import LinkImport from '$components/LinkImport.svelte'
-    import PreviousReflections from '$components/PreviousReflections.svelte'
-    import ManageData from '$components/ManageData.svelte'
+    // import PreviousReflections from '$components/PreviousReflections.svelte'
+    // import ManageData from '$components/ManageData.svelte'
     import FileImport from '$components/FileImport.svelte'
     import HeroiconsPlusCircle from '~icons/heroicons/plus-circle'
     import MdiGithub from '~icons/mdi/github'
@@ -51,11 +51,11 @@
                     >
                 </div>
 
-                <ManageData />
+                <!-- <ManageData /> -->
 
-                {#if $reflections.length}
+                <!-- {#if $reflections.length}
                     <PreviousReflections />
-                {/if}
+                {/if} -->
                 <div class="mx-auto max-w-prose">
                     <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">
                         Welcome{$reflections.length > 1 ? ' back' : ''}!

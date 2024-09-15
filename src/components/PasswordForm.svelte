@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import Button from './Button.svelte'
     import HeroiconsLockClosed from '~icons/heroicons/lock-closed'
 </script>
@@ -32,7 +32,7 @@
         class:hidden={!isDecrypting}
         class:grid={isDecrypting}
     >
-        <p class="spinner h-7 w-7" />
+        <div class="spinner h-7 w-7"></div>
         <p>Decrypting your data...</p>
     </div>
     <header class="flex items-center gap-2" class:hidden={isDecrypting}>

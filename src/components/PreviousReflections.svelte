@@ -1,9 +1,10 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import { tick } from 'svelte'
     import { derived, writable } from 'svelte/store'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
-    import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui'
+    // import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui'
+    import { Popover } from 'bits-ui'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Lifewheel from './Lifewheel.svelte'

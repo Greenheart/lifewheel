@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import type { ParsedLink } from '$lib/types'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 

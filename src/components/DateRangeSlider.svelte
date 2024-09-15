@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     import type { Writable } from 'svelte/store'
 
     let step = 1
