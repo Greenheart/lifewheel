@@ -38,10 +38,10 @@
         <code class="rounded-md bg-gray-900 px-2 py-3">{generated}</code>
     {/await}
     <div class="grid grid-cols-2 gap-2">
-        <Button variant="outline" on:click={copy}>{copyText}</Button>
+        <Button variant="outline" onclick={copy}>{copyText}</Button>
         <Button
             variant="outline"
-            on:click={() => {
+            onclick={() => {
                 if (!$wordList) return
                 passphrase = generatePassphrase({ words: $wordList })
             }}
@@ -61,7 +61,7 @@
     </div>
     <Button
         disabled={!saved || isSubmitting}
-        on:click={async () => {
+        onclick={async () => {
             isSubmitting = true
             const pwd = await passphrase
             $isGeneratingKey = true
@@ -70,7 +70,7 @@
             isSubmitting = false
         }}>Continue</Button
     >
-    <Button variant="ghost" on:click={toggleForm} disabled={isSubmitting}
+    <Button variant="ghost" onclick={toggleForm} disabled={isSubmitting}
         >Use custom password instead</Button
     >
 </div>

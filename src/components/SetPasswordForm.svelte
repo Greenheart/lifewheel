@@ -8,18 +8,22 @@
 <script lang="ts">
     import { encryptionKey } from '$lib/stores'
 
-    export let isGeneratingKey: Writable<boolean>
-    export let toggleForm: () => void
+    type Props = {
+        isGeneratingKey: Writable<boolean>
+        toggleForm: () => void
+    }
+    let { isGeneratingKey, toggleForm }: Props = $props()
 
-    let error: string | null = null
-    let valid = false
-    let password = ''
-    let repeat = ''
-    let persistKey = false
-    let saved = false
-    let isSubmitting = false
+    let error: string | null = $state(null)
+    let valid = $state(false)
+    let password = $state('')
+    let repeat = $state('')
+    let persistKey = $state(false)
+    let saved = $state(false)
+    let isSubmitting = $state(false)
 
-    const onSubmit = async () => {
+    const onSubmit = async (event: SubmitEvent) => {
+        event.preventDefault()
         isSubmitting = true
         valid = isValid()
         if (!valid) {
@@ -48,7 +52,7 @@
     }
 </script>
 
-<form on:submit|preventDefault={onSubmit} class="grid">
+<form onsubmit={onSubmit} class="grid">
     <label for="repeat" class="text-sm">Your password</label>
     <input
         type="password"
@@ -83,7 +87,7 @@
     {/if}
 
     <Button type="submit" class="mb-2" disabled={!saved || isSubmitting}>Continue</Button>
-    <Button variant="ghost" on:click={toggleForm} disabled={isSubmitting}
+    <Button variant="ghost" onclick={toggleForm} disabled={isSubmitting}
         >Generate passphrase instead</Button
     >
 </form>

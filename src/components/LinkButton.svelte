@@ -1,15 +1,20 @@
 <script lang="ts" module>
+    import type { HTMLAttributes } from 'svelte/elements'
+    import type { Snippet } from 'svelte'
     import { cx } from '$lib/utils'
     import { defaultVariant, variants, defaultClasses } from './Button.svelte'
 </script>
 
 <script lang="ts">
-    export let href: string
-    export let variant: keyof typeof variants = defaultVariant
-    let className = ''
-    export { className as class }
+    interface Props extends HTMLAttributes<HTMLAnchorElement> {
+        href: string
+        variant?: keyof typeof variants
+        children: Snippet
+    }
+
+    let { href, variant = defaultVariant, class: className, children }: Props = $props()
 </script>
 
 <a {href} class={cx('block text-center', defaultClasses, variants[variant], className)}>
-    <slot />
+    {@render children()}
 </a>

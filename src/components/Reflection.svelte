@@ -86,18 +86,18 @@
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack}
-            <Button variant="roundOutline" on:click={onPrev} aria-label="Show previous step"
+            <Button variant="roundOutline" onclick={onPrev} aria-label="Show previous step"
                 >←</Button
             >
         {/if}
-        <div class="flex-grow" />
-        <Button variant="roundSolid" on:click={onNext} aria-label="Show next step">→</Button>
+        <div class="flex-grow"></div>
+        <Button variant="roundSolid" onclick={onNext} aria-label="Show next step">→</Button>
     </div>
 </div>
 
 <!-- Make it easy to navigate between sections with the keyboard -->
 <svelte:body
-    on:keyup={(event) => {
+    onkeyup={(event) => {
         if (!document.activeElement?.className?.includes('input-slider')) {
             if (event.key === 'ArrowLeft') {
                 if (canGoBack) onPrev()

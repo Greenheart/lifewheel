@@ -138,7 +138,7 @@
                         <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
                             <Button
                                 aria-label="Remove reflection"
-                                on:click={async () => {
+                                onclick={async () => {
                                     open = false
                                     await removeReflection()
                                 }}
@@ -148,7 +148,7 @@
                             >
                             <Button
                                 aria-label="Delete all"
-                                on:click={async () => {
+                                onclick={async () => {
                                     open = false
                                     await deleteAll()
                                 }}
@@ -175,7 +175,7 @@
                         variant="roundOutline"
                         aria-label="Show previous reflection"
                         class={$index < 1 ? 'invisible' : undefined}
-                        on:click={onPrev}>←</Button
+                        onclick={onPrev}>←</Button
                     >
                     <!-- IDEA: Between the buttons here might be a good spot to display notes -->
                     <div></div>
@@ -183,7 +183,7 @@
                         variant="roundOutline"
                         aria-label="Show next reflection"
                         class={$index >= $reflections.length - 1 ? 'invisible' : undefined}
-                        on:click={onNext}>→</Button
+                        onclick={onNext}>→</Button
                     >
                 </div>
             {/if}
@@ -192,7 +192,7 @@
 {/if}
 
 <svelte:body
-    on:keyup={(event) => {
+    onkeyup={(event) => {
         if (
             !document.querySelector('.manage-data:focus-within') &&
             !document.activeElement?.className?.includes('input-slider')

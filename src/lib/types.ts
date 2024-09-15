@@ -1,6 +1,6 @@
 import type { colors } from './constants'
 import type { ProtocolVersion } from './protocols'
-export { ProtocolVersion }
+export type { ProtocolVersion }
 
 type BasicStep = {
     title: string

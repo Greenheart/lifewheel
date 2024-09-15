@@ -36,16 +36,17 @@
     import { onDestroy, onMount } from 'svelte'
     import { scale } from 'svelte/transition'
 
-    export let data: LifewheelState
-    export let tweenedLifewheel: Tweened<LifewheelState>
+    type Props = {
+        data: LifewheelState
+        tweenedLifewheel: Tweened<LifewheelState>
+        class?: string
+    }
+    let { data, tweenedLifewheel, class: className = '' }: Props = $props()
 
-    let className = ''
-    export { className as class }
-
-    let dimensions: string[] = []
-    let visible = false
-    let clientWidth: number
-    let innerWidth: number
+    let dimensions: string[] = $state([])
+    let visible = $state(false)
+    let clientWidth: number = $state(0)
+    let innerWidth: number = $state(0)
 
     onMount(() => {
         visible = true
@@ -53,17 +54,17 @@
         dimensions = getArcPaths($tweenedLifewheel)
     })
 
-    $: width = Math.round(clientWidth * (innerWidth < 640 ? 0.6 : 0.75))
+    const width = $derived(Math.round(clientWidth * (innerWidth < 640 ? 0.6 : 0.75)))
 
     onDestroy(() => {
         // Reset tweened state to make sure it shows smooth transitions if the lifewheel is opened when partially filled.
         tweenedLifewheel.set(INITIAL_LIFEWHEEL_STATE)
     })
 
-    $: {
+    $effect(() => {
         tweenedLifewheel.set(data)
         dimensions = getArcPaths($tweenedLifewheel)
-    }
+    })
 </script>
 
 <svelte:window bind:innerWidth />

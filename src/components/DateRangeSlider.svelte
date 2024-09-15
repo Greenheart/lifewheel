@@ -1,14 +1,15 @@
 <script lang="ts" module>
     import type { Writable } from 'svelte/store'
-
-    let step = 1
 </script>
 
 <script lang="ts">
-    export let min: number
-    export let max: number
+    type Props = {
+        min: number
+        max: number
+        value: Writable<number>
+    }
 
-    export let value: Writable<number>
+    let { min, max, value }: Props = $props()
 </script>
 
 <div
@@ -19,7 +20,7 @@
         type="range"
         {min}
         {max}
-        {step}
+        step={1}
         class="input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-no-repeat shadow-sm"
         style={`background-size: ${(($value - min) * 100) / (max - min)}% 100%`}
         bind:value={$value}

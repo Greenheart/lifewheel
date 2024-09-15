@@ -1,24 +1,27 @@
 <script lang="ts" module>
     import { cx } from '$lib/utils'
+    import type { Snippet } from 'svelte'
     import type { Writable } from 'svelte/store'
 </script>
 
 <script lang="ts">
-    export let id: string
-    export let name: string
-    export let disabled = false
-    export let checked: Writable<boolean>
-
-    let className = ''
-    export { className as class }
+    type Props = {
+        id: string
+        name: string
+        disabled: boolean
+        checked: Writable<boolean>
+        class?: string
+        label: Snippet
+    }
+    let { id, name, disabled = false, checked, class: className = '', label }: Props = $props()
 </script>
 
 <label class={cx('toggle', className)} for={name}>
     <input type="checkbox" {name} {id} {disabled} bind:checked={$checked} />
     <span class="toggle-track">
-        <span class="toggle-indicator" />
+        <span class="toggle-indicator"></span>
     </span>
-    <slot name="label" />
+    {@render label()}
 </label>
 
 <style lang="postcss">

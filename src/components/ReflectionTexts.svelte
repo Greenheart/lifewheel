@@ -7,7 +7,10 @@
 <script lang="ts">
     import { colors, LIFEWHEEL_ICONS } from '$lib/constants'
 
-    export let reflectionStep: Readable<ReflectionStep>
+    type Props = {
+        reflectionStep: Readable<ReflectionStep>
+    }
+    let { reflectionStep }: Props = $props()
 </script>
 
 <h2

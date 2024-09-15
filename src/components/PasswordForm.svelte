@@ -12,7 +12,8 @@
     let password = ''
     let persistKey = false
 
-    const submitPassphrase = async () => {
+    const submitPassphrase = async (event: SubmitEvent) => {
+        event.preventDefault()
         if (!password.length) return
         isDecrypting = true
 
@@ -40,7 +41,7 @@
         <p id="msg">This {importType} is password protected.</p>
     </header>
     <!-- svelte-ignore a11y-autofocus -->
-    <form on:submit|preventDefault={submitPassphrase} class:hidden={isDecrypting} class="mt-3">
+    <form onsubmit={submitPassphrase} class:hidden={isDecrypting} class="mt-3">
         <input
             type="password"
             name="password"
@@ -58,6 +59,6 @@
     </form>
 
     {#if !isDecrypting}
-        <Button variant="ghost" on:click={onCancel} class="mx-auto mt-8 block">Cancel</Button>
+        <Button variant="ghost" onclick={onCancel} class="mx-auto mt-8 block">Cancel</Button>
     {/if}
 </div>

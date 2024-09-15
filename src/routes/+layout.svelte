@@ -1,6 +1,8 @@
 <script lang="ts">
     import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from '$lib/constants'
     import '../app.postcss'
+
+    let { children } = $props()
 </script>
 
 <svelte:head>
@@ -9,5 +11,5 @@
 </svelte:head>
 
 <main class="min-h-screen bg-gray-900 text-white">
-    <slot />
+    {@render children()}
 </main>

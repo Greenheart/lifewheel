@@ -100,7 +100,7 @@
             bind:this={tooltip}
         >
             {$lifewheel[$reflectionStep.i]}
-            <div class="arrow absolute h-2 w-2 rotate-45 bg-black" bind:this={arrowElement} />
+            <div class="arrow absolute h-2 w-2 rotate-45 bg-black" bind:this={arrowElement}></div>
         </div>
         <input
             type="range"
@@ -114,11 +114,11 @@
                 $reflectionStep.colors.to,
             )}
             style={`background-size: ${getThumbPosition($lifewheel[$reflectionStep.i])}% 100%`}
-            on:keydown={(event) => {
+            onkeydown={(event) => {
                 if (event.key.includes('Arrow')) flashTooltip()
             }}
-            on:pointerdown={showTooltip}
-            on:pointerup={() => hideTooltip()}
+            onpointerdown={showTooltip}
+            onpointerup={() => hideTooltip()}
             bind:value={$lifewheel[$reflectionStep.i]}
             bind:this={input}
         />
@@ -128,7 +128,7 @@
 
 <!-- Make it easy to change the current value with the keyboard -->
 <svelte:body
-    on:keydown={(event) => {
+    onkeydown={(event) => {
         const isFocused = document.activeElement?.className.includes('input')
         if (isFocused && event.key.includes('Arrow')) {
             flashTooltip()

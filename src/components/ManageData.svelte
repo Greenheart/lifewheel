@@ -130,17 +130,17 @@
 
 <div class="mx-auto w-full max-w-4xl pt-2" class:invisible={$loading}>
     <Tabs.Root class="manage-data">
-        <Tabs.List class="flex justify-center gap-1" on:focusin={openMenu}>
+        <Tabs.List class="flex justify-center gap-1" onfocusin={openMenu}>
             <Tabs.Trigger
                 value="open"
                 class={cx(tabClasses, 'hover:border-emerald-400/5')}
-                on:click={openMenu}><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
+                onclick={openMenu}><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
             >
             {#if $reflections.length}
                 <Tabs.Trigger
                     value="save"
                     class={cx(tabClasses, 'hover:border-emerald-400/5')}
-                    on:click={openMenu}><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
+                    onclick={openMenu}><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
                 >
             {/if}
         </Tabs.List>
@@ -149,11 +149,11 @@
                 <Button
                     variant="roundGhost"
                     class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                    on:click={closeMenu}><HeroiconsXMark class="size-6" /></Button
+                    onclick={closeMenu}><HeroiconsXMark class="size-6" /></Button
                 >
                 <Button
                     variant="outline"
-                    on:click={async () => {
+                    onclick={async () => {
                         const success = await openFile()
                         if (success) {
                             await tick()
@@ -175,12 +175,12 @@
                     <Button
                         variant="roundGhost"
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
-                        on:click={closeMenu}><HeroiconsXMark class="size-6" /></Button
+                        onclick={closeMenu}><HeroiconsXMark class="size-6" /></Button
                     >
 
                     <div class="flex flex-wrap gap-2 pr-16">
                         <Button
-                            on:click={async () => {
+                            onclick={async () => {
                                 if ($encryptionEnabled) {
                                     const data = await $encryptedData
                                     if (!data) return
@@ -196,7 +196,7 @@
                         >
 
                         <Button
-                            on:click={() => copyLink()}
+                            onclick={() => copyLink()}
                             variant="outline"
                             class="flex w-36 items-center gap-2"
                             disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
@@ -237,7 +237,9 @@
                                     name="encrypt"
                                     disabled={$isGeneratingKey}
                                 >
-                                    <span slot="label">Use encryption for better privacy</span>
+                                    {#snippet label()}
+                                        <span>Use encryption for better privacy</span>
+                                    {/snippet}
                                 </Switch>
                             </div>
 
@@ -257,7 +259,7 @@
                                     {#if imageURL}
                                         <div class="flex gap-1 pb-8 2xs:gap-2 xs:hidden">
                                             <Button
-                                                on:click={async () => {
+                                                onclick={async () => {
                                                     if ($encryptionEnabled) {
                                                         const data = await $encryptedData
                                                         if (!data) return
@@ -274,7 +276,7 @@
                                             >
 
                                             <Button
-                                                on:click={() => copyLink()}
+                                                onclick={() => copyLink()}
                                                 variant="outline"
                                                 class="flex w-32 items-center gap-1"
                                                 disabled={$isGeneratingKey ||
@@ -291,8 +293,7 @@
                                             <Button
                                                 variant="ghost"
                                                 class="mt-4"
-                                                on:click={clearEncryptionKey}
-                                                >Change password</Button
+                                                onclick={clearEncryptionKey}>Change password</Button
                                             >
                                         {/if}
                                     {/if}

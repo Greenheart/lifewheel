@@ -1,6 +1,7 @@
 <script lang="ts" module>
     import type { HTMLButtonAttributes } from 'svelte/elements'
     import { cx } from '$lib/utils'
+    import type { Snippet } from 'svelte'
 
     export const variants = {
         solid: 'rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-400/75 px-3 py-2 text-base xs:text-lg text-black hover:from-emerald-500 hover:to-emerald-500/75',
@@ -19,22 +20,22 @@
 </script>
 
 <script lang="ts">
-    interface $$Props extends HTMLButtonAttributes {
+    interface Props extends HTMLButtonAttributes {
         disabled?: boolean
         variant?: keyof typeof variants
         class?: string
+        children: Snippet
     }
-    export let disabled = false
-    export let variant: keyof typeof variants = defaultVariant
-    let className = ''
-    export { className as class }
+
+    let {
+        disabled = false,
+        variant = defaultVariant,
+        class: className = '',
+        children,
+        ...rest
+    }: Props = $props()
 </script>
 
-<button
-    {...$$restProps}
-    on:click
-    {disabled}
-    class={cx(defaultClasses, variants[variant], className)}
->
-    <slot />
+<button {...rest} {disabled} class={cx(defaultClasses, variants[variant], className)}>
+    {@render children()}
 </button>
