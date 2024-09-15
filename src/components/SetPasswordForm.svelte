@@ -1,24 +1,19 @@
 <script lang="ts" module>
-    import type { Writable } from 'svelte/store'
-
-    import { generateUserKey } from '$lib/crypto'
     import Button from './Button.svelte'
 </script>
 
 <script lang="ts">
-    import { encryptionKey } from '$lib/stores'
+    import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
     type Props = {
-        isGeneratingKey: Writable<boolean>
         toggleForm: () => void
     }
-    let { isGeneratingKey, toggleForm }: Props = $props()
+    let { toggleForm }: Props = $props()
 
     let error: string | null = $state(null)
     let valid = $state(false)
     let password = $state('')
     let repeat = $state('')
-    let persistKey = $state(false)
     let saved = $state(false)
     let isSubmitting = $state(false)
 
@@ -31,9 +26,8 @@
             return
         }
 
-        $isGeneratingKey = true
-        $encryptionKey = await generateUserKey(password, persistKey)
-        $isGeneratingKey = false
+        await encryptionKey.generateUserKey(password)
+        isSubmitting = false
     }
 
     const isValid = () => {
@@ -77,7 +71,12 @@
             I have saved my password somewhere safe</label
         >
         <label for="persist" class="flex gap-2 py-2 text-sm"
-            ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
+            ><input
+                type="checkbox"
+                name="persist"
+                id="persist"
+                bind:checked={encryptionKey.shouldPersist}
+            />
             Remember me on this device</label
         >
     </div>

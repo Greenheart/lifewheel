@@ -1,7 +1,7 @@
 <script lang="ts" module>
     import QRCode from 'qrcode'
     import { Tabs } from 'bits-ui'
-    import { derived, writable } from 'svelte/store'
+    import { derived, toStore, writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Switch from './Switch.svelte'
@@ -16,7 +16,6 @@
 
     import { openFile } from '$lib/import'
     import { saveEncryptedFile, saveFile } from '$lib/export'
-    import { clearPersistedKey } from '$lib/crypto'
     import { cx } from '$lib/utils'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 
@@ -25,12 +24,12 @@
 
 <script lang="ts">
     import { browser } from '$app/environment'
-    import { reflections, encryptionKey } from '$lib/stores'
+    import { reflections } from '$lib/stores'
     import { tick } from 'svelte'
     import { appState } from '$lib/app-state.svelte'
+    import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
     const encryptionEnabled = writable(true)
-    const isGeneratingKey = writable(false)
 
     const link = derived(
         [reflections],
@@ -48,13 +47,16 @@
 
     /**
      * Encrypted data can be reused and exported into multiple formats (link, QR, file)
+     * TODO: Migrate away from stores and use state instead
      */
-    const encryptedData = derived([reflections, encryptionKey], ([entries, key]) =>
-        (async () => {
-            if (!browser || !key) return null
+    const encryptedData = derived(
+        [reflections, toStore(() => encryptionKey.key)],
+        ([entries, key]) =>
+            (async () => {
+                if (!browser || !key) return null
 
-            return CURRENT_PROTOCOL.getEncryptedData(entries, key)
-        })(),
+                return CURRENT_PROTOCOL.getEncryptedData(entries, key)
+            })(),
     )
 
     /**
@@ -114,11 +116,6 @@
 
     function openMenu() {
         isOpen = true
-    }
-
-    const clearEncryptionKey = () => {
-        $encryptionKey = null
-        clearPersistedKey('enc')
     }
 
     $effect(() => {
@@ -192,7 +189,8 @@
                             }}
                             variant="outline"
                             class="flex w-36 items-center gap-2"
-                            disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
+                            disabled={encryptionKey.isGenerating ||
+                                ($encryptionEnabled && !encryptionKey.key)}
                             ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                         >
 
@@ -200,7 +198,8 @@
                             onclick={() => copyLink()}
                             variant="outline"
                             class="flex w-36 items-center gap-2"
-                            disabled={$isGeneratingKey || ($encryptionEnabled && !$encryptionKey)}
+                            disabled={encryptionKey.isGenerating ||
+                                ($encryptionEnabled && !encryptionKey.key)}
                             ><HeroiconsLink class="size-6" />{copyText}</Button
                         >
                     </div>
@@ -236,7 +235,7 @@
                                     checked={encryptionEnabled}
                                     id="encrypt"
                                     name="encrypt"
-                                    disabled={$isGeneratingKey}
+                                    disabled={encryptionKey.isGenerating}
                                 >
                                     {#snippet label()}
                                         <span>Use encryption for better privacy</span>
@@ -244,15 +243,15 @@
                                 </Switch>
                             </div>
 
-                            {#if $isGeneratingKey}
+                            {#if encryptionKey.isGenerating}
                                 <div
                                     class="flex flex-grow flex-col items-center justify-center pb-8 pt-8 text-lg"
                                 >
                                     <div class="spinner h-7 w-7 pb-2"></div>
                                     <p>Encrypting your data...</p>
                                 </div>
-                            {:else if $encryptionEnabled && $encryptionKey === null}
-                                <CryptoKeyForm {isGeneratingKey} />
+                            {:else if $encryptionEnabled && encryptionKey.key === null}
+                                <CryptoKeyForm />
                             {:else}
                                 {#await $encryptionEnabled ? $encryptedQRCode : $regularQRCode}
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
@@ -271,8 +270,8 @@
                                                 }}
                                                 variant="outline"
                                                 class="flex w-32 items-center gap-1"
-                                                disabled={$isGeneratingKey ||
-                                                    ($encryptionEnabled && !$encryptionKey)}
+                                                disabled={encryptionKey.isGenerating ||
+                                                    ($encryptionEnabled && !encryptionKey.key)}
                                                 ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                                             >
 
@@ -280,8 +279,8 @@
                                                 onclick={() => copyLink()}
                                                 variant="outline"
                                                 class="flex w-32 items-center gap-1"
-                                                disabled={$isGeneratingKey ||
-                                                    ($encryptionEnabled && !$encryptionKey)}
+                                                disabled={encryptionKey.isGenerating ||
+                                                    ($encryptionEnabled && !encryptionKey.key)}
                                                 ><HeroiconsLink class="size-6" />{copyText}</Button
                                             >
                                         </div>
@@ -290,11 +289,12 @@
                                             link:
                                         </h2>
                                         <img src={imageURL} alt="QR code generated for your link" />
-                                        {#if $encryptionEnabled && $encryptionKey}
+                                        {#if $encryptionEnabled && encryptionKey.key}
                                             <Button
                                                 variant="ghost"
                                                 class="mt-4"
-                                                onclick={clearEncryptionKey}>Change password</Button
+                                                onclick={() => encryptionKey.clear()}
+                                                >Change password</Button
                                             >
                                         {/if}
                                     {/if}

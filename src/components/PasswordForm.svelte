@@ -1,23 +1,23 @@
 <script lang="ts" module>
-    import Button from './Button.svelte'
     import HeroiconsLockClosed from '~icons/heroicons/lock-closed'
+    import { encryptionKey } from '$lib/EncryptionKey.svelte'
+    import Button from './Button.svelte'
 </script>
 
 <script lang="ts">
     export let importType: 'file' | 'link'
-    export let onSubmit: (password: string, persistKey?: boolean) => Promise<void>
+    export let onSubmit: (password: string) => Promise<void>
     export let onCancel: () => void
 
     let isDecrypting = false
     let password = ''
-    let persistKey = false
 
     const submitPassphrase = async (event: SubmitEvent) => {
         event.preventDefault()
         if (!password.length) return
         isDecrypting = true
 
-        await onSubmit(password, persistKey)
+        await onSubmit(password)
             .catch((error) => {
                 console.error(error)
             })
@@ -52,7 +52,12 @@
             autocomplete="off"
         />
         <label for="persist" class="flex gap-2 py-3 text-sm"
-            ><input type="checkbox" name="persist" id="persist" bind:checked={persistKey} />
+            ><input
+                type="checkbox"
+                name="persist"
+                id="persist"
+                bind:checked={encryptionKey.shouldPersist}
+            />
             Remember me on this device</label
         >
         <Button type="submit" class="w-full">Submit</Button>

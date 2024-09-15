@@ -2,20 +2,20 @@
     import { base64url } from 'rfc4648'
 
     import PasswordForm from './PasswordForm.svelte'
-    import { setPersistedKey } from '$lib/crypto'
 </script>
 
 <script lang="ts">
-    import { reflections, encryptedFile, encryptionKey } from '$lib/stores'
+    import { reflections, encryptedFile } from '$lib/stores'
     import { appState } from '$lib/app-state.svelte'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
+    import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
     const closeFileImport = () => {
         appState.loading = false
         $encryptedFile = null
     }
 
-    const submitPassphrase = async (password: string, persistKey = false) => {
+    const submitPassphrase = async (password: string) => {
         try {
             if (!$encryptedFile) return
             const key = await CURRENT_PROTOCOL.deriveKeyFromData({
@@ -28,12 +28,7 @@
                 key,
             })
 
-            if (persistKey) {
-                console.log('persistKey enc', key)
-                await setPersistedKey('enc', key)
-            }
-
-            $encryptionKey = key
+            encryptionKey.key = key
 
             $reflections = CURRENT_PROTOCOL.getUniqueEntries({
                 currentEntries: $reflections,

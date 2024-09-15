@@ -7,9 +7,9 @@
 
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { encryptionKey, reflections } from '$lib/stores'
-    import { setPersistedKey } from '$lib/crypto'
+    import { reflections } from '$lib/stores'
     import { appState } from '$lib/app-state.svelte'
+    import { encryptionKey } from '$lib/EncryptionKey.svelte'
 
     let payload: ParsedLink
 
@@ -46,7 +46,7 @@
         history.pushState('', document.title, window.location.pathname)
     }
 
-    const submitPassphrase = async (password: string, persistKey = false) => {
+    const submitPassphrase = async (password: string) => {
         try {
             const key = await CURRENT_PROTOCOL.deriveKeyFromData({
                 data: payload.data,
@@ -85,11 +85,7 @@
             // This could be solved though, and could reduce the need to prompt for the same passphrase repeatedly, when the key is already present.
 
             // Together with this feature of storing multiple decryption keys, it would be nice to also separate decryption keys from encryption keys (used when exporting from your current app)
-            $encryptionKey = key
-
-            if (persistKey) {
-                await setPersistedKey('enc', key)
-            }
+            encryptionKey.key = key
         } catch (error) {
             console.error(error)
         }
