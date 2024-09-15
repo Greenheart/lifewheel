@@ -4,7 +4,7 @@
 
     import LinkButton from '$components/LinkButton.svelte'
     import LinkImport from '$components/LinkImport.svelte'
-    // import PreviousReflections from '$components/PreviousReflections.svelte'
+    import PreviousReflections from '$components/PreviousReflections.svelte'
     // import ManageData from '$components/ManageData.svelte'
     import FileImport from '$components/FileImport.svelte'
     import HeroiconsPlusCircle from '~icons/heroicons/plus-circle'
@@ -53,9 +53,9 @@
 
                 <!-- <ManageData /> -->
 
-                <!-- {#if $reflections.length}
+                {#if $reflections.length}
                     <PreviousReflections />
-                {/if} -->
+                {/if}
                 <div class="mx-auto max-w-prose">
                     <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">
                         Welcome{$reflections.length > 1 ? ' back' : ''}!

@@ -3,7 +3,6 @@
     import { derived, writable } from 'svelte/store'
     import { tweened } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
-    // import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui'
     import { Popover } from 'bits-ui'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
@@ -36,6 +35,8 @@
         tweenedLifewheel.set(entries[currentIndex].data)
         return entries[currentIndex]
     })
+
+    let open = $state(false)
 
     const onPrev = () => {
         $index = $index - 1
@@ -122,18 +123,23 @@
                     })}\n${$currentEntry.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
                 </h3>
 
-                <Popover class="relative" let:close>
-                    <PopoverButton
+                <Popover.Root
+                    {open}
+                    onOpenChange={(isOpen) => {
+                        open = isOpen
+                    }}
+                >
+                    <Popover.Trigger
                         aria-label="Open menu for this reflection"
                         class={menuButtonClasses}
-                        ><HeroiconsEllipsisHorizontal class="size-6" /></PopoverButton
+                        ><HeroiconsEllipsisHorizontal class="size-6" /></Popover.Trigger
                     >
-                    <PopoverPanel class="absolute -bottom-28 right-0 z-10">
+                    <Popover.Content class="text-white" sideOffset={4} side="bottom" align="end">
                         <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
                             <Button
                                 aria-label="Remove reflection"
                                 on:click={async () => {
-                                    close(null)
+                                    open = false
                                     await removeReflection()
                                 }}
                                 variant="ghost"
@@ -143,7 +149,7 @@
                             <Button
                                 aria-label="Delete all"
                                 on:click={async () => {
-                                    close(null)
+                                    open = false
                                     await deleteAll()
                                 }}
                                 variant="ghost"
@@ -151,8 +157,8 @@
                                 ><HeroiconsTrash class="size-6" />Delete all</Button
                             >
                         </div>
-                    </PopoverPanel>
-                </Popover>
+                    </Popover.Content>
+                </Popover.Root>
             </div>
 
             <Lifewheel data={$currentEntry.data} {tweenedLifewheel} class="max-w-sm" />
@@ -172,7 +178,7 @@
                         on:click={onPrev}>←</Button
                     >
                     <!-- IDEA: Between the buttons here might be a good spot to display notes -->
-                    <div />
+                    <div></div>
                     <Button
                         variant="roundOutline"
                         aria-label="Show next reflection"
