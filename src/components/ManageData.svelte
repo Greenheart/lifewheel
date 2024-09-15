@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import QRCode from 'qrcode'
-    import { Tab, TabGroup, TabList, TabPanels, TabPanel } from '@rgossiaux/svelte-headlessui'
+    import { Tabs } from 'bits-ui'
     import { derived, writable } from 'svelte/store'
 
     import Button, { defaultClasses, variants } from './Button.svelte'
@@ -120,30 +120,31 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl pt-2" class:invisible={$loading}>
-    <TabGroup class="manage-data" defaultIndex={1}>
-        <TabList class="flex justify-center gap-1" on:focusin={() => ($isDataMenuOpen = true)}>
-            <Tab
-                class={({ selected }) =>
-                    cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
+    <Tabs.Root value="open" class="manage-data">
+        <!-- NOTE: Maybe remove the $isDataMenuOpen state since it might not be as useful anymore -->
+        <Tabs.List class="flex justify-center gap-1" on:focusin={() => ($isDataMenuOpen = true)}>
+            <Tabs.Trigger
+                value="open"
+                class={cx(tabClasses, $isDataMenuOpen ? 'border-emerald-400/5' : null)}
                 on:click={() => ($isDataMenuOpen = true)}
-                ><HeroiconsFolderOpen class="size-6" />Open</Tab
+                ><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
             >
             {#if $reflections.length}
-                <Tab
-                    class={({ selected }) =>
-                        cx(tabClasses, selected && $isDataMenuOpen ? 'border-emerald-400/5' : null)}
+                <Tabs.Trigger
+                    value="save"
+                    class={cx(tabClasses, $isDataMenuOpen ? 'border-emerald-400/5' : null)}
                     on:click={() => ($isDataMenuOpen = true)}
-                    ><HeroiconsArrowDownTray class="size-6" />Save</Tab
+                    ><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
                 >
             {/if}
-        </TabList>
-        <TabPanels
+        </Tabs.List>
+        <div
             class={cx(
                 'relative mt-2 rounded-md bg-gray-800 p-4',
                 $isDataMenuOpen ? undefined : 'hidden',
             )}
         >
-            <TabPanel>
+            <Tabs.Content value="open">
                 <Button
                     variant="roundGhost"
                     class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
@@ -168,9 +169,9 @@
                     You can open multiple files to combine all unique reflection entries, and then
                     save them as one file or link.
                 </p>
-            </TabPanel>
+            </Tabs.Content>
             {#if $reflections.length}
-                <TabPanel>
+                <Tabs.Content value="save">
                     <Button
                         variant="roundGhost"
                         class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
@@ -245,7 +246,7 @@
                                 <div
                                     class="flex flex-grow flex-col items-center justify-center pb-8 pt-8 text-lg"
                                 >
-                                    <div class="spinner h-7 w-7 pb-2" />
+                                    <div class="spinner h-7 w-7 pb-2"></div>
                                     <p>Encrypting your data...</p>
                                 </div>
                             {:else if $encryptionEnabled && $encryptionKey === null}
@@ -300,8 +301,8 @@
                             {/if}
                         </div>
                     </div>
-                </TabPanel>
+                </Tabs.Content>
             {/if}
-        </TabPanels>
-    </TabGroup>
+        </div>
+    </Tabs.Root>
 </div>
