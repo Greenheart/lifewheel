@@ -8,9 +8,10 @@
 import { fileOpen } from 'browser-fs-access'
 
 import type { BaseSaveFile, EncryptedSaveFile, SaveFile } from './types'
-import { encryptedFile, loading, reflections } from './stores'
+import { encryptedFile, reflections } from './stores'
 import { get } from 'svelte/store'
 import { CURRENT_PROTOCOL } from './protocols'
+import { appState } from './app-state'
 
 function isEncryptedSaveFile(file: BaseSaveFile): file is EncryptedSaveFile {
     return file.encrypted
@@ -48,7 +49,7 @@ export async function openFile(): Promise<boolean> {
     // For encrypted files, we need to show a password form in a separate component
     if (isEncryptedSaveFile(file)) {
         encryptedFile.set(file)
-        loading.set(true)
+        appState.loading = true
 
         return true
     }

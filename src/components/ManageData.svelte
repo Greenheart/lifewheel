@@ -25,8 +25,9 @@
 
 <script lang="ts">
     import { browser } from '$app/environment'
-    import { reflections, loading, encryptionKey } from '$lib/stores'
+    import { reflections, encryptionKey } from '$lib/stores'
     import { tick } from 'svelte'
+    import { appState } from '$lib/app-state'
 
     const encryptionEnabled = writable(true)
     const isGeneratingKey = writable(false)
@@ -128,7 +129,7 @@
     })
 </script>
 
-<div class="mx-auto w-full max-w-4xl pt-2" class:invisible={$loading}>
+<div class="mx-auto w-full max-w-4xl pt-2" class:invisible={appState.loading}>
     <Tabs.Root class="manage-data">
         <Tabs.List class="flex justify-center gap-1" onfocusin={openMenu}>
             <Tabs.Trigger

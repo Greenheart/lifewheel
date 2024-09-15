@@ -14,7 +14,8 @@
 </script>
 
 <script lang="ts">
-    import { loading, reflections, encryptedFile } from '$lib/stores'
+    import { reflections, encryptedFile } from '$lib/stores'
+    import { appState } from '$lib/app-state'
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
@@ -35,7 +36,7 @@
             <p class="pt-4 text-xl text-white xs:text-2xl">{APP_TAGLINE}</p>
         </div>
 
-        {#if $loading}
+        {#if appState.loading}
             {#if $encryptedFile}
                 <FileImport />
             {:else}
@@ -208,7 +209,7 @@
         {/if}
     </div>
 
-    {#if !$loading}
+    {#if !appState.loading}
         <div class="pt-16" in:fade={{ duration: 300 }}>
             <div class="pb-4 pt-16 text-center">
                 <p>Made for 🏞 with 💚</p>

@@ -6,11 +6,12 @@
 </script>
 
 <script lang="ts">
-    import { loading, reflections, encryptedFile, encryptionKey } from '$lib/stores'
+    import { reflections, encryptedFile, encryptionKey } from '$lib/stores'
+    import { appState } from '$lib/app-state'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 
     const closeFileImport = () => {
-        $loading = false
+        appState.loading = false
         $encryptedFile = null
     }
 

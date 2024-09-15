@@ -7,11 +7,6 @@ import { browser } from '$app/environment'
 import { base } from '$app/paths'
 
 /**
- * Delay rendering until the app has loaded.
- */
-export const loading = writable<boolean>(true)
-
-/**
  * Temporary store used when loading encrypted files.
  */
 export const encryptedFile = writable<EncryptedSaveFile | null>(null)

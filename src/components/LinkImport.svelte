@@ -7,8 +7,9 @@
 
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { encryptionKey, loading, reflections } from '$lib/stores'
+    import { encryptionKey, reflections } from '$lib/stores'
     import { setPersistedKey } from '$lib/crypto'
+    import { appState } from '$lib/app-state'
 
     let payload: ParsedLink
 
@@ -36,12 +37,12 @@
                 closeLinkImport()
             }
         } else {
-            $loading = false
+            appState.loading = false
         }
     })
 
     const closeLinkImport = () => {
-        $loading = false
+        appState.loading = false
         history.pushState('', document.title, window.location.pathname)
     }
 
