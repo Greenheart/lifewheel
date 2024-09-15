@@ -112,7 +112,7 @@
         <div class="icons" style={`--n: ${LIFEWHEEL_ICONS.length}`}>
             {#each LIFEWHEEL_ICONS as Icon, i}
                 <div class="item" style={`--i: ${i}`}>
-                    <Icon class={colors[i].text} width="var(--size)" height="var(--size)" />
+                    <Icon class={colors[i].text} />
                 </div>
             {/each}
         </div>
@@ -151,5 +151,10 @@
                 0
             )
             rotate(68deg);
+    }
+
+    :global(.item > svg) {
+        width: var(--size);
+        height: var(--size);
     }
 </style>
