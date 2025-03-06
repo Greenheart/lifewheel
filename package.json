@@ -1,6 +1,6 @@
 {
     "name": "lifewheel",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "private": true,
     "type": "module",
     "scripts": {
@@ -13,38 +13,38 @@
         "format": "prettier --plugin-search-dir . --write ."
     },
     "dependencies": {
-        "@floating-ui/dom": "^1.6.11",
-        "@iconify-json/heroicons": "^1.2.1",
-        "bits-ui": "^0.21.16",
+        "@floating-ui/dom": "^1.6.13",
+        "@iconify-json/heroicons": "^1.2.2",
+        "bits-ui": "^0.21.6",
         "browser-fs-access": "^0.35.0",
         "d3-shape": "^3.2.0",
         "idb-keyval": "^6.2.1",
         "pako": "^2.1.0",
         "qrcode": "^1.5.4",
-        "rfc4648": "^1.5.3"
+        "rfc4648": "^1.5.4"
     },
     "devDependencies": {
-        "@iconify-json/material-symbols": "^1.2.4",
-        "@iconify-json/mdi": "^1.2.1",
-        "@sveltejs/adapter-static": "^3.0.5",
-        "@sveltejs/kit": "^2.7.1",
-        "@sveltejs/vite-plugin-svelte": "4.0.0-next.8",
-        "@types/d3-shape": "^3.1.6",
+        "@iconify-json/material-symbols": "^1.2.15",
+        "@iconify-json/mdi": "^1.2.3",
+        "@sveltejs/adapter-static": "^3.0.8",
+        "@sveltejs/kit": "^2.18.0",
+        "@sveltejs/vite-plugin-svelte": "^5.0.3",
+        "@types/d3-shape": "^3.1.7",
         "@types/pako": "^2.0.3",
         "@types/qrcode": "^1.5.5",
         "autoprefixer": "^10.4.20",
-        "postcss": "^8.4.47",
+        "postcss": "^8.5.3",
         "postcss-load-config": "^6.0.1",
-        "prettier": "^3.3.3",
-        "prettier-plugin-svelte": "^3.2.7",
-        "prettier-plugin-tailwindcss": "^0.6.8",
-        "svelte": "5.0.0-next.268",
-        "svelte-check": "^4.0.5",
-        "tailwindcss": "^3.4.14",
-        "tslib": "^2.8.0",
-        "typescript": "^5.6.3",
+        "prettier": "^3.5.3",
+        "prettier-plugin-svelte": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.11",
+        "svelte": "^5.22.5",
+        "svelte-check": "^4.1.5",
+        "tailwindcss": "^3.4.17",
+        "tslib": "^2.8.1",
+        "typescript": "^5.8.2",
         "unplugin-icons": "^0.19.3",
-        "vite": "^5.4.9"
+        "vite": "^6.2.0"
     },
     "prettier": {
         "tabWidth": 4,
@@ -65,6 +65,11 @@
                     "parser": "svelte"
                 }
             }
+        ]
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "esbuild"
         ]
     }
 }
