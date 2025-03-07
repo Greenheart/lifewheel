@@ -6,12 +6,6 @@ import type {
     TextStep,
 } from './types'
 
-/**
- * TODO: See if this can be replaced with Svelte built in clsx support?
- */
-export const cx = (...classes: (string | undefined | null | false)[]) =>
-    classes.filter(Boolean).join(' ').trim()
-
 export function isLifewheelStep(step: ReflectionStep): step is LifewheelStep {
     return step.phase === 'reflection'
 }

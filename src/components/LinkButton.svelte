@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import type { HTMLAttributes } from 'svelte/elements'
     import type { Snippet } from 'svelte'
-    import { cx } from '$lib/utils'
     import { defaultVariant, variants, defaultClasses } from './Button.svelte'
 </script>
 
@@ -15,6 +14,6 @@
     let { href, variant = defaultVariant, class: className, children }: Props = $props()
 </script>
 
-<a {href} class={cx('block text-center', defaultClasses, variants[variant], className)}>
+<a {href} class={['block text-center', defaultClasses, variants[variant], className]}>
     {@render children()}
 </a>

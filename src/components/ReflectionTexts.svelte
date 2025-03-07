@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import type { ReflectionStep } from '$lib/types'
-    import { cx, isLifewheelStep } from '../lib/utils'
+    import { isLifewheelStep } from '../lib/utils'
 </script>
 
 <script lang="ts">
@@ -13,10 +13,10 @@
 </script>
 
 <h2
-    class={cx(
+    class={[
         'flex items-center justify-center gap-2 text-lg font-normal normal-case xs:text-2xl sm:text-3xl',
         isLifewheelStep(reflectionStep) ? reflectionStep.colors.text : 'text-emerald-400',
-    )}
+    ]}
 >
     {#key reflectionStep}
         {#if isLifewheelStep(reflectionStep)}

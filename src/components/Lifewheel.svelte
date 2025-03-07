@@ -10,7 +10,6 @@
         LIFEWHEEL_ICONS,
     } from '$lib/constants'
     import type { LifewheelState } from '$lib/types'
-    import { cx } from '../lib/utils'
 
     const oneEigthRadians = (Math.PI * 2) / 8
     const levelWidth = 20
@@ -71,7 +70,7 @@
 
 <div
     bind:clientWidth
-    class={cx('pointer-events-none w-full select-none grid place-content-center pt-8', className)}
+    class={['pointer-events-none w-full select-none grid place-content-center pt-8', className]}
     style="--width: {width}px; --size: {innerWidth < 375 ? 20 : 24}px;"
 >
     {#if visible}
@@ -84,7 +83,7 @@
             class="lifewheel aspect-square"
         >
             {#each backgrounds as path, i}
-                <path d={path} class={cx(colors[i].fill, 'opacity-20')} />
+                <path d={path} class={[colors[i].fill, 'opacity-20']} />
             {/each}
 
             <!-- Render lifewheel selected values for each dimension -->

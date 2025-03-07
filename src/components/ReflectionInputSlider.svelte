@@ -3,7 +3,7 @@
 
     import { MAX_LEVEL, MIN_LEVEL } from '$lib/constants'
     import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
-    import { cx, isLifewheelStep } from '../lib/utils'
+    import { isLifewheelStep } from '../lib/utils'
 
     let min = MIN_LEVEL
     let max = MAX_LEVEL
@@ -107,11 +107,11 @@
             {min}
             {max}
             {step}
-            class={cx(
+            class={[
                 'input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
                 reflectionStep.colors.from,
                 reflectionStep.colors.to,
-            )}
+            ]}
             style={`background-size: ${getThumbPosition(lifewheel[reflectionStep.i])}% 100%`}
             onkeydown={(event) => {
                 if (event.key.includes('Arrow')) flashTooltip()

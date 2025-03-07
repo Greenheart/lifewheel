@@ -15,10 +15,9 @@
 
     import { openFile } from '$lib/import'
     import { saveEncryptedFile, saveFile } from '$lib/export'
-    import { cx } from '$lib/utils'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
 
-    const tabClasses = cx(defaultClasses, variants.ghost, 'inline-flex items-center gap-2')
+    const tabClasses = [defaultClasses, variants.ghost, 'inline-flex items-center gap-2']
 </script>
 
 <script lang="ts">
@@ -135,18 +134,18 @@
         <Tabs.List class="flex justify-center gap-1" onfocusin={openMenu}>
             <Tabs.Trigger
                 value="open"
-                class={cx(tabClasses, 'hover:border-emerald-400/5')}
+                class={[...tabClasses, 'hover:border-emerald-400/5']}
                 onclick={openMenu}><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
             >
             {#if reflections.count}
                 <Tabs.Trigger
                     value="save"
-                    class={cx(tabClasses, 'hover:border-emerald-400/5')}
+                    class={[...tabClasses, 'hover:border-emerald-400/5']}
                     onclick={openMenu}><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
                 >
             {/if}
         </Tabs.List>
-        <div class={cx('relative mt-2 rounded-md bg-gray-800 p-4', isOpen ? undefined : 'hidden')}>
+        <div class={['relative mt-2 rounded-md bg-gray-800 p-4', isOpen ? undefined : 'hidden']}>
             <Tabs.Content value="open">
                 <Button
                     variant="roundGhost"

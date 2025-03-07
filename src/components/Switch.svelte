@@ -1,5 +1,4 @@
 <script lang="ts" module>
-    import { cx } from '$lib/utils'
     import type { Snippet } from 'svelte'
 </script>
 
@@ -22,7 +21,7 @@
     }: Props = $props()
 </script>
 
-<label class={cx('toggle', className)} for={name}>
+<label class={['toggle', className]} for={name}>
     <input type="checkbox" {name} {id} {disabled} bind:checked />
     <span class="toggle-track">
         <span class="toggle-indicator"></span>

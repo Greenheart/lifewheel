@@ -1,6 +1,5 @@
 <script lang="ts" module>
     import type { HTMLButtonAttributes } from 'svelte/elements'
-    import { cx } from '$lib/utils'
     import type { Snippet } from 'svelte'
 
     export const variants = {
@@ -36,6 +35,6 @@
     }: Props = $props()
 </script>
 
-<button {...rest} {disabled} class={cx(defaultClasses, variants[variant], className)}>
+<button {...rest} {disabled} class={[defaultClasses, variants[variant], className]}>
     {@render children()}
 </button>

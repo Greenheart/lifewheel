@@ -11,13 +11,11 @@
     import HeroiconsEllipsisHorizontal from '~icons/heroicons/ellipsis-horizontal'
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
 
-    import { cx } from '$lib/utils'
-
-    const menuButtonClasses = cx(
+    const menuButtonClasses = [
         defaultClasses,
         variants.roundGhost,
         '!h-12 !w-12 !border-emerald-400/5',
-    )
+    ]
 </script>
 
 <script lang="ts">
