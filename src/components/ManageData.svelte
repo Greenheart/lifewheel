@@ -108,7 +108,6 @@
     })
 </script>
 
-<!-- NOTE: Maybe no need to be a toggle, since it will be used only in one place anyway -->
 {#snippet encryptionToggle()}
     <div class="flex select-none items-center gap-3 pb-8 pt-8">
         {#if shouldEncrypt}
@@ -225,35 +224,6 @@
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
-                                        <!-- IDEA: Maybe remove duplicate buttons -->
-                                        <!-- <div class="flex gap-1 pb-8 2xs:gap-2 xs:hidden">
-                                            <Button
-                                                onclick={async () => {
-                                                    if (shouldEncrypt) {
-                                                        const data = await encryptedData
-                                                        if (!data) return
-                                                        await saveEncryptedFile(data)
-                                                    } else {
-                                                        await saveFile(reflections.entries)
-                                                    }
-                                                }}
-                                                variant="outline"
-                                                class="flex w-32 items-center gap-1"
-                                                disabled={encryptionKey.isGenerating ||
-                                                    (shouldEncrypt && !encryptionKey.key)}
-                                                ><HeroiconsArrowDownTray class="size-6" />Save file</Button
-                                            >
-
-                                            <Button
-                                                onclick={() => copyLink()}
-                                                variant="outline"
-                                                class="flex w-32 items-center gap-1"
-                                                disabled={encryptionKey.isGenerating ||
-                                                    (shouldEncrypt && !encryptionKey.key)}
-                                                ><HeroiconsLink class="size-6" />{copyText}</Button
-                                            >
-                                        </div> -->
-
                                         <div class="grid justify-center text-center pb-8">
                                             <h2 class="pb-4 text-lg font-bold">
                                                 QR code for your {shouldEncrypt ? 'encrypted' : ''}
