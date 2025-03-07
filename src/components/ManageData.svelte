@@ -108,6 +108,27 @@
     })
 </script>
 
+<!-- NOTE: Maybe no need to be a toggle, since it will be used only in one place anyway -->
+{#snippet encryptionToggle()}
+    <div class="flex select-none items-center gap-3 pb-8 pt-8">
+        {#if shouldEncrypt}
+            <HeroiconsLockClosed class="flex-shrink-0 size-6" />
+        {:else}
+            <HeroiconsLockOpen class="flex-shrink-0 opacity-50 size-6" />
+        {/if}
+        <Switch
+            bind:checked={shouldEncrypt}
+            id="encrypt"
+            name="encrypt"
+            disabled={encryptionKey.isGenerating}
+        >
+            {#snippet label()}
+                <span>Use encryption for better privacy</span>
+            {/snippet}
+        </Switch>
+    </div>
+{/snippet}
+
 <div class="mx-auto w-full max-w-4xl pt-2" class:invisible={appState.loading}>
     <Tabs.Root class="manage-data">
         <Tabs.List class="flex justify-center gap-1" onfocusin={openMenu}>
@@ -187,43 +208,8 @@
                     </div>
 
                     <div class="grid md:grid-cols-2 md:gap-8">
-                        <div class="grid content-start gap-4 md:order-2">
-                            <h2 class="pt-8 text-lg font-bold">Your data is your “account” 😇</h2>
-                            <p>
-                                <HeroiconsPlusCircle class="inline stroke-yellow-400" /> To add more
-                                reflections in the future, save your file or copy your link and open
-                                it in any modern browser.
-                            </p>
-                            <p>
-                                🔐 For better privacy, protect your data with a password. Save it in
-                                your password manager - it's not possible to recover a lost
-                                password.
-                            </p>
-                            <p>
-                                🙌 You can open multiple files (or links) to combine all reflections
-                                and save them as one file or link. This can be useful to merge data
-                                from different devices.
-                            </p>
-                        </div>
-
-                        <div class="md:order-1">
-                            <div class="flex select-none items-center gap-3 pb-8 pt-8">
-                                {#if shouldEncrypt}
-                                    <HeroiconsLockClosed class="flex-shrink-0 size-6" />
-                                {:else}
-                                    <HeroiconsLockOpen class="flex-shrink-0 opacity-50 size-6" />
-                                {/if}
-                                <Switch
-                                    bind:checked={shouldEncrypt}
-                                    id="encrypt"
-                                    name="encrypt"
-                                    disabled={encryptionKey.isGenerating}
-                                >
-                                    {#snippet label()}
-                                        <span>Use encryption for better privacy</span>
-                                    {/snippet}
-                                </Switch>
-                            </div>
+                        <div>
+                            {@render encryptionToggle()}
 
                             {#if encryptionKey.isGenerating}
                                 <div
@@ -239,7 +225,8 @@
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
-                                        <div class="flex gap-1 pb-8 2xs:gap-2 xs:hidden">
+                                        <!-- IDEA: Maybe remove duplicate buttons -->
+                                        <!-- <div class="flex gap-1 pb-8 2xs:gap-2 xs:hidden">
                                             <Button
                                                 onclick={async () => {
                                                     if (shouldEncrypt) {
@@ -265,12 +252,19 @@
                                                     (shouldEncrypt && !encryptionKey.key)}
                                                 ><HeroiconsLink class="size-6" />{copyText}</Button
                                             >
+                                        </div> -->
+
+                                        <div class="grid justify-center text-center pb-8">
+                                            <h2 class="pb-4 text-lg font-bold">
+                                                QR code for your {shouldEncrypt ? 'encrypted' : ''}
+                                                link:
+                                            </h2>
+                                            <img
+                                                src={imageURL}
+                                                alt="QR code generated for your link"
+                                            />
                                         </div>
-                                        <h2 class="pb-4 text-lg font-bold">
-                                            QR code for your {shouldEncrypt ? 'encrypted' : ''}
-                                            link:
-                                        </h2>
-                                        <img src={imageURL} alt="QR code generated for your link" />
+
                                         {#if shouldEncrypt && encryptionKey.key}
                                             <Button
                                                 variant="ghost"
@@ -282,6 +276,25 @@
                                     {/if}
                                 {/await}
                             {/if}
+                        </div>
+
+                        <div class="grid content-start gap-4">
+                            <h2 class="pt-8 text-lg font-bold">Your data is your “account” 😇</h2>
+                            <p>
+                                <HeroiconsPlusCircle class="inline stroke-yellow-400" /> To add more
+                                reflections in the future, save your file or copy your link and open
+                                it in any modern browser.
+                            </p>
+                            <p>
+                                🔐 For better privacy, protect your data with a password. Save it in
+                                your password manager - it's not possible to recover a lost
+                                password.
+                            </p>
+                            <p>
+                                🙌 You can open multiple files (or links) to combine all reflections
+                                and save them as one file or link. This can be useful to merge data
+                                from different devices.
+                            </p>
                         </div>
                     </div>
                 </Tabs.Content>
