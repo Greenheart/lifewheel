@@ -66,7 +66,7 @@
                     {#if !reflections.count}
                         <div class="grid gap-6 pt-8 text-lg">
                             <p class="font-bold">
-                                Offline-first, privacy-friendly web app for your personal wellbeing.
+                                Local-first, privacy-friendly web app for your personal wellbeing.
                             </p>
 
                             <p>{APP_DESCRIPTION}</p>

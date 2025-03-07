@@ -1,6 +1,6 @@
 # Life Wheel
 
-> Offline-first, privacy-friendly web app for your personal wellbeing.
+> [Local-first](https://localfirstweb.dev/), privacy-friendly web app for your personal wellbeing.
 
 <img src="screenshot.png" width="214" height="463" alt="Screenshot of the Lifewheel app. Overview of previous reflections, showing colored circle segments representing eight dimensions of your life.">
 
@@ -25,7 +25,7 @@ Seamlessly sync your data across devices with a private link (using the [URI fra
 -   ⌨️ Keyboard shortcuts (primarily with the arrow keys) for extra comfort.
 -   🆓 Free as in freedom. This is [free software](https://fsfe.org/freesoftware/), and you're welcome to help make it even better!
 
-Designed with inspiration from the [Humane Tech](https://www.humanetech.com/) principles, this project explores the possibilities of offline-first web apps. Specifically - is it possible to give users full control over their private data, while still providing a smooth user experience? For the answer... well, you have to see it yourself! 😄
+Designed with inspiration from the [Humane Tech](https://www.humanetech.com/) principles, this project explores the possibilities of local-first web apps. Specifically - is it possible to give users full control over their private data, while still providing a smooth user experience? For the answer... well, you have to see it yourself! 😄
 
 **Now check out the [live demo](https://reconnect.earth/lifewheel)!**
 
