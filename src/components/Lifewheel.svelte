@@ -110,9 +110,9 @@
             {/each}
         </svg>
 
-        <div class="icons" style={`--n: ${LIFEWHEEL_ICONS.length}`}>
+        <div class="icons pointer-events-auto" style={`--n: ${LIFEWHEEL_ICONS.length}`}>
             {#each LIFEWHEEL_ICONS as Icon, i}
-                <div class="item" style={`--i: ${i}`}>
+                <div class="item" style={`--i: ${i}`} title={lifewheelSteps[i].title}>
                     <Icon class={colors[i].text} />
                 </div>
             {/each}
