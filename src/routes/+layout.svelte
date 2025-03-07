@@ -1,5 +1,6 @@
 <script lang="ts">
     import { APP_DESCRIPTION, APP_NAME, APP_TAGLINE } from '$lib/constants'
+    import '@fontsource-variable/inter'
     import '../app.postcss'
 
     let { children } = $props()
