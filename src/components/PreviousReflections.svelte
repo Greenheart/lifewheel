@@ -135,7 +135,12 @@
                         class={menuButtonClasses}
                         ><HeroiconsEllipsisHorizontal class="size-6" /></Popover.Trigger
                     >
-                    <Popover.Content class="text-white" sideOffset={4} side="bottom" align="end">
+                    <Popover.Content
+                        class="text-white z-50"
+                        sideOffset={4}
+                        side="bottom"
+                        align="end"
+                    >
                         <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
                             <Button
                                 aria-label="Remove reflection"
