@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { encryptedFile } from '$lib/stores'
+    import { encryptedFile } from '$lib/EncryptedFile.svelte'
     import { appState } from '$lib/app-state.svelte'
     import { CURRENT_PROTOCOL } from '$lib/protocols'
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
@@ -13,19 +13,19 @@
 
     const closeFileImport = () => {
         appState.loading = false
-        $encryptedFile = null
+        encryptedFile.current = null
     }
 
     const submitPassphrase = async (password: string) => {
         try {
-            if (!$encryptedFile) return
+            if (!encryptedFile.current) return
             const key = await CURRENT_PROTOCOL.deriveKeyFromData({
-                data: base64url.parse($encryptedFile.data),
+                data: base64url.parse(encryptedFile.current.data),
                 password,
-                protocolVersion: $encryptedFile.version,
+                protocolVersion: encryptedFile.current.version,
             })
             const newEntries = await CURRENT_PROTOCOL.importEncryptedFile({
-                file: $encryptedFile,
+                file: encryptedFile.current,
                 key,
             })
 
@@ -35,7 +35,7 @@
                 CURRENT_PROTOCOL.getUniqueEntries({
                     currentEntries: reflections.entries,
                     newEntries,
-                    protocolVersion: $encryptedFile.version,
+                    protocolVersion: encryptedFile.current.version,
                 }),
             )
         } catch (error) {

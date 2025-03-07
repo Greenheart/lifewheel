@@ -14,7 +14,7 @@
 </script>
 
 <script lang="ts">
-    import { encryptedFile } from '$lib/stores'
+    import { encryptedFile } from '$lib/EncryptedFile.svelte'
     import { reflections } from '$lib/Reflections.svelte'
     import { appState } from '$lib/app-state.svelte'
 </script>
@@ -38,7 +38,7 @@
         </div>
 
         {#if appState.loading}
-            {#if $encryptedFile}
+            {#if encryptedFile.current}
                 <FileImport />
             {:else}
                 <LinkImport />
