@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import { tick } from 'svelte'
-    import { toStore } from 'svelte/store'
-    import { tweened } from 'svelte/motion'
+    import { Tween } from 'svelte/motion'
     import { cubicOut } from 'svelte/easing'
     import { Popover } from 'bits-ui'
 
@@ -12,7 +11,6 @@
     import HeroiconsEllipsisHorizontal from '~icons/heroicons/ellipsis-horizontal'
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
 
-    import type { LifewheelState } from '$lib/types'
     import { cx } from '$lib/utils'
 
     const menuButtonClasses = cx(
@@ -26,21 +24,16 @@
     import { reflections } from '$lib/Reflections.svelte'
 
     let index = $state(Math.max(reflections.count - 1, 0))
+    $inspect(reflections.entries[index].data).with(console.log)
 
-    const currentReflectionAsStore = toStore(() => reflections.entries[index])
-
-    const tweenedLifewheel = tweened<LifewheelState>($currentReflectionAsStore.data, {
-        duration: 500,
+    const tweenedLifewheel = Tween.of(() => reflections.entries[index].data, {
+        duration: 700,
         easing: cubicOut,
     })
 
     const currentReflection = $derived.by(() => {
         if (reflections.entries.length < 1) return null
-        const entry = reflections.entries[index]
-        if (entry) {
-            tweenedLifewheel.set(entry.data)
-        }
-        return entry
+        return reflections.entries[index]
     })
 
     let open = $state(false)

@@ -1,6 +1,6 @@
 <script module lang="ts">
     import { arc } from 'd3-shape'
-    import type { Tweened } from 'svelte/motion'
+    import type { Tween } from 'svelte/motion'
 
     import {
         colors,
@@ -38,7 +38,7 @@
 
     type Props = {
         data: LifewheelState
-        tweenedLifewheel: Tweened<LifewheelState>
+        tweenedLifewheel: Tween<LifewheelState>
         class?: string
     }
     let { data, tweenedLifewheel, class: className = '' }: Props = $props()
@@ -51,7 +51,7 @@
     onMount(() => {
         visible = true
         tweenedLifewheel.set(data)
-        dimensions = getArcPaths($tweenedLifewheel)
+        dimensions = getArcPaths(tweenedLifewheel.current)
     })
 
     const width = $derived(Math.round(clientWidth * (innerWidth < 640 ? 0.6 : 0.75)))
@@ -63,7 +63,7 @@
 
     $effect(() => {
         tweenedLifewheel.set(data)
-        dimensions = getArcPaths($tweenedLifewheel)
+        dimensions = getArcPaths(tweenedLifewheel.current)
     })
 </script>
 

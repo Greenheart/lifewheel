@@ -1,7 +1,6 @@
 <script lang="ts" module>
     import { cubicOut } from 'svelte/easing'
-    import { tweened } from 'svelte/motion'
-    import { writable } from 'svelte/store'
+    import { Tween } from 'svelte/motion'
 
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
@@ -20,7 +19,7 @@
     /**
      * The actual lifewheel state.
      */
-    export const lifewheel = writable<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
+    let lifewheel = $state<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
 
     /**
      * The currently visible reflection step.
@@ -30,7 +29,7 @@
     /**
      * A tweened representation of the lifewheel state. This allows smooth tweened motions when values change.
      */
-    const tweenedLifewheel = tweened<LifewheelState>(INITIAL_LIFEWHEEL_STATE, {
+    const tweenedLifewheel = Tween.of(() => INITIAL_LIFEWHEEL_STATE, {
         duration: 400,
         easing: cubicOut,
     })
@@ -50,16 +49,16 @@
     const onNext = async () => {
         currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
-            reflections.add(createReflectionEntry($lifewheel))
+            reflections.add(createReflectionEntry(lifewheel))
 
             await goto('/lifewheel')
         } else {
             reflectionStep = allReflectionSteps[currentIndex + 1]
 
             if (isLifewheelStep(reflectionStep)) {
-                if ($lifewheel[reflectionStep.i] === 0) {
+                if (lifewheel[reflectionStep.i] === 0) {
                     // Add default value the first time a new dimension is active.
-                    $lifewheel = $lifewheel.map((value, i) =>
+                    lifewheel = lifewheel.map((value, i) =>
                         i === (reflectionStep as LifewheelStep).i ? INITIAL_LEVEL : value,
                     ) as LifewheelState
                 }
@@ -71,7 +70,7 @@
 <div
     class="max-h-[calc(100vh-4rem)] mx-auto grid max-w-screen-md grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
-    <Lifewheel class="max-w-sm sm:max-w-md" {tweenedLifewheel} data={$lifewheel} />
+    <Lifewheel class="max-w-sm sm:max-w-md" {tweenedLifewheel} data={lifewheel} />
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4">
         <div class="h-40 2xs:h-48 xs:h-52">
@@ -79,7 +78,7 @@
         </div>
     </div>
 
-    <ReflectionInputSlider {reflectionStep} {lifewheel} />
+    <ReflectionInputSlider bind:reflectionStep bind:lifewheel />
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack()}
