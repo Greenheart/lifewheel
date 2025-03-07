@@ -81,13 +81,15 @@
         const url = await (shouldEncrypt ? encryptedLink : link)
         if (!url) return
         // Clipboard is only available in via HTTPS or localhost
-        await navigator?.clipboard?.writeText(url)
+        if (navigator.clipboard) {
+            await navigator.clipboard.writeText(url)
 
-        copyText = 'Copied!'
+            copyText = 'Copied!'
 
-        window.setTimeout(() => {
-            copyText = 'Copy link'
-        }, 2000)
+            window.setTimeout(() => {
+                copyText = 'Copy link'
+            }, 2000)
+        }
     }
 
     let isOpen = $state(false)
