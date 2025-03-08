@@ -22,7 +22,6 @@
     import { reflections } from '$lib/Reflections.svelte'
 
     let index = $state(Math.max(reflections.count - 1, 0))
-    $inspect(reflections.entries[index].data).with(console.log)
 
     const tweenedLifewheel = Tween.of(() => reflections.entries[index].data, {
         duration: 700,
@@ -50,7 +49,7 @@
         }
 
         reflections.remove(index)
-        await tick()
+
         if (!reflections.entries[index] && reflections.count) {
             index = Math.max(reflections.count - 1, 0)
         }
