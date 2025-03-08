@@ -2,6 +2,9 @@
     import { cubicOut } from 'svelte/easing'
     import { Tween } from 'svelte/motion'
 
+    import HeroiconsArrowLeft from '~icons/heroicons/arrow-left'
+    import HeroiconsArrowRight from '~icons/heroicons/arrow-right'
+
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
     import ReflectionInputSlider from './ReflectionInputSlider.svelte'
@@ -70,7 +73,7 @@
 <div
     class="max-h-[calc(100vh-4rem)] mx-auto grid max-w-screen-md grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
-    <Lifewheel class="max-w-sm xl:max-w-md" {tweenedLifewheel} data={lifewheel} />
+    <Lifewheel class="max-w-sm 2xl:max-w-md" {tweenedLifewheel} data={lifewheel} />
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4">
         <div class="h-40 2xs:h-48 xs:h-52">
@@ -83,11 +86,13 @@
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack()}
             <Button variant="roundOutline" onclick={onPrev} aria-label="Show previous step"
-                >←</Button
+                ><HeroiconsArrowLeft /></Button
             >
         {/if}
         <div class="flex-grow"></div>
-        <Button variant="roundSolid" onclick={onNext} aria-label="Show next step">→</Button>
+        <Button variant="roundSolid" onclick={onNext} aria-label="Show next step"
+            ><HeroiconsArrowRight /></Button
+        >
     </div>
 </div>
 
