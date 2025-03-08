@@ -15,7 +15,7 @@
         lifewheel: LifewheelState
         reflectionStep: ReflectionStep
     }
-    let { lifewheel = $bindable(), reflectionStep = $bindable() }: Props = $props()
+    let { lifewheel = $bindable(), reflectionStep }: Props = $props()
 
     let input = $state<HTMLInputElement>()
     let tooltip = $state<HTMLDivElement>()

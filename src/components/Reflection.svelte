@@ -25,11 +25,6 @@
     let lifewheel = $state<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
 
     /**
-     * The currently visible reflection step.
-     */
-    let reflectionStep = $state<ReflectionStep>(allReflectionSteps[0])
-
-    /**
      * A tweened representation of the lifewheel state. This allows smooth tweened motions when values change.
      */
     const tweenedLifewheel = Tween.of(() => INITIAL_LIFEWHEEL_STATE, {
@@ -37,26 +32,28 @@
         easing: cubicOut,
     })
 
-    const getCurrentIndex = () =>
-        allReflectionSteps.findIndex((step) => step.title === reflectionStep.title)
+    let currentIndex = $state(0)
 
-    let currentIndex = $state(getCurrentIndex())
+    /**
+     * The currently visible reflection step.
+     */
+    let reflectionStep = $derived(allReflectionSteps[currentIndex])
 
     const canGoBack = () => currentIndex >= 1
 
     const onPrev = () => {
-        currentIndex = getCurrentIndex()
-        reflectionStep = allReflectionSteps[currentIndex - 1]
+        if (canGoBack()) {
+            currentIndex -= 1
+        }
     }
 
     const onNext = async () => {
-        currentIndex = getCurrentIndex()
         if (currentIndex === allReflectionSteps.length - 1) {
             reflections.add(createReflectionEntry(lifewheel))
 
             await goto('/lifewheel')
         } else {
-            reflectionStep = allReflectionSteps[currentIndex + 1]
+            currentIndex += 1
 
             if (isLifewheelStep(reflectionStep)) {
                 if (lifewheel[reflectionStep.i] === 0) {
@@ -81,7 +78,7 @@
         </div>
     </div>
 
-    <ReflectionInputSlider bind:reflectionStep bind:lifewheel />
+    <ReflectionInputSlider {reflectionStep} bind:lifewheel />
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack()}
