@@ -4,6 +4,7 @@
 
     import HeroiconsArrowLeft from '~icons/heroicons/arrow-left'
     import HeroiconsArrowRight from '~icons/heroicons/arrow-right'
+    import HeroiconsXMark from '~icons/heroicons/x-mark'
 
     import Button from './Button.svelte'
     import ReflectionTexts from './ReflectionTexts.svelte'
@@ -12,12 +13,13 @@
 
     import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE, INITIAL_LEVEL } from '$lib/constants'
     import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
-    import type { LifewheelState, LifewheelStep, ReflectionStep } from '$lib/types'
+    import type { LifewheelState, LifewheelStep } from '$lib/types'
 </script>
 
 <script lang="ts">
     import { goto } from '$app/navigation'
     import { reflections } from '$lib/Reflections.svelte'
+    import { base } from '$app/paths'
 
     /**
      * The actual lifewheel state.
@@ -51,7 +53,7 @@
         if (currentIndex === allReflectionSteps.length - 1) {
             reflections.add(createReflectionEntry(lifewheel))
 
-            await goto('/lifewheel')
+            await goto(base)
         } else {
             currentIndex += 1
 
@@ -65,11 +67,24 @@
             }
         }
     }
+
+    async function abortReflection() {
+        if (confirm('Are you sure you want to abort this reflection and lose your progress?')) {
+            await goto(base)
+        }
+    }
 </script>
 
 <div
     class="max-h-[calc(100vh-4rem)] mx-auto grid max-w-screen-md grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
+    <Button
+        onclick={abortReflection}
+        aria-label="Abort reflection and go back to main menu"
+        class="!h-12 !w-12 !border-emerald-400/5 absolute top-4 right-4"
+        variant="roundGhost"><HeroiconsXMark /></Button
+    >
+
     <Lifewheel class="max-w-sm 2xl:max-w-md" {tweenedLifewheel} data={lifewheel} />
 
     <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4">
