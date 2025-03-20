@@ -10,6 +10,8 @@
     import HeroiconsTrash from '~icons/heroicons/trash'
     import HeroiconsEllipsisHorizontal from '~icons/heroicons/ellipsis-horizontal'
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
+    import HeroiconsArrowLeft from '~icons/heroicons/arrow-left'
+    import HeroiconsArrowRight from '~icons/heroicons/arrow-right'
 
     const menuButtonClasses = [
         defaultClasses,
@@ -171,7 +173,7 @@
                         variant="roundOutline"
                         aria-label="Show previous reflection"
                         class={index < 1 ? 'invisible' : undefined}
-                        onclick={onPrev}>←</Button
+                        onclick={onPrev}><HeroiconsArrowLeft /></Button
                     >
                     <!-- IDEA: Between the buttons here might be a good spot to display notes -->
                     <div></div>
@@ -179,7 +181,7 @@
                         variant="roundOutline"
                         aria-label="Show next reflection"
                         class={index >= reflections.entries.length - 1 ? 'invisible' : undefined}
-                        onclick={onNext}>→</Button
+                        onclick={onNext}><HeroiconsArrowRight /></Button
                     >
                 </div>
             {/if}
