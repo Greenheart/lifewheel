@@ -69,7 +69,13 @@
     }
 
     async function abortReflection() {
-        if (confirm('Are you sure you want to abort this reflection and lose your progress?')) {
+        const hasUnsavedChanges = lifewheel.some((value) => value > 0 && value !== INITIAL_LEVEL)
+
+        if (
+            !hasUnsavedChanges ||
+            (hasUnsavedChanges &&
+                confirm('Are you sure you want to abort this reflection and lose your progress?'))
+        ) {
             await goto(base)
         }
     }
