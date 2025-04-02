@@ -28,6 +28,8 @@
 <script lang="ts">
     import { goto } from '$app/navigation'
     import { reflections } from '$lib/Reflections.svelte'
+    import { base } from '$app/paths'
+    import HistoricalOverview from './HistoricalOverview.svelte'
     import { resolve } from '$app/paths'
     import Textarea from './Textarea.svelte'
 
@@ -119,7 +121,9 @@
 
     <ReflectionInputSlider {reflectionStep} bind:lifewheel {sliderClass} />
 
-    <div class="flex w-full max-w-md min-w-40 justify-between px-4 pb-4">
+    <HistoricalOverview></HistoricalOverview>
+
+    <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack()}
             <Button variant="roundOutline" onclick={onPrev} aria-label="Show previous step"
                 ><HeroiconsArrowLeft /></Button
