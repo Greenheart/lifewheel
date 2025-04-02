@@ -5,7 +5,7 @@ export type { ProtocolVersion }
 type BasicStep = {
     title: string
     text: string
-    phase: 'intro' | 'reflection' | 'outro'
+    phase: 'intro' | 'reflection' | 'comment' | 'outro'
 }
 
 export type LifewheelStep = BasicStep & {
@@ -21,7 +21,7 @@ export type LifewheelStep = BasicStep & {
 }
 
 export type TextStep = BasicStep & {
-    phase: 'intro' | 'outro'
+    phase: 'intro' | 'comment' | 'outro'
 }
 
 export type ReflectionStep = LifewheelStep | BasicStep
@@ -30,10 +30,12 @@ export type ReflectionStep = LifewheelStep | BasicStep
  * Each dimension of the life wheel represented by a number
  */
 export type LifewheelState = [number, number, number, number, number, number, number, number]
+export type CommentState = string
 
 export type ReflectionEntry = {
-    data: LifewheelState
     time: Date
+    data: LifewheelState
+    comment: CommentState
 }
 
 export type ParsedLink = {

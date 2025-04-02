@@ -2,6 +2,7 @@ import type { EncryptedSaveFile, ParsedLink, ReflectionEntry, SaveFile, UserKey 
 
 import v1 from './v1/protocol'
 import v2 from './v2/protocol'
+import v3 from './v3/protocol'
 
 // IDEA: In the future, we could lazy load old protocol versions only when they are needed.
 // Or if we package Lifewheel as a PWA, it doesn't matter since all modules would be offline anyway.
@@ -130,11 +131,12 @@ type BackwardsCompatibleProtocol = Pick<
 export const PROTOCOL_VERSIONS = {
     1: v1,
     2: v2,
+    3: v3,
 }
 
 export type ProtocolVersion = keyof typeof PROTOCOL_VERSIONS
 
-const CURRENT_PROTOCOL_VERSION = 2
+const CURRENT_PROTOCOL_VERSION = 3
 
 const PROTOCOL = PROTOCOL_VERSIONS[CURRENT_PROTOCOL_VERSION]
 

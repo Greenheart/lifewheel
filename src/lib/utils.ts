@@ -1,26 +1,27 @@
 import type {
+    CommentState,
     LifewheelState,
     LifewheelStep,
     ReflectionEntry,
     ReflectionStep,
-    TextStep,
 } from './types'
 
 export function isLifewheelStep(step: ReflectionStep): step is LifewheelStep {
     return step.phase === 'reflection'
 }
 
-export function isTextStep(step: ReflectionStep): step is TextStep {
-    return step.phase !== 'reflection'
+export function isCommentStep(step: ReflectionStep): step is LifewheelStep {
+    return step.phase === 'comment'
 }
 
-export const createReflectionEntry = (data: LifewheelState): ReflectionEntry => {
+export const createReflectionEntry = (data: LifewheelState, comment: CommentState): ReflectionEntry => {
     const time = new Date()
     // We don't care about seconds or millisedconds. Reducing precision also saves data.
     time.setSeconds(0, 0)
 
     return {
         data,
+        comment,
         time,
     }
 }
@@ -65,7 +66,7 @@ export function mergeTypedArrays(...arrays: Uint8Array[]) {
 }
 
 export function encodeInt32(n: number) {
-    const num = Math.min(256 * 256 * 256 * 256 - 1, Math.floor(n))
+    const num = Math.min(0xffffffff, Math.floor(n))
     const res = new Uint8Array(4)
     res[0] = num >> 24
     res[1] = (num >> 16) & 0xff
@@ -74,21 +75,29 @@ export function encodeInt32(n: number) {
     return res
 }
 
-// IDEA: To store variable length data (for example strings)
-// we could encode the length of the string and add it before the string data itself.
-// This way, we know where to begin and end parsing, before starting with the next reflection entry
-// The protocol needs to be updated to handle that some data is of known length while some fields are of variable length
-// But if this works, we have a way to transfer rich data across devices
+export function decodeInt32(data: Uint8Array) {
+    return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
+}
+
 export function encodeInt16(n: number) {
-    const num = Math.min(256 * 256 - 1, Math.floor(n))
+    const num = Math.min(0xffff, Math.floor(n))
     const res = new Uint8Array(2)
     res[0] = num >> 8
     res[1] = num & 0xff
     return res
 }
 
-export function decodeInt32(data: Uint8Array) {
-    return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
+export function encodeString(s: string) {
+    const utf8Data = new TextEncoder().encode(s)
+    // TODO: Is this the best way to convert types?
+    const data = new Uint8Array(utf8Data.length)
+    data.set(utf8Data, 0)
+    return data
+}
+
+export function decodeString(data: Uint8Array) {
+    const decoder = new TextDecoder('utf-8')
+    return decoder.decode(data)
 }
 
 /**

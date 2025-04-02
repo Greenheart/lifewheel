@@ -11,20 +11,22 @@
     import ReflectionInputSlider from './ReflectionInputSlider.svelte'
     import Lifewheel from './Lifewheel.svelte'
 
-    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE, INITIAL_LEVEL } from '$lib/constants'
-    import { createReflectionEntry, isLifewheelStep } from '$lib/utils'
-    import type { LifewheelState, LifewheelStep } from '$lib/types'
+    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE, INITIAL_LEVEL, INITIAL_COMMENT_STATE } from '$lib/constants'
+    import { createReflectionEntry, isCommentStep, isLifewheelStep } from '$lib/utils'
+    import type { LifewheelState, LifewheelStep, CommentState } from '$lib/types'
 </script>
 
 <script lang="ts">
     import { goto } from '$app/navigation'
     import { reflections } from '$lib/Reflections.svelte'
     import { base } from '$app/paths'
+    import TextBox from './TextBox.svelte'
 
     /**
      * The actual lifewheel state.
      */
     let lifewheel = $state<LifewheelState>(INITIAL_LIFEWHEEL_STATE)
+    let comment = $state<CommentState>(INITIAL_COMMENT_STATE)
 
     /**
      * A tweened representation of the lifewheel state. This allows smooth tweened motions when values change.
@@ -51,7 +53,7 @@
 
     const onNext = async () => {
         if (currentIndex === allReflectionSteps.length - 1) {
-            reflections.add(createReflectionEntry(lifewheel))
+            reflections.add(createReflectionEntry(lifewheel, comment))
 
             await goto(base)
         } else {
@@ -69,7 +71,7 @@
     }
 
     async function abortReflection() {
-        const hasUnsavedChanges = lifewheel.some((value) => value > 0 && value !== INITIAL_LEVEL)
+        const hasUnsavedChanges = lifewheel.some((value) => value > 0 && value !== INITIAL_LEVEL) || comment.length > 0
 
         if (
             !hasUnsavedChanges ||
@@ -97,6 +99,14 @@
         <div class="h-40 2xs:h-48 xs:h-52">
             <ReflectionTexts {reflectionStep} />
         </div>
+
+        
+    {#if isCommentStep(reflectionStep)}
+        <div class="flex min-w-[160px] max-w-md justify-between px-4 pb-4">
+            <TextBox bind:commentState={comment} />
+        </div>
+    {/if}
+
     </div>
 
     <ReflectionInputSlider {reflectionStep} bind:lifewheel />
