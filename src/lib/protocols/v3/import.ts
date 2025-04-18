@@ -1,5 +1,7 @@
+import { inflate } from 'pako'
+
 import type { ReflectionEntry } from '$lib/types'
-import { decodeInt32 } from '$lib/utils'
+import { decodeInt32, decodeString } from '$lib/utils'
 
 function decodeTime(data: Uint8Array) {
     const timestamp = decodeInt32(data)
@@ -17,16 +19,34 @@ function decodeEntryData(data: number[]) {
     return bin.map((n) => parseInt(n, 2))
 }
 
+/**
+ * Decode comment data back into the original strings
+ */
+function decodeCommentData(commentData: number[]){
+    return decodeString(new Uint8Array(commentData))
+}
+
 function decodeEntry(entryData: Uint8Array) {
+    const commentLen = decodeInt32(entryData.subarray(8, 9));
     return {
         time: decodeTime(entryData.subarray(0, 4)),
-        data: decodeEntryData(Array.from(entryData.subarray(4))),
+        data: decodeEntryData(Array.from(entryData.subarray(4, 8))),
+        comment: decodeCommentData(Array.from(entryData.subarray(9, 9 + commentLen))),
     } as ReflectionEntry
 }
 
 export function decodeReflectionEntries(data: Uint8Array) {
+    // Compression was added in protocol version 2.
+    try {
+        data = inflate(data)
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+
     const length = decodeInt32(data.subarray(0, 4))
-    const entryDataLength = 12
+    // Starting with version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
+    const entryDataLength = 8
     return Array.from({ length }, (_, index) => {
         const offset = 4 + index * entryDataLength
         const entryData = data.subarray(offset, offset + entryDataLength)
@@ -38,9 +58,9 @@ export function decodeReflectionEntries(data: Uint8Array) {
  * Turn timestamps back into dates during runtime
  */
 export function reviveTimestamps(reflections: ReflectionEntry[]) {
-    return reflections.map<ReflectionEntry>(({ time, data }) => ({
+    return reflections.map<ReflectionEntry>(({ time, comment, data }) => ({
         time: new Date(time),
-        comment: '',
+        comment,
         data,
     }))
 }
@@ -54,6 +74,7 @@ export const getUniqueEntries = (items: ReflectionEntry[]) =>
             array.findIndex(
                 (otherItem) =>
                     item.time.getTime() === otherItem.time.getTime() &&
+                    item.comment === otherItem.comment &&
                     item.data.join('') === otherItem.data.join(''),
             ) === index,
     )

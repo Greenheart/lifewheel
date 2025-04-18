@@ -1,10 +1,10 @@
 <script lang="ts" module>
     import type { ReflectionStep } from '$lib/types'
-    import { isLifewheelStep } from '../lib/utils'
+    import { isLifewheelStep, isCommentStep } from '../lib/utils'
 </script>
 
 <script lang="ts">
-    import { colors, LIFEWHEEL_ICONS } from '$lib/constants'
+    import { colors, COMMENT_ICON, LIFEWHEEL_ICONS } from '$lib/constants'
 
     type Props = {
         reflectionStep: ReflectionStep
@@ -22,6 +22,11 @@
         {#if isLifewheelStep(reflectionStep)}
             {@const Icon = LIFEWHEEL_ICONS[reflectionStep.i]}
             <Icon class="size-6 -mb-0.5 {colors[reflectionStep.i].text}" />
+        {/if}
+        
+        {#if isCommentStep(reflectionStep)}
+            {@const Icon = COMMENT_ICON}
+            <Icon class="size-6 -mb-0.5 text-emerald-400" />
         {/if}
     {/key}
     {reflectionStep.title}

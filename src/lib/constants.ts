@@ -6,8 +6,9 @@ import MaterialSymbolsGroupsRounded from '~icons/material-symbols/groups-rounded
 import MdiConversation from '~icons/mdi/conversation'
 import MdiUmbrellaBeach from '~icons/mdi/umbrella-beach'
 import MdiDollar from '~icons/mdi/dollar'
+import MdiNoteEdit from '~icons/mdi/note-edit'
 
-import type { LifewheelState, LifewheelStep, ReflectionStep, TextStep } from './types'
+import type { LifewheelState, CommentState, LifewheelStep, ReflectionStep, TextStep } from './types'
 
 export const LIFEWHEEL_ICONS = [
     MdiHeart,
@@ -19,6 +20,8 @@ export const LIFEWHEEL_ICONS = [
     MdiUmbrellaBeach,
     MdiDollar,
 ]
+
+export const COMMENT_ICON = MdiNoteEdit
 
 export const APP_NAME = 'Life Wheel'
 export const APP_TAGLINE = 'Reflect on Your Life Balance'
@@ -130,6 +133,13 @@ export const introSteps: Partial<TextStep>[] = [
     },
 ]
 
+export const commentSteps: Partial<TextStep>[] = [
+    {
+        title: 'Comment',
+        text: 'Write down anything that will help your future self remember why you rated the dimensions the way you did.',
+    },
+]
+
 export const outroSteps: Partial<TextStep>[] = [
     {
         title: 'Well done!',
@@ -151,6 +161,10 @@ export const allReflectionSteps = [
         step.i = i
         return step
     }),
+    commentSteps.map((step) => {
+        step.phase = 'comment'
+        return step
+    }),
     outroSteps.map((step) => {
         step.phase = 'outro'
         return step
@@ -170,5 +184,6 @@ export const MAX_LEVEL = 10
  * This is key in enabling the tweened motion.
  */
 export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
+export const INITIAL_COMMENT_STATE: CommentState = ''
 
 export const REPO_URL = 'https://github.com/Greenheart/lifewheel'

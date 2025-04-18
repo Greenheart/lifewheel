@@ -22,6 +22,8 @@
 
 <script lang="ts">
     import { reflections } from '$lib/Reflections.svelte'
+    import TextBox from './TextBox.svelte'
+    import CommentView from './CommentView.svelte'
 
     let index = $state(Math.max(reflections.count - 1, 0))
 
@@ -85,12 +87,8 @@
                 ✅ When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
                 ✅ Add keyboard support for navigating to the prev / next entry with arrow left and arrow right
 
-            Note - if we add notes in the future
-                If the entry has a note, this could be a nice place to show the note attached to the refleciton
-                Maybe show first lines and then toggle to expand (which resets for each entry)
-                TODO: Figure out how to encode variable length string in the entries.
-                        Maybe possible to use some special delimiter sequence so the parser can know where the next entry starts
-                        potential solution: encode the length of the variable length content, so that the parser knows when to start and stop
+            Comments
+                ✅: Encode variable length string in the entries.
 
             Slider
                 ✅ (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
@@ -160,6 +158,10 @@
             </div>
 
             <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
+
+            {#if currentReflection.comment != null && currentReflection.comment.length > 0}
+                <CommentView textData={currentReflection.comment} />
+            {/if}
 
             {#if reflections.entries.length > 2}
                 <DateRangeSlider min={0} max={reflections.entries.length - 1} bind:value={index} />

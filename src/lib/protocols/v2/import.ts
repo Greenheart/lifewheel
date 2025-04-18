@@ -51,6 +51,7 @@ export function decodeReflectionEntries(data: Uint8Array) {
 export function reviveTimestamps(reflections: ReflectionEntry[]) {
     return reflections.map<ReflectionEntry>(({ time, data }) => ({
         time: new Date(time),
+        comment: '',
         data,
     }))
 }
