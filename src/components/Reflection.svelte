@@ -20,6 +20,7 @@
     import { goto } from '$app/navigation'
     import { reflections } from '$lib/Reflections.svelte'
     import { base } from '$app/paths'
+    import HistoricalOverview from './HistoricalOverview.svelte'
 
     /**
      * The actual lifewheel state.
@@ -100,6 +101,8 @@
     </div>
 
     <ReflectionInputSlider {reflectionStep} bind:lifewheel />
+
+    <HistoricalOverview></HistoricalOverview>
 
     <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
         {#if canGoBack()}
