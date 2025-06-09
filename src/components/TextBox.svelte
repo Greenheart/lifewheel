@@ -10,6 +10,6 @@
     let { commentState = $bindable() }: Props = $props()
 </script>
 
-<textarea rows="3" cols="50" class={['']} style="color: black; outline: black; outline-width: 1px; outline-style: dotted;"
+<textarea class="comment-textarea" rows="2" cols="42" maxlength="100" placeholder="Leave a comment..."
     bind:value={commentState}>
 </textarea>

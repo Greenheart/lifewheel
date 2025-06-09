@@ -15,11 +15,10 @@ function encodeEntry(entry: ReflectionEntry) {
         encodeTime(entry.time),
         new Uint8Array(encodeEntryData(entry.data)),
         encodeInt32(entry.comment != null ? entry.comment.length : 0),
-        encodeString(entry.comment != null ? entry.comment : 'null'))
+        encodeString(entry.comment != null ? entry.comment : ''))
 }
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
-    console.log('encodeReflectionEntries', reflections)
     const encodedEntries = reflections.map(encodeEntry)
     const data = mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
     return deflate(data, { level: 9 })
@@ -33,11 +32,6 @@ function encodeEntryData(data: ReflectionEntry['data']) {
             data[2] << 4 | data[3],
             data[4] << 4 | data[5],
             data[6] << 4 | data[7]]
-    
-    //const bin = data.map((number) => number.toString(2).padStart(4, '0'))
-    //return [bin[0] + bin[1], bin[2] + bin[3], bin[4] + bin[5], bin[6] + bin[7]].map((n) =>
-    //    parseInt(n, 2),
-    //)
 }
 
 

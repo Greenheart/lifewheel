@@ -127,7 +127,11 @@
 <!-- Make it easy to navigate between sections with the keyboard -->
 <svelte:body
     onkeyup={(event) => {
-        if (!document.activeElement?.className?.includes('input-slider')) {
+        const commentBoxFocused = document.activeElement?.className?.includes('comment-textarea')
+        const sliderFocused = document.activeElement?.className?.includes('input-slider')
+
+        if (!sliderFocused && (!isCommentStep(reflectionStep) || !commentBoxFocused)) {
+            // Only allow navigation with arrow keys if the comment area and slider are not focused
             if (event.key === 'ArrowLeft') {
                 if (canGoBack()) onPrev()
             } else if (event.key === 'ArrowRight') {

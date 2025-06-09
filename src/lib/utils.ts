@@ -79,17 +79,8 @@ export function decodeInt32(data: Uint8Array) {
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
 }
 
-export function encodeInt16(n: number) {
-    const num = Math.min(0xffff, Math.floor(n))
-    const res = new Uint8Array(2)
-    res[0] = num >> 8
-    res[1] = num & 0xff
-    return res
-}
-
 export function encodeString(s: string) {
     const utf8Data = new TextEncoder().encode(s)
-    // TODO: Is this the best way to convert types?
     const data = new Uint8Array(utf8Data.length)
     data.set(utf8Data, 0)
     return data

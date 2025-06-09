@@ -76,6 +76,22 @@ input[type='range']::-webkit-slider-runnable-track {
     animation: spin 0.5s linear infinite;
 }
 
+.comment-textarea {
+    color: black;
+    outline: black;
+    outline-width: 1px;
+    outline-style: solid;
+    border-radius: 0.5em;
+    padding: 0.5em 0.75em 0.5em 0.75em;
+    resize: none;
+    width: 100%;
+    min-height: 100px;
+}
+
+.hidden-comment {
+    visibility: hidden;
+}
+
 @keyframes spin {
     100% {
         transform: rotate(360deg);

@@ -22,8 +22,8 @@ function decodeEntryData(data: number[]) {
 /**
  * Decode comment data back into the original strings
  */
-function decodeCommentData(commentData: number[]){
-    return decodeString(new Uint8Array(commentData))
+function decodeCommentData(commentData: Uint8Array){
+    return decodeString(commentData)
 }
 
 function decodeEntry(entryData: Uint8Array) {
@@ -31,7 +31,7 @@ function decodeEntry(entryData: Uint8Array) {
     return {
         time: decodeTime(entryData.subarray(0, 4)),
         data: decodeEntryData(Array.from(entryData.subarray(4, 8))),
-        comment: decodeCommentData(Array.from(entryData.subarray(9, 9 + commentLen))),
+        comment: decodeCommentData(entryData.subarray(9, 9 + commentLen)),
     } as ReflectionEntry
 }
 

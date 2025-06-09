@@ -22,7 +22,6 @@
 
 <script lang="ts">
     import { reflections } from '$lib/Reflections.svelte'
-    import TextBox from './TextBox.svelte'
     import CommentView from './CommentView.svelte'
 
     let index = $state(Math.max(reflections.count - 1, 0))
@@ -161,6 +160,8 @@
 
             {#if currentReflection.comment != null && currentReflection.comment.length > 0}
                 <CommentView textData={currentReflection.comment} />
+            {:else}
+                <CommentView textData="." hidden />
             {/if}
 
             {#if reflections.entries.length > 2}
