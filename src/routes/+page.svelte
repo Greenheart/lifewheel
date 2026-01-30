@@ -226,10 +226,3 @@
         </div>
     {/if}
 </div>
-
-<!-- IDEA: Feedback
-
-    maybe improve copy for each reflection
-    500 characters max length for written check-in
-    how did this feel during the check-in, what did you think about?
--->
