@@ -87,8 +87,7 @@ export function encodeString(s: string) {
 }
 
 export function decodeString(data: Uint8Array) {
-    const decoder = new TextDecoder('utf-8')
-    return decoder.decode(data)
+    return new TextDecoder().decode(data)
 }
 
 /**
