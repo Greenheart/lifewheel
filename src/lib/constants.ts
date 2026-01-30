@@ -133,18 +133,11 @@ export const introSteps: Partial<TextStep>[] = [
     },
 ]
 
-// IDEA: Maybe merge the outro and comment step into one?
-// This would be a simpler experience
 export const outroSteps: TextStep[] = [
-    {
-        phase: 'comment',
-        title: 'Well done!',
-        text: 'Write down anything that will help your future self remember why you rated the dimensions the way you did.',
-    },
     {
         phase: 'outro',
         title: 'Well done!',
-        text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
+        text: 'Take a moment to reflect on the life wheel above.\n\nWhich area(s) of your life are you satisfied with? What would you like to do to improve your wellbeing?',
     },
 ]
 

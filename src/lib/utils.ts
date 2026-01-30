@@ -11,7 +11,7 @@ export function isLifewheelStep(step: ReflectionStep): step is LifewheelStep {
 }
 
 export function isCommentStep(step: ReflectionStep): step is LifewheelStep {
-    return step.phase === 'comment'
+    return step.phase === 'outro'
 }
 
 export const createReflectionEntry = (

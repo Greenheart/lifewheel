@@ -5,7 +5,7 @@ export type { ProtocolVersion }
 type BasicStep = {
     title: string
     text: string
-    phase: 'intro' | 'reflection' | 'comment' | 'outro'
+    phase: 'intro' | 'reflection' | 'outro'
 }
 
 export type LifewheelStep = BasicStep & {
@@ -21,7 +21,7 @@ export type LifewheelStep = BasicStep & {
 }
 
 export type TextStep = BasicStep & {
-    phase: 'intro' | 'comment' | 'outro'
+    phase: 'intro' | 'outro'
 }
 
 export type ReflectionStep = LifewheelStep | BasicStep
