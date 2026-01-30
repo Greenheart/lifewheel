@@ -106,7 +106,7 @@ const PROTOCOL: Protocol = {
         )
 
         console.log(
-            `Imported ${Math.abs(
+            `[v${PROTOCOL.PROTOCOL_VERSION}] Imported ${Math.abs(
                 updatedEntries.length - currentEntries.length,
             )} - filtered out ${Math.abs(newEntries.length - updatedEntries.length)}`,
             updatedEntries.map((e) => e.time.getTime()),
