@@ -27,7 +27,7 @@ class PassphraseGenerator {
 
 async function loadWordList() {
     const rawWords =
-        (await fetch(`${resolve('/')}/words.txt`)
+        (await fetch(new URL('words.txt', new URL(resolve('/'), window.location.origin)).toString())
             .then((res) => res.text())
             .catch((err) => {
                 console.error(err)
