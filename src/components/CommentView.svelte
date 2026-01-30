@@ -1,5 +1,5 @@
 <script lang="ts" module>
-    import type { ClassValue, HTMLAttributes } from 'svelte/elements'
+    import type { HTMLAttributes } from 'svelte/elements'
 </script>
 
 <script lang="ts">

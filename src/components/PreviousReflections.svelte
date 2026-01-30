@@ -175,7 +175,7 @@
 
                     <CommentView
                         comment={currentReflection.comment ?? ''}
-                        class={!currentReflection.comment && 'invisible'}
+                        class={!currentReflection.comment ? 'invisible' : ''}
                     />
 
                     <Button
