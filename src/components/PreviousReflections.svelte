@@ -160,7 +160,7 @@
 
             <CommentView
                 comment={currentReflection.comment ?? ''}
-                hidden={(currentReflection.comment?.length ?? 0) > 0}
+                class={!currentReflection.comment ? 'invisible' : ''}
             />
 
             {#if reflections.entries.length > 2}

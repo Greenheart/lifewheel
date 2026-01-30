@@ -1,19 +1,17 @@
 <script lang="ts" module>
-    import type { HTMLAttributes } from 'svelte/elements'
+    import type { ClassValue, HTMLAttributes } from 'svelte/elements'
 </script>
 
 <script lang="ts">
     interface Props extends HTMLAttributes<HTMLAnchorElement> {
         comment: string
-        hidden?: boolean
+        class?: string
     }
 
-    let { comment, hidden }: Props = $props()
+    let { comment, class: className }: Props = $props()
 </script>
 
-<div
-    class={['comment-view rounded-lg border-2 border-white bg-white/10 p-4', hidden && 'invisible']}
->
+<div class={['comment-view rounded-lg border-2 border-white bg-white/10 p-4', className]}>
     <p>
         {comment}
     </p>
