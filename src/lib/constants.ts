@@ -6,8 +6,9 @@ import MaterialSymbolsGroupsRounded from '~icons/material-symbols/groups-rounded
 import MdiConversation from '~icons/mdi/conversation'
 import MdiUmbrellaBeach from '~icons/mdi/umbrella-beach'
 import MdiDollar from '~icons/mdi/dollar'
+import MdiNoteEdit from '~icons/mdi/note-edit'
 
-import type { LifewheelState, LifewheelStep, ReflectionStep, TextStep } from './types'
+import type { LifewheelState, CommentState, LifewheelStep, ReflectionStep, TextStep } from './types'
 
 export const LIFEWHEEL_ICONS = [
     MdiHeart,
@@ -19,6 +20,8 @@ export const LIFEWHEEL_ICONS = [
     MdiUmbrellaBeach,
     MdiDollar,
 ]
+
+export const COMMENT_ICON = MdiNoteEdit
 
 export const APP_NAME = 'Life Wheel'
 export const APP_TAGLINE = 'Reflect on Your Life Balance'
@@ -130,10 +133,11 @@ export const introSteps: Partial<TextStep>[] = [
     },
 ]
 
-export const outroSteps: Partial<TextStep>[] = [
+export const outroSteps: TextStep[] = [
     {
+        phase: 'outro',
         title: 'Well done!',
-        text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
+        text: 'Take a moment to reflect on the life wheel above.\n\nWhich area(s) of your life are you satisfied with? What would you like to do to improve your wellbeing?',
     },
 ]
 
@@ -151,10 +155,7 @@ export const allReflectionSteps = [
         step.i = i
         return step
     }),
-    outroSteps.map((step) => {
-        step.phase = 'outro'
-        return step
-    }),
+    outroSteps,
 ].flat() as ReflectionStep[]
 
 /**
@@ -170,5 +171,9 @@ export const MAX_LEVEL = 10
  * This is key in enabling the tweened motion.
  */
 export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
+export const INITIAL_COMMENT_STATE: CommentState = ''
 
 export const REPO_URL = 'https://github.com/Greenheart/lifewheel'
+
+/** Used to check and control focus of child components */
+export const sliderClass = 'input-slider'

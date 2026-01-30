@@ -6,10 +6,11 @@
 </script>
 
 <script lang="ts">
-    import { onMount } from 'svelte'
+    import { onMount, tick } from 'svelte'
     import { reflections } from '$lib/Reflections.svelte'
     import { appState } from '$lib/app-state.svelte'
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
+    import { pushState } from '$app/navigation'
 
     let payload: ParsedLink
 
@@ -31,22 +32,24 @@
                         }),
                     )
 
-                    closeLinkImport()
+                    await closeLinkImport()
                 }
 
                 // IDEA: Maybe try importing encrypted links with the saved key, and then fallback to the password form if it doesn't work.
             } catch (error) {
                 console.error('Invalid link: ', error)
-                closeLinkImport()
+                await closeLinkImport()
             }
         } else {
             appState.loading = false
         }
     })
 
-    const closeLinkImport = () => {
+    const closeLinkImport = async () => {
         appState.loading = false
-        history.pushState('', document.title, window.location.pathname)
+        // Ensure the SvelteKit router is initialized.
+        await tick()
+        pushState(new URL(window.location.pathname, window.location.origin), {})
     }
 
     const submitPassphrase = async (password: string) => {
@@ -95,7 +98,7 @@
             console.error(error)
         }
 
-        closeLinkImport()
+        await closeLinkImport()
     }
 </script>
 

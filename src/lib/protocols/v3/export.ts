@@ -2,7 +2,7 @@ import { deflate } from 'pako'
 import * as base64url from '$lib/base64url'
 
 import type { ProtocolVersion, ReflectionEntry } from '$lib/types'
-import { encodeInt32, mergeTypedArrays } from '$lib/utils'
+import { encodeInt32, encodeString, mergeTypedArrays } from '$lib/utils'
 import { PROTOCOL_VERSION } from './protocol'
 
 function encodeTime(date: Date) {
@@ -11,7 +11,15 @@ function encodeTime(date: Date) {
 }
 
 function encodeEntry(entry: ReflectionEntry) {
-    return mergeTypedArrays(encodeTime(entry.time), new Uint8Array(encodeEntryData(entry.data)))
+    const encodedEntry = mergeTypedArrays(
+        encodeTime(entry.time),
+        new Uint8Array(encodeEntryData(entry.data)),
+        encodeInt32(entry.comment ? entry.comment.length : 0),
+        encodeString(entry.comment ? entry.comment : ''),
+    )
+    // Since each entry includes comments of varying length, we need to know the total length of the entry
+    // so we can decode it later.
+    return mergeTypedArrays(encodeInt32(encodedEntry.byteLength), encodedEntry)
 }
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
@@ -21,21 +29,18 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
 }
 
 /**
- * Encode two numbers into a single byte to save some data.
- *
- * For example the two numbers [7, 3] are first encoded into ['0100', '0011']
- * and then combined into a single byte, represented as '01000011'.
- * This slightly reduces the output size for encoded data.
- *
- * This could be achieved with bitwise operators.
- * However, I used strings to make the code more readable.
+ * Encode every pair of numbers into a one byte to compress data.
+ * This takes advantage of the fact that Reflection entries store data values between 1-10
+ * and this can be represented as only 4 bits per value.
+ * Given we also have eight dimensions, we can then store them as 4 compressed bytes instead of 8.
  */
 function encodeEntryData(data: ReflectionEntry['data']) {
-    const bin = data.map((number) => number.toString(2).padStart(4, '0'))
-
-    return [bin[0] + bin[1], bin[2] + bin[3], bin[4] + bin[5], bin[6] + bin[7]].map((n) =>
-        parseInt(n, 2),
-    )
+    return [
+        (data[0] << 4) | data[1],
+        (data[2] << 4) | data[3],
+        (data[4] << 4) | data[5],
+        (data[6] << 4) | data[7],
+    ]
 }
 
 const formatHeader = ({

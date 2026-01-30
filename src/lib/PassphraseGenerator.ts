@@ -1,8 +1,5 @@
-import { browser } from '$app/environment'
-import { base } from '$app/paths'
 import { secureRandomInt } from './crypto'
-
-class PassphraseGenerator {
+export class PassphraseGenerator {
     #wordList: WordList
 
     constructor(wordList: WordList) {
@@ -25,25 +22,4 @@ class PassphraseGenerator {
     }
 }
 
-async function loadWordList() {
-    const rawWords =
-        (await fetch(`${base}/words.txt`)
-            .then((res) => res.text())
-            .catch((err) => {
-                console.error(err)
-            })) ?? ''
-
-    return rawWords
-        .trim()
-        .split('\n')
-        .reduce<{ [id: string]: string }>((result, row) => {
-            const [id, word] = row.split('\t')
-            result[id] = word
-            return result
-        }, {})
-}
-
 type WordList = { [id: string]: string }
-
-const defaultWordList = browser ? await loadWordList() : {}
-export const passphraseGenerator = new PassphraseGenerator(defaultWordList)

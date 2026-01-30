@@ -12,6 +12,7 @@
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
     import HeroiconsArrowLeft from '~icons/heroicons/arrow-left'
     import HeroiconsArrowRight from '~icons/heroicons/arrow-right'
+    import { sliderClass } from '$lib/constants'
 
     const menuButtonClasses = [
         defaultClasses,
@@ -22,6 +23,7 @@
 
 <script lang="ts">
     import { reflections } from '$lib/Reflections.svelte'
+    import CommentView from './CommentView.svelte'
 
     let index = $state(Math.max(reflections.count - 1, 0))
 
@@ -70,11 +72,11 @@
 
 {#if currentReflection}
     <section>
-        <h2 class="pt-8 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
+        <h2 class="2xs:text-3xl pt-8 text-center text-2xl font-extrabold">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
             IDEA: On both mobile and desktop, keep the same UI layout
-            
+
             Lifewheel
                 ✅ Show the lifewheel visualisation for the current entry
                 ✅ Uses a tweened store to visualise how values change over time as you step through your previous reflections
@@ -85,18 +87,14 @@
                 ✅ When you reach the beginning or the end, we hide the buttons to navigate to the next/prev step
                 ✅ Add keyboard support for navigating to the prev / next entry with arrow left and arrow right
 
-            Note - if we add notes in the future
-                If the entry has a note, this could be a nice place to show the note attached to the refleciton
-                Maybe show first lines and then toggle to expand (which resets for each entry)
-                TODO: Figure out how to encode variable length string in the entries.
-                        Maybe possible to use some special delimiter sequence so the parser can know where the next entry starts
-                        potential solution: encode the length of the variable length content, so that the parser knows when to start and stop
+            Comments
+                ✅: Encode variable length string in the entries.
 
             Slider
                 ✅ (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
                 ✅ The slider has one step for each entry, and min value 0 anv max value length - 1.
                 ✅ Changing the value of the slider updates the index of the current Entry
-            
+
             Graph
                 Below the top section, show a graph of how the values have changed over time
                 One line is shown for each dimension, using the matching color
@@ -110,7 +108,7 @@
                 Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
         -->
             <div class="grid w-full max-w-lg grid-cols-[48px_1fr_48px] items-center gap-4">
-                <h3 class="col-start-2 select-none whitespace-pre-wrap text-center">
+                <h3 class="col-start-2 text-center whitespace-pre-wrap select-none">
                     {`${currentReflection.time.toLocaleDateString('en-GB', {
                         dateStyle: 'long',
                     })}\n${currentReflection.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}
@@ -133,7 +131,7 @@
                         side="bottom"
                         align="end"
                     >
-                        <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
+                        <div class="grid w-56 gap-1 rounded-md bg-gray-800 p-1 shadow-xl">
                             <Button
                                 aria-label="Remove reflection"
                                 onclick={async () => {
@@ -162,12 +160,17 @@
             <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
 
             {#if reflections.entries.length > 2}
-                <DateRangeSlider min={0} max={reflections.entries.length - 1} bind:value={index} />
+                <DateRangeSlider
+                    min={0}
+                    max={reflections.entries.length - 1}
+                    bind:value={index}
+                    {sliderClass}
+                />
             {/if}
 
             {#if reflections.entries.length > 1}
                 <div
-                    class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-center gap-4 pt-4"
+                    class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-start gap-4 pt-4"
                 >
                     <Button
                         variant="roundOutline"
@@ -175,8 +178,12 @@
                         class={index < 1 ? 'invisible' : undefined}
                         onclick={onPrev}><HeroiconsArrowLeft /></Button
                     >
-                    <!-- IDEA: Between the buttons here might be a good spot to display notes -->
-                    <div></div>
+
+                    <CommentView
+                        comment={currentReflection.comment ?? ''}
+                        class={!currentReflection.comment ? 'invisible' : ''}
+                    />
+
                     <Button
                         variant="roundOutline"
                         aria-label="Show next reflection"

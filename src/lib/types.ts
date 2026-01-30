@@ -30,10 +30,13 @@ export type ReflectionStep = LifewheelStep | BasicStep
  * Each dimension of the life wheel represented by a number
  */
 export type LifewheelState = [number, number, number, number, number, number, number, number]
+export type CommentState = string
 
 export type ReflectionEntry = {
-    data: LifewheelState
     time: Date
+    data: LifewheelState
+    /** A comment related to the reflection. Earlier versions don't include comments which is why it might be undefined */
+    comment?: CommentState
 }
 
 export type ParsedLink = {
@@ -62,5 +65,5 @@ export type SaveFile = BaseSaveFile & {
 // NOTE: Maybe we need to store the protocolVersion for each key, to know which version it is compatible with.
 export type UserKey = {
     key: CryptoKey
-    salt: Uint8Array
+    salt: Uint8Array<ArrayBuffer>
 }

@@ -56,7 +56,9 @@ class EncryptionKey {
 
     async persist() {
         try {
-            await set(this.#keyId, this.#key)
+            const keyId = $state.snapshot(this.#keyId)
+            const key = $state.snapshot(this.#key)
+            await set(keyId, key)
             localStorage.setItem(keyUpdate, Date.now().toString())
         } catch (error) {
             console.error(error)

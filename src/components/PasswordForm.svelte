@@ -50,7 +50,7 @@
             name="password"
             aria-label="Password"
             autofocus
-            class="w-full rounded-md px-4 py-3 font-light text-black"
+            class="w-full rounded-md bg-white px-4 py-3 font-light text-black"
             bind:value={password}
             autocomplete="off"
         />

@@ -1,10 +1,10 @@
 <script lang="ts" module>
     import type { ReflectionStep } from '$lib/types'
-    import { isLifewheelStep } from '../lib/utils'
+    import { isLifewheelStep, isCommentStep } from '../lib/utils'
 </script>
 
 <script lang="ts">
-    import { colors, LIFEWHEEL_ICONS } from '$lib/constants'
+    import { colors, COMMENT_ICON, LIFEWHEEL_ICONS } from '$lib/constants'
 
     type Props = {
         reflectionStep: ReflectionStep
@@ -14,7 +14,7 @@
 
 <h2
     class={[
-        'flex items-center justify-center gap-2 text-lg font-normal normal-case xs:text-2xl sm:text-3xl',
+        'xs:text-2xl flex items-center justify-center gap-2 text-lg font-normal normal-case sm:text-3xl',
         isLifewheelStep(reflectionStep) ? reflectionStep.colors.text : 'text-emerald-400',
     ]}
 >
@@ -23,9 +23,14 @@
             {@const Icon = LIFEWHEEL_ICONS[reflectionStep.i]}
             <Icon class="-mb-0.5 size-6 {colors[reflectionStep.i].text}" />
         {/if}
+
+        {#if isCommentStep(reflectionStep)}
+            {@const Icon = COMMENT_ICON}
+            <Icon class="-mb-0.5 size-6 text-emerald-400" />
+        {/if}
     {/key}
     {reflectionStep.title}
 </h2>
-<p class="whitespace-pre-wrap pt-2 text-sm 2xs:text-base xs:text-lg">
+<p class="2xs:text-base xs:text-lg pt-2 text-sm whitespace-pre-wrap">
     {reflectionStep.text}
 </p>
