@@ -11,12 +11,15 @@ function encodeTime(date: Date) {
 }
 
 function encodeEntry(entry: ReflectionEntry) {
-    return mergeTypedArrays(
+    const encodedEntry = mergeTypedArrays(
         encodeTime(entry.time),
         new Uint8Array(encodeEntryData(entry.data)),
         encodeInt32(entry.comment ? entry.comment.length : 0),
         encodeString(entry.comment ? entry.comment : ''),
     )
+    // Since each entry includes comments of varying length, we need to know the total length of the entry
+    // so we can decode it later.
+    return mergeTypedArrays(encodeInt32(encodedEntry.byteLength), encodedEntry)
 }
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {

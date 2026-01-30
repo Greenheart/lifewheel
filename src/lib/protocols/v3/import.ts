@@ -23,6 +23,7 @@ export function decodeEntry(entryData: Uint8Array) {
     const commentLen = decodeInt32(entryData.subarray(8, 12))
     return {
         time: decodeTime(entryData.subarray(0, 4)),
+        // Starting with protocol version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
         data: decodeEntryData(Array.from(entryData.subarray(4, 8))),
         comment: decodeString(entryData.subarray(12, 12 + commentLen)),
     } as ReflectionEntry
@@ -37,14 +38,38 @@ export function decodeReflectionEntries(data: Uint8Array) {
         return []
     }
 
-    const length = decodeInt32(data.subarray(0, 4))
-    // Starting with protocol version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
-    const entryDataLength = 8
-    return Array.from({ length }, (_, index) => {
-        const offset = 4 + index * entryDataLength
-        const entryData = data.subarray(offset, offset + entryDataLength)
-        return decodeEntry(entryData)
-    })
+    const expectedEntriesCount = decodeInt32(data.subarray(0, 4))
+    const entries: ReflectionEntry[] = []
+
+    /**
+     * Current offset when reading entries.
+     * Starting at 4 since we have already read the entriesCount Int32 of 4 bytes
+     */
+    let offset = 4
+    /**
+     * The variable length of the current entry.
+     * This varies since comments may be of different lengths.
+     */
+    let entryDataLength: number
+
+    do {
+        // The first 4 bytes of each entry defines the entryDataLength
+        entryDataLength = decodeInt32(data.subarray(offset, offset + 4))
+        offset += 4
+
+        // Decode the entry
+        entries.push(decodeEntry(data.subarray(offset, offset + entryDataLength)))
+        offset += entryDataLength
+    } while (offset < data.length)
+
+    if (entries.length !== expectedEntriesCount) {
+        console.error({ entries })
+        throw new Error(
+            `Invalid decoding of entries. Either the data is wrong or the decoding logic is broken. Expected ${expectedEntriesCount} entries but decoded ${entries.length}`,
+        )
+    }
+
+    return entries
 }
 
 /**
@@ -54,6 +79,7 @@ export function reviveTimestamps(reflections: ReflectionEntry[]) {
     return reflections.map<ReflectionEntry>(({ time, comment, data }) => ({
         time: new Date(time),
         data,
+        comment,
     }))
 }
 
