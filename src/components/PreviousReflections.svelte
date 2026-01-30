@@ -130,7 +130,7 @@
                         side="bottom"
                         align="end"
                     >
-                        <div class="grid w-56 gap-1 rounded-lg bg-gray-800 p-1 shadow-xl">
+                        <div class="grid w-56 gap-1 rounded-md bg-gray-800 p-1 shadow-xl">
                             <Button
                                 aria-label="Remove reflection"
                                 onclick={async () => {

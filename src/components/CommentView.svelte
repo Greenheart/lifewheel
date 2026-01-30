@@ -11,12 +11,7 @@
     let { comment, class: className }: Props = $props()
 </script>
 
-<div
-    class={[
-        'comment-view rounded-lg border-2 border-white bg-white/10 p-4 text-wrap wrap-break-word break-all',
-        className,
-    ]}
->
+<div class={['comment-view rounded-md bg-gray-800 p-4 text-wrap wrap-anywhere', className]}>
     <p>
         {comment}
     </p>
