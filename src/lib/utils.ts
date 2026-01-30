@@ -4,13 +4,14 @@ import type {
     LifewheelStep,
     ReflectionEntry,
     ReflectionStep,
+    TextStep,
 } from './types'
 
 export function isLifewheelStep(step: ReflectionStep): step is LifewheelStep {
     return step.phase === 'reflection'
 }
 
-export function isCommentStep(step: ReflectionStep): step is LifewheelStep {
+export function isCommentStep(step: ReflectionStep): step is TextStep {
     return step.phase === 'outro'
 }
 
