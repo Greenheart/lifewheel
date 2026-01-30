@@ -80,6 +80,9 @@ export function encodeInt32(n: number) {
 }
 
 export function decodeInt32(data: Uint8Array) {
+    if (data.byteLength !== 4) {
+        throw new Error(`Invalid Int32: expected 4 bytes but received ${data.byteLength}`)
+    }
     return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]
 }
 
