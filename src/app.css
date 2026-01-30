@@ -103,10 +103,6 @@ input[type='range']::-webkit-slider-runnable-track {
     min-height: 100px;
 }
 
-.hidden-comment {
-    visibility: hidden;
-}
-
 @keyframes spin {
     100% {
         transform: rotate(360deg);
