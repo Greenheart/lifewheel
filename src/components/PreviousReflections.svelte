@@ -75,7 +75,7 @@
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
             IDEA: On both mobile and desktop, keep the same UI layout
-            
+
             Lifewheel
                 ✅ Show the lifewheel visualisation for the current entry
                 ✅ Uses a tweened store to visualise how values change over time as you step through your previous reflections
@@ -93,7 +93,7 @@
                 ✅ (Similar to the input slider in the reflection), this can be used to navigate to a specific point in time.
                 ✅ The slider has one step for each entry, and min value 0 anv max value length - 1.
                 ✅ Changing the value of the slider updates the index of the current Entry
-            
+
             Graph
                 Below the top section, show a graph of how the values have changed over time
                 One line is shown for each dimension, using the matching color
@@ -158,11 +158,10 @@
 
             <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
 
-            {#if currentReflection.comment != null && currentReflection.comment.length > 0}
-                <CommentView textData={currentReflection.comment} />
-            {:else}
-                <CommentView textData="." hidden />
-            {/if}
+            <CommentView
+                comment={currentReflection.comment ?? ''}
+                hidden={(currentReflection.comment?.length ?? 0) > 0}
+            />
 
             {#if reflections.entries.length > 2}
                 <DateRangeSlider min={0} max={reflections.entries.length - 1} bind:value={index} />

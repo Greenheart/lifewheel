@@ -4,17 +4,17 @@
 
 <script lang="ts">
     interface Props extends HTMLAttributes<HTMLAnchorElement> {
-        textData: string
+        comment: string
         hidden?: boolean
     }
 
-    let { textData, hidden }: Props = $props()
+    let { comment, hidden }: Props = $props()
 </script>
 
 <div
     class={['comment-view rounded-lg border-2 border-white bg-white/10 p-4', hidden && 'invisible']}
 >
     <p>
-        {textData}
+        {comment}
     </p>
 </div>

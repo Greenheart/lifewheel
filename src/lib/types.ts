@@ -35,7 +35,8 @@ export type CommentState = string
 export type ReflectionEntry = {
     time: Date
     data: LifewheelState
-    comment: CommentState
+    /** A comment related to the reflection. Earlier versions don't include comments which is why it might be undefined */
+    comment?: CommentState
 }
 
 export type ParsedLink = {
