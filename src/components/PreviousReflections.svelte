@@ -16,7 +16,7 @@
     const menuButtonClasses = [
         defaultClasses,
         variants.roundGhost,
-        '!h-12 !w-12 !border-emerald-400/5',
+        'h-12! w-12! border-emerald-400/5!',
     ]
 </script>
 

@@ -84,18 +84,18 @@
 </script>
 
 <div
-    class="mx-auto grid max-h-[calc(100vh-4rem)] max-w-screen-md grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
+    class="mx-auto grid max-h-[calc(100vh-4rem)] max-w-(--breakpoint-md) grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
     <Button
         onclick={abortReflection}
         aria-label="Abort reflection and go back to main menu"
-        class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
+        class="absolute right-4 top-4 h-12! w-12! border-emerald-400/5!"
         variant="roundGhost"><HeroiconsXMark /></Button
     >
 
     <Lifewheel class="max-w-sm 2xl:max-w-md" {tweenedLifewheel} data={lifewheel} />
 
-    <div class="flex max-w-lg flex-grow flex-col items-center justify-end px-4">
+    <div class="flex max-w-lg grow flex-col items-center justify-end px-4">
         <div class="h-40 2xs:h-48 xs:h-52">
             <ReflectionTexts {reflectionStep} />
         </div>
@@ -117,7 +117,7 @@
                 ><HeroiconsArrowLeft /></Button
             >
         {/if}
-        <div class="flex-grow"></div>
+        <div class="grow"></div>
         <Button variant="roundSolid" onclick={onNext} aria-label="Show next step"
             ><HeroiconsArrowRight /></Button
         >

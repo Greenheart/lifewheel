@@ -108,7 +108,7 @@
             {max}
             {step}
             class={[
-                'input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-gradient-to-br bg-no-repeat shadow-sm',
+                'input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-linear-to-br bg-no-repeat shadow-sm',
                 reflectionStep.colors.from,
                 reflectionStep.colors.to,
             ]}
