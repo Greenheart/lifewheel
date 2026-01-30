@@ -65,5 +65,5 @@ export type SaveFile = BaseSaveFile & {
 // NOTE: Maybe we need to store the protocolVersion for each key, to know which version it is compatible with.
 export type UserKey = {
     key: CryptoKey
-    salt: Uint8Array
+    salt: Uint8Array<ArrayBuffer>
 }

@@ -32,7 +32,7 @@ export type Protocol = {
     importLink(link: ParsedLink): ReflectionEntry[]
     importEncryptedLink(link: ParsedLink, key: UserKey): Promise<ReflectionEntry[]>
     deriveKey(
-        salt: Uint8Array,
+        salt: Uint8Array<ArrayBuffer>,
         password: string,
         iterations?: number,
         keyUsages?: Iterable<KeyUsage>,
@@ -96,7 +96,7 @@ type BackwardsCompatibleProtocol = Pick<
         keyUsages,
         protocolVersion,
     }: {
-        salt: Uint8Array
+        salt: Uint8Array<ArrayBuffer>
         password: string
         iterations?: number
         keyUsages?: Iterable<KeyUsage>

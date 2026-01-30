@@ -4,7 +4,7 @@ import { decodeInt32, encodeInt32 } from '$lib/utils'
 export const ITERATIONS = 2e6
 
 export async function deriveKey(
-    salt: Uint8Array,
+    salt: Uint8Array<ArrayBuffer>,
     password: string,
     iterations: number = ITERATIONS,
     keyUsages: Iterable<KeyUsage> = ['encrypt', 'decrypt'],
@@ -48,7 +48,7 @@ export async function deriveKeyFromData(
  * @param iterations The number of iterations to derive the key from the password.
  */
 export async function getEncryptedPayload(
-    content: Uint8Array,
+    content: Uint8Array<ArrayBuffer>,
     key: UserKey,
     iterations: number = ITERATIONS,
 ) {
