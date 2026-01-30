@@ -14,8 +14,8 @@ function encodeEntry(entry: ReflectionEntry) {
     return mergeTypedArrays(
         encodeTime(entry.time),
         new Uint8Array(encodeEntryData(entry.data)),
-        encodeInt32(entry.comment != null ? entry.comment.length : 0),
-        encodeString(entry.comment != null ? entry.comment : ''),
+        encodeInt32(entry.comment.length),
+        encodeString(entry.comment),
     )
 }
 

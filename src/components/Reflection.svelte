@@ -115,7 +115,7 @@
 
     <ReflectionInputSlider {reflectionStep} bind:lifewheel />
 
-    <div class="flex w-full max-w-md min-w-[160px] justify-between px-4 pb-4">
+    <div class="flex w-full max-w-md min-w-40 justify-between px-4 pb-4">
         {#if canGoBack()}
             <Button variant="roundOutline" onclick={onPrev} aria-label="Show previous step"
                 ><HeroiconsArrowLeft /></Button
