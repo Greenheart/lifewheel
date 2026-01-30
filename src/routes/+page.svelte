@@ -1,6 +1,6 @@
 <script lang="ts" module>
     import { fade } from 'svelte/transition'
-    import { base } from '$app/paths'
+    import { resolve } from '$app/paths'
 
     import LinkButton from '$components/LinkButton.svelte'
     import LinkImport from '$components/LinkImport.svelte'
@@ -46,7 +46,9 @@
         {:else}
             <div in:fade={{ duration: 300 }}>
                 <div class="mx-auto w-52 pt-10">
-                    <LinkButton href="{base}/reflection" class="flex items-center justify-center"
+                    <LinkButton
+                        href={resolve('/reflection')}
+                        class="flex items-center justify-center"
                         ><span class="flex max-w-max items-center gap-1"
                             ><HeroiconsPlusCircle class="size-6" />New reflection</span
                         ></LinkButton
@@ -107,7 +109,7 @@
                     {#if !reflections.count}
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
-                                href="{base}/reflection"
+                                href={resolve('/reflection')}
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
                                     ><HeroiconsPlusCircle class="size-6" />Get started</span
@@ -196,7 +198,7 @@
 
                         <div class="mx-auto w-52 pt-12">
                             <LinkButton
-                                href="{base}/reflection"
+                                href={resolve('/reflection')}
                                 class="flex items-center justify-center"
                                 ><span class="flex max-w-max items-center gap-1"
                                     ><HeroiconsPlusCircle class="size-6" />New reflection</span

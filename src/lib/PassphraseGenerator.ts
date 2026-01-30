@@ -1,5 +1,5 @@
 import { browser } from '$app/environment'
-import { base } from '$app/paths'
+import { resolve } from '$app/paths'
 import { secureRandomInt } from './crypto'
 
 class PassphraseGenerator {
@@ -27,7 +27,7 @@ class PassphraseGenerator {
 
 async function loadWordList() {
     const rawWords =
-        (await fetch(`${base}/words.txt`)
+        (await fetch(`${resolve('/')}/words.txt`)
             .then((res) => res.text())
             .catch((err) => {
                 console.error(err)

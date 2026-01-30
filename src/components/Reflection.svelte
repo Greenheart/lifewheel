@@ -24,7 +24,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation'
     import { reflections } from '$lib/Reflections.svelte'
-    import { base } from '$app/paths'
+    import { resolve } from '$app/paths'
     import TextBox from './TextBox.svelte'
 
     /**
@@ -60,7 +60,7 @@
         if (currentIndex === allReflectionSteps.length - 1) {
             reflections.add(createReflectionEntry(lifewheel, comment))
 
-            await goto(base)
+            await goto(resolve('/'))
         } else {
             currentIndex += 1
 
@@ -84,7 +84,7 @@
             (hasUnsavedChanges &&
                 confirm('Are you sure you want to abort this reflection and lose your progress?'))
         ) {
-            await goto(base)
+            await goto(resolve('/'))
         }
     }
 </script>
