@@ -133,15 +133,16 @@ export const introSteps: Partial<TextStep>[] = [
     },
 ]
 
-export const commentSteps: Partial<TextStep>[] = [
+// IDEA: Maybe merge the outro and comment step into one?
+// This would be a simpler experience
+export const outroSteps: TextStep[] = [
     {
-        title: 'Comment',
+        phase: 'comment',
+        title: 'Well done!',
         text: 'Write down anything that will help your future self remember why you rated the dimensions the way you did.',
     },
-]
-
-export const outroSteps: Partial<TextStep>[] = [
     {
+        phase: 'outro',
         title: 'Well done!',
         text: 'Take a moment to reflect on the life wheel above.\n\nWhat does the result tell you about your situation and how does it affect your mental wellbeing?',
     },
@@ -161,14 +162,7 @@ export const allReflectionSteps = [
         step.i = i
         return step
     }),
-    commentSteps.map((step) => {
-        step.phase = 'comment'
-        return step
-    }),
-    outroSteps.map((step) => {
-        step.phase = 'outro'
-        return step
-    }),
+    outroSteps,
 ].flat() as ReflectionStep[]
 
 /**
