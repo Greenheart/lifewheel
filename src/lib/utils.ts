@@ -24,7 +24,7 @@ export const createReflectionEntry = (
 
     return {
         data,
-        comment,
+        comment: comment.trim(),
         time,
     }
 }
