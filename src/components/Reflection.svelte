@@ -25,7 +25,7 @@
     import { goto } from '$app/navigation'
     import { reflections } from '$lib/Reflections.svelte'
     import { resolve } from '$app/paths'
-    import TextBox from './TextBox.svelte'
+    import Textarea from './Textarea.svelte'
 
     /**
      * The actual lifewheel state.
@@ -108,7 +108,7 @@
 
         {#if isCommentStep(reflectionStep)}
             <div class="flex max-w-md min-w-40 justify-between px-4 pb-4">
-                <TextBox bind:value={comment} class="comment-textarea" />
+                <Textarea bind:value={comment} class="comment-textarea" />
             </div>
         {/if}
     </div>
