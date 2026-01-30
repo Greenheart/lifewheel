@@ -29,12 +29,12 @@
 
         <div class="pt-4 text-center">
             <h1
-                class="bg-linear-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
+                class="xs:text-6xl bg-linear-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold text-transparent normal-case"
             >
                 {APP_NAME}
             </h1>
 
-            <p class="pt-4 text-xl text-white xs:text-2xl">{APP_TAGLINE}</p>
+            <p class="xs:text-2xl pt-4 text-xl">{APP_TAGLINE}</p>
         </div>
 
         {#if appState.loading}
@@ -59,7 +59,7 @@
                     <PreviousReflections />
                 {/if}
                 <div class="mx-auto max-w-prose">
-                    <h2 class="pt-12 text-2xl font-extrabold 2xs:text-3xl">
+                    <h2 class="2xs:text-3xl pt-12 text-2xl font-extrabold">
                         Welcome{reflections.count > 1 ? ' back' : ''}!
                     </h2>
 
@@ -115,7 +115,7 @@
                             >
                         </div>
 
-                        <h2 class="pt-16 text-2xl font-extrabold 2xs:text-3xl">
+                        <h2 class="2xs:text-3xl pt-16 text-2xl font-extrabold">
                             Project Vision and Key Features
                         </h2>
                         <ul class="grid gap-6 pt-8 text-lg">
@@ -211,7 +211,7 @@
 
     {#if !appState.loading}
         <div class="pt-16" in:fade={{ duration: 300 }}>
-            <div class="pb-4 pt-16 text-center">
+            <div class="pt-16 pb-4 text-center">
                 <p>Made for 🏞 with 💚</p>
                 <p class="pt-2">
                     © {new Date().getFullYear()}

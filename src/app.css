@@ -92,8 +92,8 @@ input[type='range']::-webkit-slider-runnable-track {
 }
 
 .comment-textarea {
-    color: black;
-    outline: black;
+    color: white;
+    outline: white;
     outline-width: 1px;
     outline-style: solid;
     border-radius: 0.5em;

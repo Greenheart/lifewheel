@@ -110,7 +110,7 @@
 </script>
 
 {#snippet encryptionToggle()}
-    <div class="flex select-none items-center gap-3 pb-8 pt-8">
+    <div class="flex items-center gap-3 pt-8 pb-8 select-none">
         {#if shouldEncrypt}
             <HeroiconsLockClosed class="size-6 shrink-0" />
         {:else}
@@ -149,7 +149,7 @@
             <Tabs.Content value="open">
                 <Button
                     variant="roundGhost"
-                    class="absolute right-4 top-4 h-12! w-12! border-emerald-400/5!"
+                    class="absolute top-4 right-4 h-12! w-12! border-emerald-400/5!"
                     onclick={closeMenu}><HeroiconsXMark class="size-6" /></Button
                 >
                 <Button
@@ -175,7 +175,7 @@
                 <Tabs.Content value="save">
                     <Button
                         variant="roundGhost"
-                        class="absolute right-4 top-4 h-12! w-12! border-emerald-400/5!"
+                        class="absolute top-4 right-4 h-12! w-12! border-emerald-400/5!"
                         onclick={closeMenu}><HeroiconsXMark class="size-6" /></Button
                     >
 
@@ -213,7 +213,7 @@
 
                             {#if encryptionKey.isGenerating}
                                 <div
-                                    class="flex grow flex-col items-center justify-center pb-8 pt-8 text-lg"
+                                    class="flex grow flex-col items-center justify-center pt-8 pb-8 text-lg"
                                 >
                                     <div class="spinner h-7 w-7 pb-2"></div>
                                     <p>Encrypting your data...</p>

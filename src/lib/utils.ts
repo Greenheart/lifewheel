@@ -14,7 +14,10 @@ export function isCommentStep(step: ReflectionStep): step is LifewheelStep {
     return step.phase === 'comment'
 }
 
-export const createReflectionEntry = (data: LifewheelState, comment: CommentState): ReflectionEntry => {
+export const createReflectionEntry = (
+    data: LifewheelState,
+    comment: CommentState,
+): ReflectionEntry => {
     const time = new Date()
     // We don't care about seconds or millisedconds. Reducing precision also saves data.
     time.setSeconds(0, 0)

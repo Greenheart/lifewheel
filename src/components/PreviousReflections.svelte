@@ -71,7 +71,7 @@
 
 {#if currentReflection}
     <section>
-        <h2 class="pt-8 text-center text-2xl font-extrabold 2xs:text-3xl">Previous reflections</h2>
+        <h2 class="2xs:text-3xl pt-8 text-center text-2xl font-extrabold">Previous reflections</h2>
         <div class="grid justify-items-center gap-2 pt-4">
             <!--
             IDEA: On both mobile and desktop, keep the same UI layout
@@ -107,7 +107,7 @@
                 Allow the graph to be scrolled sideways (click and drag as well as swipe on touch)
         -->
             <div class="grid w-full max-w-lg grid-cols-[48px_1fr_48px] items-center gap-4">
-                <h3 class="col-start-2 select-none whitespace-pre-wrap text-center">
+                <h3 class="col-start-2 text-center whitespace-pre-wrap select-none">
                     {`${currentReflection.time.toLocaleDateString('en-GB', {
                         dateStyle: 'long',
                     })}\n${currentReflection.time.toLocaleTimeString('en-GB', { timeStyle: 'short' })}`}

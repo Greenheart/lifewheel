@@ -88,14 +88,14 @@
 </script>
 
 <div
-    class="slider flex h-4 w-full min-w-[160px] max-w-md select-none items-center gap-4 px-4 text-lg xs:h-6 xs:text-xl"
+    class="slider xs:h-6 xs:text-xl flex h-4 w-full max-w-md min-w-40 items-center gap-4 px-4 text-lg select-none"
 >
     {#if isLifewheelStep(reflectionStep)}
         <span>{min}</span>
         <div
             role="tooltip"
             id="tooltip"
-            class="absolute left-0 top-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm"
+            class="absolute top-0 left-0 hidden max-w-max rounded-md bg-black px-2 py-1.5 text-sm"
             bind:this={tooltip}
         >
             {lifewheel[reflectionStep.i]}
@@ -108,7 +108,7 @@
             {max}
             {step}
             class={[
-                'input-slider h-4 min-w-[160px] flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-linear-to-br bg-no-repeat shadow-sm',
+                'input-slider h-4 min-w-40 flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-linear-to-br bg-no-repeat shadow-sm',
                 reflectionStep.colors.from,
                 reflectionStep.colors.to,
             ]}

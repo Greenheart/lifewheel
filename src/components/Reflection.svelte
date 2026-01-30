@@ -11,7 +11,12 @@
     import ReflectionInputSlider from './ReflectionInputSlider.svelte'
     import Lifewheel from './Lifewheel.svelte'
 
-    import { allReflectionSteps, INITIAL_LIFEWHEEL_STATE, INITIAL_LEVEL, INITIAL_COMMENT_STATE } from '$lib/constants'
+    import {
+        allReflectionSteps,
+        INITIAL_LIFEWHEEL_STATE,
+        INITIAL_LEVEL,
+        INITIAL_COMMENT_STATE,
+    } from '$lib/constants'
     import { createReflectionEntry, isCommentStep, isLifewheelStep } from '$lib/utils'
     import type { LifewheelState, LifewheelStep, CommentState } from '$lib/types'
 </script>
@@ -71,7 +76,8 @@
     }
 
     async function abortReflection() {
-        const hasUnsavedChanges = lifewheel.some((value) => value > 0 && value !== INITIAL_LEVEL) || comment.length > 0
+        const hasUnsavedChanges =
+            lifewheel.some((value) => value > 0 && value !== INITIAL_LEVEL) || comment.length > 0
 
         if (
             !hasUnsavedChanges ||
@@ -89,29 +95,27 @@
     <Button
         onclick={abortReflection}
         aria-label="Abort reflection and go back to main menu"
-        class="absolute right-4 top-4 h-12! w-12! border-emerald-400/5!"
+        class="absolute top-4 right-4 h-12! w-12! border-emerald-400/5!"
         variant="roundGhost"><HeroiconsXMark /></Button
     >
 
     <Lifewheel class="max-w-sm 2xl:max-w-md" {tweenedLifewheel} data={lifewheel} />
 
     <div class="flex max-w-lg grow flex-col items-center justify-end px-4">
-        <div class="h-40 2xs:h-48 xs:h-52">
+        <div class="2xs:h-48 xs:h-52 h-40">
             <ReflectionTexts {reflectionStep} />
         </div>
 
-        
-    {#if isCommentStep(reflectionStep)}
-        <div class="flex min-w-[160px] max-w-md justify-between px-4 pb-4">
-            <TextBox bind:commentState={comment} />
-        </div>
-    {/if}
-
+        {#if isCommentStep(reflectionStep)}
+            <div class="flex max-w-md min-w-40 justify-between px-4 pb-4">
+                <TextBox bind:commentState={comment} />
+            </div>
+        {/if}
     </div>
 
     <ReflectionInputSlider {reflectionStep} bind:lifewheel />
 
-    <div class="flex w-full min-w-[160px] max-w-md justify-between px-4 pb-4">
+    <div class="flex w-full max-w-md min-w-[160px] justify-between px-4 pb-4">
         {#if canGoBack()}
             <Button variant="roundOutline" onclick={onPrev} aria-label="Show previous step"
                 ><HeroiconsArrowLeft /></Button

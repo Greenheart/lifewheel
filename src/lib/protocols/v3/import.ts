@@ -22,12 +22,12 @@ function decodeEntryData(data: number[]) {
 /**
  * Decode comment data back into the original strings
  */
-function decodeCommentData(commentData: Uint8Array){
+function decodeCommentData(commentData: Uint8Array) {
     return decodeString(commentData)
 }
 
 function decodeEntry(entryData: Uint8Array) {
-    const commentLen = decodeInt32(entryData.subarray(8, 9));
+    const commentLen = decodeInt32(entryData.subarray(8, 9))
     return {
         time: decodeTime(entryData.subarray(0, 4)),
         data: decodeEntryData(Array.from(entryData.subarray(4, 8))),

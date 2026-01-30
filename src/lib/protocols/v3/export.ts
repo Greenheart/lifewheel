@@ -15,7 +15,8 @@ function encodeEntry(entry: ReflectionEntry) {
         encodeTime(entry.time),
         new Uint8Array(encodeEntryData(entry.data)),
         encodeInt32(entry.comment != null ? entry.comment.length : 0),
-        encodeString(entry.comment != null ? entry.comment : ''))
+        encodeString(entry.comment != null ? entry.comment : ''),
+    )
 }
 
 export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
@@ -28,12 +29,13 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
  * Encode every pair of numbers into a one byte to compress data.
  */
 function encodeEntryData(data: ReflectionEntry['data']) {
-    return [data[0] << 4 | data[1],
-            data[2] << 4 | data[3],
-            data[4] << 4 | data[5],
-            data[6] << 4 | data[7]]
+    return [
+        (data[0] << 4) | data[1],
+        (data[2] << 4) | data[3],
+        (data[4] << 4) | data[5],
+        (data[6] << 4) | data[7],
+    ]
 }
-
 
 const formatHeader = ({
     encrypted,
