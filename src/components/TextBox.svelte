@@ -5,14 +5,15 @@
 <script lang="ts">
     type Props = {
         value: CommentState
+        class?: string
     }
 
-    let { value = $bindable() }: Props = $props()
+    let { value = $bindable(), class: className }: Props = $props()
 </script>
 
 <div class="autogrow">
     <textarea
-        class="comment-textarea"
+        class={className}
         rows="2"
         cols="42"
         maxlength="300"
