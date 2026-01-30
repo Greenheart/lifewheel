@@ -158,18 +158,13 @@
 
             <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
 
-            <CommentView
-                comment={currentReflection.comment ?? ''}
-                class={!currentReflection.comment ? 'invisible' : ''}
-            />
-
             {#if reflections.entries.length > 2}
                 <DateRangeSlider min={0} max={reflections.entries.length - 1} bind:value={index} />
             {/if}
 
             {#if reflections.entries.length > 1}
                 <div
-                    class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-center gap-4 pt-4"
+                    class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-start gap-4 pt-4"
                 >
                     <Button
                         variant="roundOutline"
@@ -177,8 +172,12 @@
                         class={index < 1 ? 'invisible' : undefined}
                         onclick={onPrev}><HeroiconsArrowLeft /></Button
                     >
-                    <!-- IDEA: Between the buttons here might be a good spot to display notes -->
-                    <div></div>
+
+                    <CommentView
+                        comment={currentReflection.comment ?? ''}
+                        class={!currentReflection.comment && 'invisible'}
+                    />
+
                     <Button
                         variant="roundOutline"
                         aria-label="Show next reflection"
