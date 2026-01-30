@@ -28,6 +28,9 @@ async function downloadFile(blob: Blob) {
         id: 'documents',
         startIn: 'documents',
         description: 'Lifewheel save files',
+    }).catch((_error) => {
+        // The file failed to download, usually because the user didn't give permission
+        // or closed the file picker without savinng the file.
     })
 }
 

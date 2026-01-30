@@ -5,7 +5,7 @@
  * Anything that might change with future protocol versions should be implemented by the protocols instead.
  */
 
-import { fileOpen } from 'browser-fs-access'
+import { fileOpen, type FileWithHandle } from 'browser-fs-access'
 
 import type { BaseSaveFile, SaveFile } from './types'
 import { encryptedFile, isEncryptedSaveFile } from './EncryptedFile.svelte'
@@ -18,13 +18,20 @@ import { appState } from './app-state.svelte'
  * Open the file picker, and return a boolean indicating if it was successful or not.
  */
 export async function openFile(): Promise<boolean> {
-    const blob = await fileOpen({
-        mimeTypes: ['application/json'],
-        id: 'documents',
-        startIn: 'documents',
-        extensions: ['.json'],
-        description: 'Lifewheel save files',
-    })
+    let blob: FileWithHandle
+    try {
+        blob = await fileOpen({
+            mimeTypes: ['application/json'],
+            id: 'documents',
+            startIn: 'documents',
+            extensions: ['.json'],
+            description: 'Lifewheel save files',
+        })
+    } catch (error: unknown) {
+        // The file failed to open, usually because the user didn't give permission
+        // or closed the file picker without making a selection.
+        return false
+    }
 
     const file: BaseSaveFile = await blob
         .text()
