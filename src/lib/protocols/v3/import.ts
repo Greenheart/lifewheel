@@ -19,19 +19,12 @@ function decodeEntryData(data: number[]) {
     return bin.map((n) => parseInt(n, 2))
 }
 
-/**
- * Decode comment data back into the original strings
- */
-function decodeCommentData(commentData: Uint8Array) {
-    return decodeString(commentData)
-}
-
-function decodeEntry(entryData: Uint8Array) {
-    const commentLen = decodeInt32(entryData.subarray(8, 9))
+export function decodeEntry(entryData: Uint8Array) {
+    const commentLen = decodeInt32(entryData.subarray(8, 12))
     return {
         time: decodeTime(entryData.subarray(0, 4)),
         data: decodeEntryData(Array.from(entryData.subarray(4, 8))),
-        comment: decodeCommentData(entryData.subarray(9, 9 + commentLen)),
+        comment: decodeString(entryData.subarray(12, 12 + commentLen)),
     } as ReflectionEntry
 }
 
