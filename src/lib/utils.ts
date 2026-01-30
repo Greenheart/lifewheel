@@ -83,10 +83,7 @@ export function decodeInt32(data: Uint8Array) {
 }
 
 export function encodeString(s: string) {
-    const utf8Data = new TextEncoder().encode(s)
-    const data = new Uint8Array(utf8Data.length)
-    data.set(utf8Data, 0)
-    return data
+    return new TextEncoder().encode(s)
 }
 
 export function decodeString(data: Uint8Array) {
