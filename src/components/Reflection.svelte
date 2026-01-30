@@ -84,12 +84,12 @@
 </script>
 
 <div
-    class="max-h-[calc(100vh-4rem)] mx-auto grid max-w-screen-md grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
+    class="mx-auto grid max-h-[calc(100vh-4rem)] max-w-screen-md grid-rows-[min-content_1fr_min-content_min-content] justify-items-center gap-4 sm:gap-8"
 >
     <Button
         onclick={abortReflection}
         aria-label="Abort reflection and go back to main menu"
-        class="!h-12 !w-12 !border-emerald-400/5 absolute top-4 right-4"
+        class="absolute right-4 top-4 !h-12 !w-12 !border-emerald-400/5"
         variant="roundGhost"><HeroiconsXMark /></Button
     >
 

@@ -8,6 +8,6 @@ setDefaultResultOrder('verbatim')
 export default defineConfig({
     plugins: [sveltekit(), Icons({ compiler: 'svelte' })],
     build: {
-        target: 'es2022'
-    }
+        target: 'es2022',
+    },
 })

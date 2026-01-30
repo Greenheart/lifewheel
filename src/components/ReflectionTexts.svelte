@@ -21,7 +21,7 @@
     {#key reflectionStep}
         {#if isLifewheelStep(reflectionStep)}
             {@const Icon = LIFEWHEEL_ICONS[reflectionStep.i]}
-            <Icon class="size-6 -mb-0.5 {colors[reflectionStep.i].text}" />
+            <Icon class="-mb-0.5 size-6 {colors[reflectionStep.i].text}" />
         {/if}
         
         {#if isCommentStep(reflectionStep)}
