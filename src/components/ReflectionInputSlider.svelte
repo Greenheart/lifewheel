@@ -14,8 +14,9 @@
     type Props = {
         lifewheel: LifewheelState
         reflectionStep: ReflectionStep
+        sliderClass?: string
     }
-    let { lifewheel = $bindable(), reflectionStep }: Props = $props()
+    let { lifewheel = $bindable(), reflectionStep, sliderClass }: Props = $props()
 
     let input = $state<HTMLInputElement>()
     let tooltip = $state<HTMLDivElement>()
@@ -108,7 +109,8 @@
             {max}
             {step}
             class={[
-                'input-slider h-4 min-w-40 flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-linear-to-br bg-no-repeat shadow-sm',
+                sliderClass,
+                'h-4 min-w-40 flex-1 cursor-ew-resize touch-pan-x rounded-full bg-stone-800 bg-linear-to-br bg-no-repeat shadow-sm',
                 reflectionStep.colors.from,
                 reflectionStep.colors.to,
             ]}

@@ -174,3 +174,6 @@ export const INITIAL_LIFEWHEEL_STATE: LifewheelState = [0, 0, 0, 0, 0, 0, 0, 0]
 export const INITIAL_COMMENT_STATE: CommentState = ''
 
 export const REPO_URL = 'https://github.com/Greenheart/lifewheel'
+
+/** Used to check and control focus of child components */
+export const sliderClass = 'input-slider'

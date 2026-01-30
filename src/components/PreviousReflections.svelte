@@ -12,6 +12,7 @@
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
     import HeroiconsArrowLeft from '~icons/heroicons/arrow-left'
     import HeroiconsArrowRight from '~icons/heroicons/arrow-right'
+    import { sliderClass } from '$lib/constants'
 
     const menuButtonClasses = [
         defaultClasses,
@@ -159,7 +160,12 @@
             <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
 
             {#if reflections.entries.length > 2}
-                <DateRangeSlider min={0} max={reflections.entries.length - 1} bind:value={index} />
+                <DateRangeSlider
+                    min={0}
+                    max={reflections.entries.length - 1}
+                    bind:value={index}
+                    {sliderClass}
+                />
             {/if}
 
             {#if reflections.entries.length > 1}
