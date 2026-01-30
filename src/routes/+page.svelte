@@ -19,7 +19,7 @@
     import { appState } from '$lib/app-state.svelte'
 </script>
 
-<div class="mx-auto flex min-h-screen max-w-screen-lg flex-col justify-between px-4">
+<div class="mx-auto flex min-h-screen max-w-(--breakpoint-lg) flex-col justify-between px-4">
     <div>
         <div class="flex justify-end">
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="-mr-4 p-3"
@@ -29,7 +29,7 @@
 
         <div class="pt-4 text-center">
             <h1
-                class="bg-gradient-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
+                class="bg-linear-to-br from-emerald-400 to-emerald-400/75 bg-clip-text text-5xl font-extrabold normal-case text-transparent xs:text-6xl"
             >
                 {APP_NAME}
             </h1>

@@ -29,46 +29,66 @@
     {@render label()}
 </label>
 
-<style lang="postcss">
-    :global(.toggle) {
-        @apply flex items-center rounded-full;
+<style>
+    .toggle {
+        display: flex;
+        align-items: center;
+        border-radius: calc(infinity * 1px);
     }
 
-    :global(.toggle input) {
+    .toggle input {
         clip-path: inset(50%);
-        @apply absolute overflow-hidden whitespace-nowrap;
+        position: absolute;
+        overflow: hidden;
+        white-space: nowrap;
         height: 1px;
         width: 1px;
     }
 
-    :global(.toggle input:not([disabled]):focus-visible + .toggle-track) {
+    .toggle input:not([disabled]):focus-visible + .toggle-track {
         /* Use default browser focus styles for keyboard users */
         outline: 5px auto Highlight;
         outline: 5px auto -webkit-focus-ring-color;
     }
 
-    :global(.toggle input:disabled + .toggle-track) {
-        @apply cursor-not-allowed opacity-75;
+    .toggle input:disabled + .toggle-track {
+        cursor: not-allowed;
+        opacity: 75%;
     }
 
-    :global(.toggle-track) {
+    .toggle-track {
         border: 1px solid transparent;
-        @apply relative mr-3 flex shrink-0 cursor-pointer rounded-full bg-emerald-400/20;
+        position: relative;
+        margin-right: 12px;
+        display: flex;
+        cursor: pointer;
+        flex-shrink: 0;
+        border-radius: calc(infinity * 1px);
+        background-color: color-mix(in oklab, var(--color-emerald-400) 20%, transparent);
         height: 30px;
         width: 60px;
     }
 
-    :global(.toggle-indicator) {
-        @apply absolute flex h-6 w-6 items-center justify-center rounded-full bg-white transition duration-200;
+    .toggle-indicator {
+        position: absolute;
+        display: flex;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+        border-radius: calc(infinity * 1px);
+        background: var(--color-white);
+        transition: all 200ms var(--tw-ease, var(--default-transition-timing-function));
         bottom: 2px;
         left: 2px;
     }
 
-    :global(.toggle input:checked + .toggle-track .toggle-indicator) {
-        @apply translate-x-[30px] bg-white;
+    .toggle input:checked + .toggle-track .toggle-indicator {
+        translate: 30px;
+        background: var(--color-white);
     }
 
-    :global(.toggle input:checked + .toggle-track) {
-        @apply bg-emerald-500;
+    .toggle input:checked + .toggle-track {
+        background-color: var(--color-emerald-500);
     }
 </style>

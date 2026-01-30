@@ -70,7 +70,7 @@
 
 <div
     bind:clientWidth
-    class={['pointer-events-none grid w-full select-none place-content-center pt-8', className]}
+    class={['pointer-events-none grid w-full place-content-center pt-8 select-none', className]}
     style="--width: {width}px; --size: {innerWidth < 375 ? 20 : 24}px;"
 >
     {#if visible}
@@ -119,13 +119,15 @@
     {/if}
 </div>
 
-<style lang="postcss">
+<style>
     .lifewheel > path {
         transform: translate3d(50%, 50%, 0);
     }
 
     .lifewheel > circle {
-        @apply fill-none stroke-stone-900 stroke-1;
+        fill: none;
+        stroke: var(--color-stone-900);
+        stroke-width: 1;
     }
 
     .icons {
