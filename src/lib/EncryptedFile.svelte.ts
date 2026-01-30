@@ -1,4 +1,4 @@
-import type { BaseSaveFile, EncryptedSaveFile } from "./types";
+import type { BaseSaveFile, EncryptedSaveFile } from './types'
 
 class EncryptedFile {
     /**

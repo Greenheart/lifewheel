@@ -9,8 +9,8 @@
         "preview": "vite preview",
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-        "lint": "prettier --plugin-search-dir . --check .",
-        "format": "prettier --plugin-search-dir . --write ."
+        "lint": "prettier --check .",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@floating-ui/dom": "^1.7.5",
@@ -54,10 +54,8 @@
         "trailingComma": "all",
         "printWidth": 100,
         "plugins": [
-            "prettier-plugin-svelte"
-        ],
-        "pluginSearchDirs": [
-            "."
+            "prettier-plugin-svelte",
+            "prettier-plugin-tailwindcss"
         ],
         "overrides": [
             {

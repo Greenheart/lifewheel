@@ -128,7 +128,7 @@
                         ><HeroiconsEllipsisHorizontal class="size-6" /></Popover.Trigger
                     >
                     <Popover.Content
-                        class="text-white z-50"
+                        class="z-50 text-white"
                         sideOffset={4}
                         side="bottom"
                         align="end"

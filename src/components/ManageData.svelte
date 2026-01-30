@@ -112,9 +112,9 @@
 {#snippet encryptionToggle()}
     <div class="flex select-none items-center gap-3 pb-8 pt-8">
         {#if shouldEncrypt}
-            <HeroiconsLockClosed class="flex-shrink-0 size-6" />
+            <HeroiconsLockClosed class="size-6 flex-shrink-0" />
         {:else}
-            <HeroiconsLockOpen class="flex-shrink-0 opacity-50 size-6" />
+            <HeroiconsLockOpen class="size-6 flex-shrink-0 opacity-50" />
         {/if}
         <Switch
             bind:checked={shouldEncrypt}
@@ -225,7 +225,7 @@
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
-                                        <div class="grid justify-center text-center pb-8">
+                                        <div class="grid justify-center pb-8 text-center">
                                             <h2 class="pb-4 text-lg font-bold">
                                                 QR code for your {shouldEncrypt ? 'encrypted' : ''}
                                                 link:
@@ -252,9 +252,9 @@
                         <div class="grid content-start gap-4">
                             <h2 class="pt-8 text-lg font-bold">Your data is your “account” 😇</h2>
                             <p>
-                                <HeroiconsPlusCircle class="inline stroke-yellow-400" /> To add more
-                                reflections in the future, save your file or copy your link and open
-                                it in any modern browser.
+                                <HeroiconsPlusCircle class="inline stroke-yellow-400" /> To add more reflections
+                                in the future, save your file or copy your link and open it in any modern
+                                browser.
                             </p>
                             <p>
                                 🔐 For better privacy, protect your data with a password. Save it in

@@ -70,7 +70,7 @@
 
 <div
     bind:clientWidth
-    class={['pointer-events-none w-full select-none grid place-content-center pt-8', className]}
+    class={['pointer-events-none grid w-full select-none place-content-center pt-8', className]}
     style="--width: {width}px; --size: {innerWidth < 375 ? 20 : 24}px;"
 >
     {#if visible}

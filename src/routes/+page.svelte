@@ -80,9 +80,8 @@
                                     class="text-emerald-400 underline hover:text-emerald-500"
                                     >URI fragment</a
                                 >
-                                = never sent to the server), QR code, or file. For more security and
-                                privacy, let the app generate a passphrase and encrypt your data using
-                                the
+                                = never sent to the server), QR code, or file. For more security and privacy,
+                                let the app generate a passphrase and encrypt your data using the
                                 <a
                                     href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
                                     target="_blank"
@@ -166,8 +165,8 @@
                                     rel="noopener noreferrer"
                                     class="text-emerald-400 underline hover:text-emerald-500"
                                     >URI fragment</a
-                                > which is never sent to the server). Store your link somewhere safe
-                                (for example in your password manager), or save your QR code.
+                                > which is never sent to the server). Store your link somewhere safe (for
+                                example in your password manager), or save your QR code.
                             </li>
                             <li>
                                 ✨ Easily access your data on any device by clicking your private
