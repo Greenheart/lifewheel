@@ -6,6 +6,12 @@ import { resolve } from 'path'
 const config = {
     preprocess: vitePreprocess(),
 
+    compilerOptions: {
+        experimental: {
+            async: true,
+        },
+    },
+
     kit: {
         adapter: adapter(),
         alias: {
@@ -16,6 +22,9 @@ const config = {
             base: '/lifewheel',
         },
         embedded: true,
+        experimental: {
+            remoteFunctions: true,
+        },
     },
 }
 

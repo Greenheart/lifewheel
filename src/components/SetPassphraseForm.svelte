@@ -1,18 +1,20 @@
 <script lang="ts" module>
-    import { browser } from '$app/environment'
     import Button from './Button.svelte'
-    import { passphraseGenerator } from '$lib/PassphraseGenerator'
+    import { PassphraseGenerator } from '$lib/PassphraseGenerator'
 </script>
 
 <script lang="ts">
     import { encryptionKey } from '$lib/EncryptionKey.svelte'
+    import { getWordList } from '$lib/word-list.remote'
 
     type Props = {
         toggleForm: () => void
     }
     let { toggleForm }: Props = $props()
 
-    let passphrase = $state(browser ? passphraseGenerator.generate() : '')
+    let passphraseGenerator = $state(new PassphraseGenerator(await getWordList()))
+
+    let passphrase = $state(passphraseGenerator.generate())
 
     let isSubmitting = $state(false)
     let copyText = $state('Copy')
