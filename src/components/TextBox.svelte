@@ -11,7 +11,7 @@
 </script>
 
 <textarea
-    class="comment-textarea min-h-25 w-full resize-none rounded-md px-2 py-3 text-white outline-1 outline-white"
+    class="comment-textarea min-h-25 w-full resize-none rounded-md p-2 text-white outline-1 outline-white"
     rows="2"
     cols="42"
     maxlength="300"
