@@ -52,7 +52,7 @@
         type="password"
         name="pwd"
         id="pwd"
-        class="mt-2 w-full rounded-md p-2 px-4 py-3 font-light text-black"
+        class="mt-2 w-full rounded-md bg-white p-2 px-4 py-3 font-light text-black"
         autocomplete="off"
         bind:value={password}
     />
@@ -61,7 +61,7 @@
         type="password"
         name="repeat"
         id="repeat"
-        class="mt-2 w-full rounded-md p-2 px-4 py-3 font-light text-black"
+        class="mt-2 w-full rounded-md bg-white p-2 px-4 py-3 font-light text-black"
         autocomplete="off"
         bind:value={repeat}
     />
