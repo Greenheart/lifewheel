@@ -15,7 +15,7 @@
     rows="2"
     cols="42"
     maxlength="300"
-    placeholder="Leave a comment..."
+    placeholder="Write your reflection..."
     bind:value={commentState}
 >
 </textarea>
