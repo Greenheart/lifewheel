@@ -12,8 +12,7 @@
 </script>
 
 <div
-    style="border: 2px solid white; padding: 1em; border-radius: 0.5em; background-color: rgba(255, 255, 255, 0.1);"
-    class={['', 'comment-view', hidden ? 'invisible' : ''].join(' ')}
+    class={['comment-view rounded-lg border-2 border-white bg-white/10 p-4', hidden && 'invisible']}
 >
     <p>
         {textData}
