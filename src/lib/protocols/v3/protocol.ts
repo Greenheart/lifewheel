@@ -1,4 +1,4 @@
-import { base64url } from 'rfc4648'
+import * as base64url from '$lib/base64url'
 
 import type {
     SaveFile,

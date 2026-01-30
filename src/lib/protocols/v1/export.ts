@@ -1,4 +1,4 @@
-import { base64url } from 'rfc4648'
+import * as base64url from '$lib/base64url'
 
 import type { ProtocolVersion, ReflectionEntry } from '$lib/types'
 import { encodeInt32, mergeTypedArrays } from '$lib/utils'

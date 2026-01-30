@@ -23,8 +23,7 @@
         "d3-shape": "^3.2.0",
         "idb-keyval": "^6.2.2",
         "pako": "^2.1.0",
-        "qrcode": "^1.5.4",
-        "rfc4648": "^1.5.4"
+        "qrcode": "^1.5.4"
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "^3.0.10",
