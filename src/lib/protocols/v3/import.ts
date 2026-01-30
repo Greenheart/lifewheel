@@ -38,7 +38,7 @@ export function decodeReflectionEntries(data: Uint8Array) {
     }
 
     const length = decodeInt32(data.subarray(0, 4))
-    // Starting with version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
+    // Starting with protocol version 2, assume 4 bytes for the data rather than 8, since the data has been compressed
     const entryDataLength = 8
     return Array.from({ length }, (_, index) => {
         const offset = 4 + index * entryDataLength
@@ -53,7 +53,6 @@ export function decodeReflectionEntries(data: Uint8Array) {
 export function reviveTimestamps(reflections: ReflectionEntry[]) {
     return reflections.map<ReflectionEntry>(({ time, comment, data }) => ({
         time: new Date(time),
-        comment,
         data,
     }))
 }

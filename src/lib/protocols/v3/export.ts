@@ -27,6 +27,9 @@ export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
 
 /**
  * Encode every pair of numbers into a one byte to compress data.
+ * This takes advantage of the fact that Reflection entries store data values between 1-10
+ * and this can be represented as only 4 bits per value.
+ * Given we also have eight dimensions, we can then store them as 4 compressed bytes instead of 8.
  */
 function encodeEntryData(data: ReflectionEntry['data']) {
     return [
