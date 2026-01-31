@@ -1,12 +1,10 @@
 import { prerender } from '$app/server'
-import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
 
 /**
  * Get a formatted wordlist, ready to used for passphrase generation.
  */
 export const getWordList = prerender(async () => {
-    const rawWords = await readFile(resolve(import.meta.dirname, '../data/words.txt'), 'utf-8')
+    const rawWords = (await import('../data/words.txt?raw')).default
     return rawWords
         .trim()
         .split('\n')
