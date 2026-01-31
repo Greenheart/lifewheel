@@ -110,7 +110,7 @@
 
     const canCopyLink = $derived.by(async () => {
         const url = await (shouldEncrypt ? encryptedLink : link)
-        return (url ?? '').length > URL_MAX_SIZE
+        return (url ?? '').length < URL_MAX_SIZE
     })
 
     let copyText = $state('Copy link')
@@ -241,9 +241,10 @@
                             onclick={() => copyLink()}
                             variant="outline"
                             class="flex w-36 items-center gap-2"
-                            disabled={encryptionKey.isGenerating ||
-                                (shouldEncrypt && !encryptionKey.key) ||
-                                !canCopyLink}><HeroiconsLink class="size-6" />{copyText}</Button
+                            disabled={!(await canCopyLink) ||
+                                encryptionKey.isGenerating ||
+                                (shouldEncrypt && !encryptionKey.key)}
+                            ><HeroiconsLink class="size-6" />{copyText}</Button
                         >
                     </div>
 
