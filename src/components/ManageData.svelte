@@ -29,6 +29,13 @@
 
     let shouldEncrypt = $state(false)
 
+    /**
+     * Max size of URL, as of 2023, according to https://stackoverflow.com/a/417184
+     *
+     * IDEA: Disable/hide the copy link button if URL is too big
+     */
+    // const URL_MAX_SIZE = 8000
+
     const link = $derived.by(async () => {
         if (!browser) return null
         const url = new URL(window.location.href)
@@ -63,14 +70,46 @@
 
     const regularQRCode = $derived.by(async () => {
         const fullURL = await link
-        if (!fullURL) return null
+        if (!fullURL || fullURL.length > QR_CODE_MAX_SIZE) return null
         return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
     })
 
     const encryptedQRCode = $derived.by(async () => {
         const fullURL = await encryptedLink
-        if (!fullURL) return null
+        if (!fullURL || fullURL.length > QR_CODE_MAX_SIZE) return null
         return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+    })
+
+    /**
+     * Max size of QR code data, assuming alphanumeric data and error correction M
+     * More details: https://stackoverflow.com/a/11065449
+     *
+     * IDEA: Disable/hide the QR code if it is too big to use reliably.
+     */
+    const QR_CODE_MAX_SIZE = 3391
+
+    /**
+     * Formatted information about QR code max size
+     */
+    const regularQRCodeSize = $derived.by(async () => {
+        const fullURL = await link
+        if (!fullURL) return null
+        return {
+            size: fullURL.length,
+            percentage: `${((fullURL.length / QR_CODE_MAX_SIZE) * 100).toFixed(0)}%`,
+        }
+    })
+
+    /**
+     * Formatted information about QR code max size
+     */
+    const encryptedQRCodeSize = $derived.by(async () => {
+        const fullURL = await encryptedLink
+        if (!fullURL) return null
+        return {
+            size: fullURL.length,
+            percentage: `${((fullURL.length / QR_CODE_MAX_SIZE) * 100).toFixed(0)}%`,
+        }
     })
 
     let copyText = $state('Copy link')
@@ -225,7 +264,7 @@
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
-                                        <div class="grid justify-center pb-8 text-center">
+                                        <div class="grid justify-center text-center">
                                             <h2 class="pb-4 text-lg font-bold">
                                                 QR code for your {shouldEncrypt ? 'encrypted' : ''}
                                                 link:
@@ -234,6 +273,14 @@
                                                 src={imageURL}
                                                 alt="QR code generated for your link"
                                             />
+                                            {#await shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize then size}
+                                                {#if size}
+                                                    <button class="pt-4 text-center text-xs"
+                                                        >QR is {size.percentage} of max size ({QR_CODE_MAX_SIZE}
+                                                        chars)</button
+                                                    >
+                                                {/if}
+                                            {/await}
                                         </div>
 
                                         {#if shouldEncrypt && encryptionKey.key}
