@@ -1,0 +1,17 @@
+{
+    "name": "Life Wheel",
+    "short_name": "Life Wheel",
+    "description": "Reflect on your life balance. Visualise your progress over time and reconnect to what matters in your life. Make reflection a habit and gain new insights for your wellbeing.",
+    "start_url": "/lifewheel/",
+    "display": "standalone",
+    "background_color": "#101828",
+    "theme_color": "#00d492",
+    "icons": [
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
