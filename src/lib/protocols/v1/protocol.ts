@@ -90,7 +90,7 @@ const PROTOCOL: Protocol = {
             data: base64url.parse(rawData),
         } as ParsedLink
     },
-    importLink(link: ParsedLink) {
+    async importLink(link: ParsedLink) {
         if (link.encrypted) throw new Error('Link is encrypted')
         return decodeReflectionEntries(link.data)
     },

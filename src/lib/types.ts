@@ -42,7 +42,7 @@ export type ReflectionEntry = {
 export type ParsedLink = {
     encrypted: boolean
     protocolVersion: ProtocolVersion
-    data: Uint8Array
+    data: Uint8Array<ArrayBuffer>
 }
 
 export type BaseSaveFile = {

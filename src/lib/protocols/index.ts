@@ -29,7 +29,7 @@ export type Protocol = {
     importFile(file: SaveFile): ReflectionEntry[]
     importEncryptedFile(file: EncryptedSaveFile, key: UserKey): Promise<ReflectionEntry[]>
     parseLink(link: string): ParsedLink
-    importLink(link: ParsedLink): ReflectionEntry[]
+    importLink(link: ParsedLink): Promise<ReflectionEntry[]>
     importEncryptedLink(link: ParsedLink, key: UserKey): Promise<ReflectionEntry[]>
     deriveKey(
         salt: Uint8Array<ArrayBuffer>,

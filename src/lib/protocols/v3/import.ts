@@ -1,4 +1,18 @@
-import { inflate } from 'pako'
+/**
+ * Decompress data using the `deflate` algorithm.
+ *
+ * @param bytes Raw, compressed bytes
+ * @returns Decompressed bytes
+ */
+async function decompress(bytes: Uint8Array<ArrayBuffer>) {
+    const data = await new Response(bytes)
+        .body!.pipeThrough(new DecompressionStream('deflate'))
+        .getReader()
+        .read()
+
+    if (!data.value) throw new Error('Decompression error')
+    return data.value
+}
 
 import type { ReflectionEntry } from '$lib/types'
 import { decodeInt32, decodeString } from '$lib/utils'
@@ -29,10 +43,10 @@ export function decodeEntry(entryData: Uint8Array) {
     } as ReflectionEntry
 }
 
-export function decodeReflectionEntries(data: Uint8Array) {
-    // Compression was added in protocol version 2.
+export async function decodeReflectionEntries(data: Uint8Array<ArrayBuffer>) {
+    // Compression switched to use web standard CompressionStream in protocol v3
     try {
-        data = inflate(data)
+        data = await decompress(data)
     } catch (error) {
         console.error(error)
         return []

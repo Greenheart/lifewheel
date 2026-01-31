@@ -20,7 +20,7 @@
                 payload = CURRENT_PROTOCOL.parseLink({ link: window.location.hash.slice(1) })
 
                 if (!payload.encrypted && payload.data) {
-                    const importedEntries = CURRENT_PROTOCOL.importLink({
+                    const importedEntries = await CURRENT_PROTOCOL.importLink({
                         link: payload,
                     })
 
