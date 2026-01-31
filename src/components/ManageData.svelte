@@ -258,8 +258,8 @@
                             {:else}
                                 {#await shouldEncrypt ? encryptedQRCode : regularQRCode}
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
-                                {:then imageURL}
-                                    {#if imageURL}
+                                {:then qrCodeImageURL}
+                                    {#if qrCodeImageURL}
                                         {#if qrCodeSize}
                                             <div class="grid justify-center text-center">
                                                 {#if qrCodeSize.size < QR_CODE_MAX_SIZE}
@@ -270,7 +270,7 @@
                                                         link:
                                                     </h2>
                                                     <img
-                                                        src={imageURL}
+                                                        src={qrCodeImageURL}
                                                         alt="QR code generated for your link"
                                                     />
                                                     <button class="pt-4 text-center text-xs"
