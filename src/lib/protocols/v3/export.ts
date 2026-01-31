@@ -1,6 +1,4 @@
-import { deflate } from 'pako'
 import * as base64url from '$lib/base64url'
-
 import type { ProtocolVersion, ReflectionEntry } from '$lib/types'
 import { encodeInt32, encodeString, mergeTypedArrays } from '$lib/utils'
 import { PROTOCOL_VERSION } from './protocol'
@@ -22,10 +20,10 @@ function encodeEntry(entry: ReflectionEntry) {
     return mergeTypedArrays(encodeInt32(encodedEntry.byteLength), encodedEntry)
 }
 
-export function encodeReflectionEntries(reflections: ReflectionEntry[]) {
+export async function encodeReflectionEntries(reflections: ReflectionEntry[]) {
     const encodedEntries = reflections.map(encodeEntry)
     const data = mergeTypedArrays(encodeInt32(reflections.length), ...encodedEntries)
-    return deflate(data, { level: 9 })
+    return deflateCompress(data)
 }
 
 /**
@@ -64,3 +62,30 @@ export const formatLink = ({
     data: Uint8Array
     encrypted?: boolean
 }) => formatHeader({ encrypted, protocolVersion: PROTOCOL_VERSION }) + base64url.stringify(data)
+
+/**
+ * Compress data using the `deflate` algorithm.
+ *
+ * @param bytes Raw bytes
+ * @returns Compressed bytes
+ */
+async function deflateCompress(bytes: Uint8Array<ArrayBuffer>) {
+    const stream = new CompressionStream('deflate')
+    const writer = stream.writable.getWriter()
+    writer.write(bytes)
+    writer.close()
+
+    const reader = stream.readable.getReader()
+    let done = false
+    let output = []
+
+    while (!done) {
+        const result = await reader.read()
+        if (result.value) {
+            output.push(...result.value)
+        }
+        done = result.done
+    }
+
+    return new Uint8Array(output)
+}

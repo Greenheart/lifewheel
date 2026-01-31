@@ -36,7 +36,7 @@ const PROTOCOL: Protocol = {
         const encryptedData =
             data instanceof Array
                 ? await getEncryptedPayload(
-                      encodeReflectionEntries(data),
+                      await encodeReflectionEntries(data),
                       key as UserKey,
                       ITERATIONS,
                   )
@@ -50,15 +50,15 @@ const PROTOCOL: Protocol = {
             data: base64url.stringify(encryptedData),
         } as EncryptedSaveFile
     },
-    exportLink(data: ReflectionEntry[]) {
-        return formatLink({ data: encodeReflectionEntries(data), encrypted: false })
+    async exportLink(data: ReflectionEntry[]) {
+        return formatLink({ data: await encodeReflectionEntries(data), encrypted: false })
     },
     async exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey) {
         if (data instanceof Array && typeof key === 'undefined') throw new Error('Missing key')
         const encryptedData =
             data instanceof Array
                 ? await getEncryptedPayload(
-                      encodeReflectionEntries(data),
+                      await encodeReflectionEntries(data),
                       key as UserKey,
                       ITERATIONS,
                   )
@@ -114,8 +114,8 @@ const PROTOCOL: Protocol = {
 
         return updatedEntries
     },
-    getEncryptedData(reflections: ReflectionEntry[], key: UserKey) {
-        return getEncryptedPayload(encodeReflectionEntries(reflections), key)
+    async getEncryptedData(reflections: ReflectionEntry[], key: UserKey) {
+        return getEncryptedPayload(await encodeReflectionEntries(reflections), key)
     },
 
     PROTOCOL_VERSION,

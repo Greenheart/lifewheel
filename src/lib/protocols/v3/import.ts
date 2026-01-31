@@ -1,19 +1,3 @@
-/**
- * Decompress data using the `deflate` algorithm.
- *
- * @param bytes Raw, compressed bytes
- * @returns Decompressed bytes
- */
-async function decompress(bytes: Uint8Array<ArrayBuffer>) {
-    const data = await new Response(bytes)
-        .body!.pipeThrough(new DecompressionStream('deflate'))
-        .getReader()
-        .read()
-
-    if (!data.value) throw new Error('Decompression error')
-    return data.value
-}
-
 import type { ReflectionEntry } from '$lib/types'
 import { decodeInt32, decodeString } from '$lib/utils'
 
@@ -46,7 +30,7 @@ export function decodeEntry(entryData: Uint8Array) {
 export async function decodeReflectionEntries(data: Uint8Array<ArrayBuffer>) {
     // Compression switched to use web standard CompressionStream in protocol v3
     try {
-        data = await decompress(data)
+        data = await inflateDecompress(data)
     } catch (error) {
         console.error(error)
         return []
@@ -110,3 +94,30 @@ export const getUniqueEntries = (items: ReflectionEntry[]) =>
                     item.data.join('') === otherItem.data.join(''),
             ) === index,
     )
+
+/**
+ * Decompress data using the `deflate` algorithm.
+ *
+ * @param bytes Raw, compressed bytes
+ * @returns Decompressed bytes
+ */
+async function inflateDecompress(bytes: Uint8Array<ArrayBuffer>) {
+    const stream = new DecompressionStream('deflate')
+    const writer = stream.writable.getWriter()
+    writer.write(bytes)
+    writer.close()
+
+    const reader = stream.readable.getReader()
+    let done = false
+    let output = []
+
+    while (!done) {
+        const result = await reader.read()
+        if (result.value) {
+            output.push(...result.value)
+        }
+        done = result.done
+    }
+
+    return new Uint8Array(output)
+}

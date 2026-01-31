@@ -24,7 +24,7 @@ export type Protocol = {
         data: ReflectionEntry[] | Uint8Array,
         key?: UserKey,
     ): Promise<EncryptedSaveFile>
-    exportLink(data: ReflectionEntry[]): string
+    exportLink(data: ReflectionEntry[]): Promise<string>
     exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey): Promise<string>
     importFile(file: SaveFile): ReflectionEntry[]
     importEncryptedFile(file: EncryptedSaveFile, key: UserKey): Promise<ReflectionEntry[]>

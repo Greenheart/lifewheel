@@ -50,7 +50,7 @@ const PROTOCOL: Protocol = {
             data: base64url.stringify(encryptedData),
         } as EncryptedSaveFile
     },
-    exportLink(data: ReflectionEntry[]) {
+    async exportLink(data: ReflectionEntry[]) {
         return formatLink({ data: encodeReflectionEntries(data), encrypted: false })
     },
     async exportEncryptedLink(data: ReflectionEntry[] | Uint8Array, key?: UserKey) {

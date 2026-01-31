@@ -39,7 +39,7 @@
     const link = $derived.by(async () => {
         if (!browser) return null
         const url = new URL(window.location.href)
-        url.hash = CURRENT_PROTOCOL.exportLink(reflections.entries)
+        url.hash = await CURRENT_PROTOCOL.exportLink(reflections.entries)
 
         return url.toString()
     })
