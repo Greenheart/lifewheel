@@ -69,13 +69,19 @@
     const regularQRCode = $derived.by(async () => {
         const fullURL = await link
         if (!fullURL || fullURL.length > QR_CODE_MAX_SIZE) return null
-        return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+        return QRCode.toDataURL(fullURL).catch((error) => {
+            console.error(error)
+            return null
+        })
     })
 
     const encryptedQRCode = $derived.by(async () => {
         const fullURL = await encryptedLink
         if (!fullURL || fullURL.length > QR_CODE_MAX_SIZE) return null
-        return QRCode.toDataURL(fullURL).catch((error) => console.error(error))
+        return QRCode.toDataURL(fullURL).catch((error) => {
+            console.error(error)
+            return null
+        })
     })
 
     /**
