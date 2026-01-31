@@ -97,10 +97,9 @@
 
     const qrCodeSize = $derived(getQRCodeSize(await (shouldEncrypt ? encryptedLink : link)))
 
-    const canCopyLink = $derived.by(async () => {
-        const url = await (shouldEncrypt ? encryptedLink : link)
-        return (url ?? '').length < URL_MAX_SIZE
-    })
+    const canCopyLink = $derived(
+        ((await (shouldEncrypt ? encryptedLink : link)) ?? '').length < URL_MAX_SIZE,
+    )
 
     let copyText = $state('Copy link')
 
@@ -230,7 +229,7 @@
                             onclick={() => copyLink()}
                             variant="outline"
                             class="flex w-36 items-center gap-2"
-                            disabled={!(await canCopyLink) ||
+                            disabled={!canCopyLink ||
                                 encryptionKey.isGenerating ||
                                 (shouldEncrypt && !encryptionKey.key)}
                             ><HeroiconsLink class="size-6" />{copyText}</Button
