@@ -108,6 +108,8 @@
         }
     })
 
+    const qrCodeSize = $derived(await (shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize))
+
     const canCopyLink = $derived.by(async () => {
         const url = await (shouldEncrypt ? encryptedLink : link)
         return (url ?? '').length < URL_MAX_SIZE
@@ -266,28 +268,42 @@
                                     <h2 class="pb-4 text-lg font-bold">Generating QR code...</h2>
                                 {:then imageURL}
                                     {#if imageURL}
-                                        <div class="grid justify-center text-center">
-                                            <h2 class="pb-4 text-lg font-bold">
-                                                QR code for your {shouldEncrypt ? 'encrypted' : ''}
-                                                link:
-                                            </h2>
-                                            <img
-                                                src={imageURL}
-                                                alt="QR code generated for your link"
-                                            />
-                                            {#await shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize}
-                                                <!-- NOTE: This is weird but seems to be required to force the promise to resolve. Without this, the size label won't be shown until the first time the encryption is toggled on/off -->
-                                                {@const _ = await regularQRCodeSize}
-                                            {:then size}
-                                                {#if size}
+                                        {#if qrCodeSize}
+                                            <div class="grid justify-center text-center">
+                                                {#if qrCodeSize.size < QR_CODE_MAX_SIZE}
+                                                    <h2 class="pb-4 text-lg font-bold">
+                                                        QR code for your {shouldEncrypt
+                                                            ? 'encrypted'
+                                                            : ''}
+                                                        link:
+                                                    </h2>
+                                                    <img
+                                                        src={imageURL}
+                                                        alt="QR code generated for your link"
+                                                    />
                                                     <button class="pt-4 text-center text-xs"
-                                                        >QR is {size.percentage} of max size ({size.size}
+                                                        >QR is {qrCodeSize.percentage} of max size ({qrCodeSize.size}
                                                         of {QR_CODE_MAX_SIZE}
                                                         chars)</button
                                                     >
+                                                {:else}
+                                                    <p class="pb-4">
+                                                        Too much data to create a QR code for your {shouldEncrypt
+                                                            ? 'encrypted'
+                                                            : ''}
+                                                        link.
+                                                    </p>
+                                                    <a
+                                                        href="https://github.com/Greenheart/lifewheel/issues/49"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="text-balance text-emerald-400 underline hover:text-emerald-500"
+                                                        >Welcome to get involved to support larger
+                                                        QR data transfers</a
+                                                    >
                                                 {/if}
-                                            {/await}
-                                        </div>
+                                            </div>
+                                        {/if}
 
                                         {#if shouldEncrypt && encryptionKey.key}
                                             <Button
