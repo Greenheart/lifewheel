@@ -111,7 +111,7 @@
         </div>
 
         {#if isCommentStep(reflectionStep)}
-            <div class="flex max-w-md min-w-40 justify-between px-4 pb-4">
+            <div class="flex max-w-md min-w-40 justify-between pb-4">
                 <Textarea bind:value={comment} class={commentClass} />
             </div>
         {/if}

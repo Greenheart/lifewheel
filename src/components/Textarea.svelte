@@ -49,7 +49,7 @@
         width: 100%;
         border-radius: 6px;
         color: white;
-        padding: 0.5rem;
+        padding: 1rem;
         outline: 1px solid white;
         grid-area: 1 / 1 / 2 / 2;
     }
