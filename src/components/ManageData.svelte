@@ -276,7 +276,8 @@
                                             {#await shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize then size}
                                                 {#if size}
                                                     <button class="pt-4 text-center text-xs"
-                                                        >QR is {size.percentage} of max size ({QR_CODE_MAX_SIZE}
+                                                        >QR is {size.percentage} of max size ({size.size}
+                                                        of {QR_CODE_MAX_SIZE}
                                                         chars)</button
                                                     >
                                                 {/if}
