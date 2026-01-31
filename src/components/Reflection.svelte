@@ -137,13 +137,19 @@
     onkeyup={(event) => {
         const commentBoxFocused = document.activeElement?.className?.includes(commentClass)
         const sliderFocused = document.activeElement?.className?.includes(sliderClass)
+        const commentStep = isCommentStep(reflectionStep)
 
-        if (!sliderFocused && (!isCommentStep(reflectionStep) || !commentBoxFocused)) {
+        if (!sliderFocused && (!commentStep || !commentBoxFocused)) {
             // Only allow navigation with arrow keys if the comment area and slider are not focused
             if (event.key === 'ArrowLeft') {
                 if (canGoBack()) onPrev()
             } else if (event.key === 'ArrowRight') {
-                onNext()
+                // Prevent accidentally completing a reflection if you have typed something.
+                // Instead, require the → button to be explicitly clicked.
+                const hasWrittenComment = commentStep && comment.trim().length
+                if (!hasWrittenComment) {
+                    onNext()
+                }
             }
         }
     }}
