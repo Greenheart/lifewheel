@@ -1,0 +1,21 @@
+{
+    // NOTE: In order to use this devcontainer, `docker` is assumed to be in the `$PATH`.
+    // Podman can be used via a symlink like `sudo ln -s $(which podman) /usr/bin/docker`
+    "name": "Life Wheel",
+    "dockerFile": "Dockerfile",
+
+    // Let playwright install browsers and related system dependencies
+    // TODO: Figure out why permissions don't work as expected.
+    // IDEA: Alternatively, try using Nix instead since that seems promising too: https://mtlynch.io/notes/nix-dev-environment/
+    "postCreateCommand": "pnpm install --frozen-lockfile && pnpm playwright install --with-deps firefox",
+    "waitFor": "postCreateCommand",
+
+    // To manually execute the tests, run `devcontainer exec pnpm build && pnpm test`
+    // Alternatively, tests can be run automatically after attaching the container.
+    // "postAttachCommand": {
+    //     "Life Wheel tests": "pnpm build && pnpm run test",
+    // },
+
+    // Forward ports as needed. For example for the dev server, and when previewing the test results
+    "forwardPorts": []
+}
