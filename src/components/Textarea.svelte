@@ -50,6 +50,8 @@
         border-radius: 6px;
         color: white;
         padding: 1rem;
+        text-wrap: wrap;
+        overflow-wrap: anywhere;
         outline: 1px solid white;
         grid-area: 1 / 1 / 2 / 2;
     }
