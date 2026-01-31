@@ -31,10 +31,8 @@
 
     /**
      * Max size of URL, as of 2023, according to https://stackoverflow.com/a/417184
-     *
-     * IDEA: Disable/hide the copy link button if URL is too big
      */
-    // const URL_MAX_SIZE = 8000
+    const URL_MAX_SIZE = 8000
 
     const link = $derived.by(async () => {
         if (!browser) return null
@@ -83,8 +81,6 @@
     /**
      * Max size of QR code data, assuming alphanumeric data and error correction M
      * More details: https://stackoverflow.com/a/11065449
-     *
-     * IDEA: Disable/hide the QR code if it is too big to use reliably.
      */
     const QR_CODE_MAX_SIZE = 3391
 
@@ -110,6 +106,11 @@
             size: fullURL.length,
             percentage: `${((fullURL.length / QR_CODE_MAX_SIZE) * 100).toFixed(0)}%`,
         }
+    })
+
+    const canCopyLink = $derived.by(async () => {
+        const url = await (shouldEncrypt ? encryptedLink : link)
+        return (url ?? '').length > URL_MAX_SIZE
     })
 
     let copyText = $state('Copy link')
@@ -241,8 +242,8 @@
                             variant="outline"
                             class="flex w-36 items-center gap-2"
                             disabled={encryptionKey.isGenerating ||
-                                (shouldEncrypt && !encryptionKey.key)}
-                            ><HeroiconsLink class="size-6" />{copyText}</Button
+                                (shouldEncrypt && !encryptionKey.key) ||
+                                !canCopyLink}><HeroiconsLink class="size-6" />{copyText}</Button
                         >
                     </div>
 
