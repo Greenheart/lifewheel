@@ -208,7 +208,7 @@
                     </div>
 
                     <div class="grid md:grid-cols-2 md:gap-8">
-                        <div>
+                        <div class="grid">
                             {@render encryptionToggle()}
 
                             {#if encryptionKey.isGenerating}
@@ -239,7 +239,7 @@
                                         {#if shouldEncrypt && encryptionKey.key}
                                             <Button
                                                 variant="ghost"
-                                                class="mt-4"
+                                                class="mt-4 justify-self-center"
                                                 onclick={() => encryptionKey.clear()}
                                                 >Change password</Button
                                             >
