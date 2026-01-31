@@ -275,7 +275,10 @@
                                                 src={imageURL}
                                                 alt="QR code generated for your link"
                                             />
-                                            {#await shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize then size}
+                                            {#await shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize}
+                                                <!-- NOTE: This is weird but seems to be required to force the promise to resolve. Without this, the size label won't be shown until the first time the encryption is toggled on/off -->
+                                                {@const _ = await regularQRCodeSize}
+                                            {:then size}
                                                 {#if size}
                                                     <button class="pt-4 text-center text-xs"
                                                         >QR is {size.percentage} of max size ({size.size}
