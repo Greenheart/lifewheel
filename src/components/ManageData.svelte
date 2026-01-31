@@ -85,30 +85,17 @@
     const QR_CODE_MAX_SIZE = 3391
 
     /**
-     * Formatted information about QR code max size
+     * Get formatted information about QR code max size
      */
-    const regularQRCodeSize = $derived.by(async () => {
-        const fullURL = await link
-        if (!fullURL) return null
+    function getQRCodeSize(url: string | null) {
+        if (!url) return null
         return {
-            size: fullURL.length,
-            percentage: `${((fullURL.length / QR_CODE_MAX_SIZE) * 100).toFixed(0)}%`,
+            size: url.length,
+            percentage: `${((url.length / QR_CODE_MAX_SIZE) * 100).toFixed(0)}%`,
         }
-    })
+    }
 
-    /**
-     * Formatted information about QR code max size
-     */
-    const encryptedQRCodeSize = $derived.by(async () => {
-        const fullURL = await encryptedLink
-        if (!fullURL) return null
-        return {
-            size: fullURL.length,
-            percentage: `${((fullURL.length / QR_CODE_MAX_SIZE) * 100).toFixed(0)}%`,
-        }
-    })
-
-    const qrCodeSize = $derived(await (shouldEncrypt ? encryptedQRCodeSize : regularQRCodeSize))
+    const qrCodeSize = $derived(getQRCodeSize(await (shouldEncrypt ? encryptedLink : link)))
 
     const canCopyLink = $derived.by(async () => {
         const url = await (shouldEncrypt ? encryptedLink : link)
