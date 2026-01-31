@@ -7,6 +7,7 @@
     import Button, { defaultClasses, variants } from './Button.svelte'
     import Lifewheel from './Lifewheel.svelte'
     import DateRangeSlider from './DateRangeSlider.svelte'
+    import HistoricalOverview from './HistoricalOverview.svelte'
     import HeroiconsTrash from '~icons/heroicons/trash'
     import HeroiconsEllipsisHorizontal from '~icons/heroicons/ellipsis-horizontal'
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
@@ -166,6 +167,10 @@
                     bind:value={index}
                     {sliderClass}
                 />
+            {/if}
+
+            {#if reflections.entries.length > 2}
+                <HistoricalOverview />
             {/if}
 
             {#if reflections.entries.length > 1}
