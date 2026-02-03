@@ -49,10 +49,18 @@
         width: 100%;
         border-radius: 6px;
         color: white;
-        padding: 1rem;
+        padding: 0.5rem;
         text-wrap: wrap;
         overflow-wrap: anywhere;
-        outline: 1px solid white;
+        border: 1px solid white;
         grid-area: 1 / 1 / 2 / 2;
+        margin-top: 1rem;
+    }
+
+    @media screen and (min-width: 640px) {
+        .autogrow > textarea,
+        .autogrow::after {
+            padding: 1rem;
+        }
     }
 </style>
