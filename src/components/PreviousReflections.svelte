@@ -168,30 +168,35 @@
                 />
             {/if}
 
-            {#if reflections.entries.length > 1}
-                <div
-                    class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-start gap-4 pt-4"
-                >
+            <div
+                class="grid w-full max-w-md grid-cols-[max-content_1fr_max-content] items-start gap-4 pt-4"
+            >
+                {#if reflections.entries.length > 1}
                     <Button
                         variant="roundOutline"
                         aria-label="Show previous reflection"
                         class={index < 1 ? 'invisible' : undefined}
                         onclick={onPrev}><HeroiconsArrowLeft /></Button
                     >
+                {/if}
 
-                    <CommentView
-                        comment={currentReflection.comment ?? ''}
-                        class={!currentReflection.comment ? 'invisible' : ''}
-                    />
+                <CommentView
+                    comment={currentReflection.comment ?? ''}
+                    class={[
+                        !currentReflection.comment ? 'invisible' : '',
+                        reflections.entries.length === 1 && 'col-start-2',
+                    ]}
+                />
 
+                {#if reflections.entries.length > 1}
                     <Button
                         variant="roundOutline"
                         aria-label="Show next reflection"
                         class={index >= reflections.entries.length - 1 ? 'invisible' : undefined}
                         onclick={onNext}><HeroiconsArrowRight /></Button
                     >
-                </div>
-            {/if}
+                {/if}
+            </div>
         </div>
     </section>
 {/if}

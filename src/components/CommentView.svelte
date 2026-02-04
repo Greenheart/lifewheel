@@ -1,11 +1,11 @@
 <script lang="ts" module>
-    import type { HTMLAttributes } from 'svelte/elements'
+    import type { ClassValue, HTMLAttributes } from 'svelte/elements'
 </script>
 
 <script lang="ts">
     interface Props extends HTMLAttributes<HTMLAnchorElement> {
         comment: string
-        class?: string
+        class?: ClassValue
     }
 
     let { comment, class: className }: Props = $props()
