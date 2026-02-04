@@ -9,8 +9,13 @@ import { build, files, version } from '$service-worker'
 const CACHE = `cache-${version}`
 
 const ASSETS = [
-    ...build, // the app itself
-    ...files, // everything in `static`
+    ...build, // The app itself
+    ...files, // Everything in `static`
+    // Explicitly add the known app routes to ensure get their resources cached
+    // This is needed because we prerender the initial HTML responses for each page
+    // Another alternative could be to turn the app into a SPA, though that would be worse for first time visitors
+    '/lifewheel/',
+    '/lifewheel/reflection/',
 ]
 
 self.addEventListener('install', (event) => {
