@@ -18,6 +18,7 @@
         "@iconify-json/heroicons": "^1.2.3",
         "@iconify-json/material-symbols": "^1.2.53",
         "@iconify-json/mdi": "^1.2.3",
+        "@lo-fi/qr-data-sync": "^0.999.2",
         "bits-ui": "^2.15.0",
         "browser-fs-access": "^0.38.0",
         "d3-shape": "^3.2.0",
@@ -65,6 +66,7 @@
     },
     "pnpm": {
         "onlyBuiltDependencies": [
+            "@lo-fi/qr-data-sync",
             "esbuild"
         ]
     }

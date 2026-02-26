@@ -84,6 +84,8 @@
         })
     })
 
+    // const animatedQRCode
+
     /**
      * Max size of QR code data, assuming alphanumeric data and error correction M
      * More details: https://stackoverflow.com/a/11065449
@@ -127,6 +129,8 @@
 
     let isOpen = $state(false)
 
+    let saveContainer = $state<HTMLDivElement | null>(null)
+
     function closeMenu() {
         isOpen = false
     }
@@ -135,6 +139,8 @@
         isOpen = true
     }
 
+    // fix
+
     $effect(() => {
         // Close menu if all entries were removed and we no longer have something to export
         if (reflections.count === 0) {
@@ -142,6 +148,10 @@
         }
     })
 </script>
+
+<svelte:head>
+    <script src="qrcode.js"></script>
+</svelte:head>
 
 {#snippet encryptionToggle()}
     <div class="flex items-center gap-3 pt-8 pb-8 select-none">
@@ -169,23 +179,31 @@
             <Tabs.Trigger
                 value="open"
                 class={[...tabClasses, 'hover:border-emerald-400/5']}
-                onclick={openMenu}><HeroiconsFolderOpen class="size-6" />Open</Tabs.Trigger
+                onclick={openMenu}
             >
+                <HeroiconsFolderOpen class="size-6" />
+                Open
+            </Tabs.Trigger>
             {#if reflections.count}
                 <Tabs.Trigger
                     value="save"
                     class={[...tabClasses, 'hover:border-emerald-400/5']}
-                    onclick={openMenu}><HeroiconsArrowDownTray class="size-6" />Save</Tabs.Trigger
+                    onclick={openMenu}
                 >
+                    <HeroiconsArrowDownTray class="size-6" />
+                    Save
+                </Tabs.Trigger>
             {/if}
         </Tabs.List>
-        <div class={['relative mt-2 rounded-md bg-gray-800 p-4', isOpen ? undefined : 'hidden']}>
+        <div bind:this={saveContainer} class={['relative mt-2 rounded-md bg-gray-800 p-4', isOpen ? undefined : 'hidden']}>
             <Tabs.Content value="open">
                 <Button
                     variant="roundGhost"
                     class="absolute top-4 right-4 h-12! w-12! border-emerald-400/5!"
-                    onclick={closeMenu}><HeroiconsXMark class="size-6" /></Button
+                    onclick={closeMenu}
                 >
+                    <HeroiconsXMark class="size-6" />
+                </Button>
                 <Button
                     variant="outline"
                     onclick={async () => {
@@ -196,8 +214,10 @@
                         }
                     }}
                     class="flex w-36 items-center gap-2"
-                    ><HeroiconsFolderOpen class="size-6" />Open file</Button
                 >
+                    <HeroiconsFolderOpen class="size-6" />
+                    Open file
+                </Button>
 
                 <h2 class="pt-8 text-lg font-bold">Using the app on other devices?</h2>
                 <p class="pt-2">
@@ -210,8 +230,10 @@
                     <Button
                         variant="roundGhost"
                         class="absolute top-4 right-4 h-12! w-12! border-emerald-400/5!"
-                        onclick={closeMenu}><HeroiconsXMark class="size-6" /></Button
+                        onclick={closeMenu}
                     >
+                        <HeroiconsXMark class="size-6" />
+                    </Button>
 
                     <div class="flex flex-wrap gap-2 pr-16">
                         <Button
@@ -228,8 +250,10 @@
                             class="flex w-36 items-center gap-2"
                             disabled={encryptionKey.isGenerating ||
                                 (shouldEncrypt && !encryptionKey.key)}
-                            ><HeroiconsArrowDownTray class="size-6" />Save file</Button
                         >
+                            <HeroiconsArrowDownTray class="size-6" />
+                            Save file
+                        </Button>
 
                         <Button
                             onclick={() => copyLink()}
@@ -238,7 +262,8 @@
                             disabled={!canCopyLink ||
                                 encryptionKey.isGenerating ||
                                 (shouldEncrypt && !encryptionKey.key)}
-                            ><HeroiconsLink class="size-6" />{copyText}</Button
+                        >
+                            <HeroiconsLink class="size-6" />{copyText}</Button
                         >
                     </div>
 
@@ -269,6 +294,7 @@
                                                             : ''}
                                                         link:
                                                     </h2>
+
                                                     <img
                                                         src={qrCodeImageURL}
                                                         alt="QR code generated for your link"
@@ -276,8 +302,8 @@
                                                     <button class="pt-4 text-center text-xs"
                                                         >QR is {qrCodeSize.percentage} of max size ({qrCodeSize.size}
                                                         of {QR_CODE_MAX_SIZE}
-                                                        chars)</button
-                                                    >
+                                                        chars)
+                                                    </button>
                                                 {:else}
                                                     <p class="pb-4">
                                                         Too much data to create a QR code for your {shouldEncrypt
@@ -302,8 +328,8 @@
                                                 variant="ghost"
                                                 class="mx-auto mt-4 block"
                                                 onclick={() => encryptionKey.clear()}
-                                                >Change password</Button
-                                            >
+                                                >Change password
+                                            </Button>
                                         {/if}
                                     {/if}
                                 {/await}
@@ -313,9 +339,9 @@
                         <div class="grid content-start gap-4">
                             <h2 class="pt-8 text-lg font-bold">Your data is your “account” 😇</h2>
                             <p>
-                                <HeroiconsPlusCircle class="inline stroke-yellow-400" /> To add more reflections
-                                in the future, save your file or copy your link and open it in any modern
-                                browser.
+                                <HeroiconsPlusCircle class="inline stroke-yellow-400" />
+                                To add more reflections in the future, save your file or copy your link
+                                and open it in any modern browser.
                             </p>
                             <p>
                                 🔐 For better privacy, protect your data with a password. Save it in

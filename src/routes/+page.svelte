@@ -17,6 +17,7 @@
     import { encryptedFile } from '$lib/EncryptedFile.svelte'
     import { reflections } from '$lib/Reflections.svelte'
     import { appState } from '$lib/app-state.svelte'
+    import AnimatedQrCode from '$components/AnimatedQrCode.svelte'
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-(--breakpoint-lg) flex-col justify-between px-4">
@@ -56,6 +57,8 @@
                 </div>
 
                 <ManageData />
+
+                <AnimatedQrCode />
 
                 {#if reflections.count}
                     <PreviousReflections />

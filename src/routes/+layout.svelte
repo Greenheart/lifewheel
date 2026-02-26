@@ -11,6 +11,6 @@
     <meta name="description" content={APP_DESCRIPTION} />
 </svelte:head>
 
-<main class="min-h-screen">
+<main class="min-h-screen bg-white">
     {@render children()}
 </main>
