@@ -12,7 +12,7 @@
     import HeroiconsMinusCircle from '~icons/heroicons/minus-circle'
     import HeroiconsArrowLeft from '~icons/heroicons/arrow-left'
     import HeroiconsArrowRight from '~icons/heroicons/arrow-right'
-    import { sliderClass } from '$lib/constants'
+    import { sliderClass, lifewheelSteps } from '$lib/constants'
 
     const menuButtonClasses = [
         defaultClasses,
@@ -24,6 +24,7 @@
 <script lang="ts">
     import { reflections } from '$lib/Reflections.svelte'
     import CommentView from './CommentView.svelte'
+    import type { PointerEventHandler } from 'svelte/elements'
 
     let index = $state(Math.max(reflections.count - 1, 0))
 
@@ -67,6 +68,23 @@
         reflections.clear()
         index = 0
         await tick()
+    }
+
+    function getSelectedDimension(px: number, py: number, rect: DOMRect) {
+        const lifewheelCenterX = rect.x + rect.width / 2
+        const lifewheelCenterY = rect.y + rect.height / 2
+        const angle = Math.atan2(py - lifewheelCenterY, px - lifewheelCenterX)
+
+        return (
+            (Math.floor(((angle + Math.PI) / (Math.PI * 2)) * lifewheelSteps.length) + 6) %
+            lifewheelSteps.length
+        )
+    }
+
+    const showTooltip: PointerEventHandler<SVGElement> = (event) => {
+        const rect = event.currentTarget.getBoundingClientRect()
+        let dimension = getSelectedDimension(event.clientX, event.clientY, rect)
+        console.log(lifewheelSteps[dimension].title)
     }
 </script>
 
@@ -157,7 +175,12 @@
                 </Popover.Root>
             </div>
 
-            <Lifewheel data={currentReflection.data} {tweenedLifewheel} class="max-w-sm" />
+            <Lifewheel
+                data={currentReflection.data}
+                {tweenedLifewheel}
+                class="max-w-sm"
+                onpointerdown={showTooltip}
+            />
 
             {#if reflections.entries.length > 2}
                 <DateRangeSlider
