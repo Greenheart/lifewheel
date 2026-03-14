@@ -34,13 +34,24 @@
 <script lang="ts">
     import { onDestroy, onMount } from 'svelte'
     import { scale } from 'svelte/transition'
+    import type { PointerEventHandler } from 'svelte/elements'
 
     type Props = {
         data: LifewheelState
         tweenedLifewheel: Tween<LifewheelState>
         class?: string
+        onpointerdown?: PointerEventHandler<SVGElement>
+        onpointermove?: PointerEventHandler<SVGElement>
+        onpointerup?: PointerEventHandler<SVGElement>
     }
-    let { data, tweenedLifewheel, class: className = '' }: Props = $props()
+    let {
+        data,
+        tweenedLifewheel,
+        class: className = '',
+        onpointerdown,
+        onpointermove,
+        onpointerup,
+    }: Props = $props()
 
     let dimensions: string[] = $state([])
     let visible = $state(false)
@@ -54,6 +65,8 @@
     })
 
     const width = $derived(Math.round(clientWidth * (innerWidth < 640 ? 0.6 : 0.75)))
+
+    const isInteractive = $derived(onpointerdown || onpointermove || onpointerup)
 
     onDestroy(() => {
         // Reset tweened state to make sure it shows smooth transitions if the lifewheel is opened when partially filled.
@@ -70,7 +83,11 @@
 
 <div
     bind:clientWidth
-    class={['pointer-events-none grid w-full place-content-center pt-8 select-none', className]}
+    class={[
+        'grid w-full place-content-center pt-8 select-none',
+        !isInteractive && 'pointer-events-none',
+        className,
+    ]}
     style="--width: {width}px; --size: {innerWidth < 375 ? 20 : 24}px;"
 >
     {#if visible}
@@ -81,6 +98,10 @@
             viewBox="0 0 500 500"
             in:scale={{ duration: 600, start: 0.5 }}
             class="lifewheel aspect-square"
+            role="application"
+            {onpointerdown}
+            {onpointermove}
+            {onpointerup}
         >
             {#each backgrounds as path, i}
                 <path d={path} class={[colors[i].fill, 'opacity-20']} />
