@@ -1,4 +1,4 @@
-import { browser } from '$app/environment'
+import { browser } from '$app/env'
 
 /**
  * Persist a state rune in localStorage with configurable parsing and serialization.

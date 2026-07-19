@@ -21,7 +21,7 @@
 </script>
 
 <script lang="ts">
-    import { browser } from '$app/environment'
+    import { browser } from '$app/env'
     import { reflections } from '$lib/Reflections.svelte'
     import { tick } from 'svelte'
     import { appState } from '$lib/app-state.svelte'

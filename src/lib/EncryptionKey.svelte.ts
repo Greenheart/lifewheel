@@ -1,6 +1,6 @@
 import { del, get, set } from 'idb-keyval'
 
-import { browser } from '$app/environment'
+import { browser } from '$app/env'
 import type { UserKey } from './types'
 import { CURRENT_PROTOCOL } from './protocols'
 
