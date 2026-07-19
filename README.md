@@ -17,7 +17,7 @@ Seamlessly sync your data across devices with a private link (using the [URI fra
 - 📊 Make reflection a habit and gain new insights for your wellbeing.
 - 👌 Keep 100% control of your private data.
 - 😇 No signup or account needed. Designed to be used offline.
-    <!-- -   📲 Install the Progressive Web App to reflect on the go. -->
+- 📲 Install the Progressive Web App to reflect on the go.
 - 📥 Seamless file exports and imports, giving you full control over data syncing and backups. Integrates well with services like [Nextcloud](https://nextcloud.com/) and [Syncthing](https://syncthing.net/).
 - 🔐 Optionally encrypt your data using the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) to improve your security and privacy. Let the app generate a strong passphrase - or choose your own.
 - 🔗 Save your data as a private link (using the [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) which is never sent to the server). Store your link somewhere safe (for example in your password manager), or save your QR code.

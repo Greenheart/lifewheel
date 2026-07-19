@@ -22,9 +22,7 @@
         oninput={(event) => {
             ;(event.currentTarget.parentNode as HTMLElement).dataset.content =
                 event.currentTarget.value
-        }}
-    >
-    </textarea>
+        }}></textarea>
 </div>
 
 <style>
